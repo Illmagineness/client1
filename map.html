@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>怀安在线 · 探索地图</title>
+<style>
+  :root{
+    --bg:#0c0d11; --panel:#131419; --panel2:#17181f; --ink:#e8e8ec; --ink-dim:#a6a6b0;
+    --ink-faint:#6c6c78; --line:#23242d; --acc:#6fb1ff; --acc2:#7fe0c0; --warn:#ff9d6b;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+    --serif:"Noto Serif SC","Songti SC",STSong,SimSun,serif;
+  }
+  *{box-sizing:border-box;}
+  body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--serif);font-size:15px;
+    line-height:1.8;-webkit-font-smoothing:antialiased;}
+  #topbar{position:sticky;top:0;z-index:40;background:#0d0e13;border-bottom:1px solid var(--line);
+    display:flex;align-items:center;gap:10px;padding:10px 16px;flex-wrap:wrap;}
+  #brand{font-family:var(--mono);font-size:14px;font-weight:700;letter-spacing:.5px;display:flex;align-items:center;gap:8px;}
+  #brand .gl{width:18px;height:18px;border-radius:4px;background:linear-gradient(135deg,#2a2a33,#3a3a45);
+    display:grid;place-items:center;font-size:11px;color:var(--acc);border:1px solid #2f2f3a;}
+  .grow{flex:1;}
+  .tbtn{background:transparent;border:1px solid #2a2a33;color:var(--ink-dim);padding:7px 13px;
+    border-radius:8px;cursor:pointer;font-size:13px;font-family:var(--serif);transition:.15s;}
+  .tbtn:hover{border-color:var(--acc);color:var(--acc);}
+  #progress{font-family:var(--mono);font-size:12px;color:var(--ink-faint);min-width:140px;text-align:right;}
+  .wrap{max-width:1040px;margin:0 auto;padding:18px 16px 70px;}
+  h1{font-size:21px;margin:6px 0 2px;}
+  .sub{color:var(--ink-faint);font-family:var(--mono);font-size:12.5px;margin-bottom:14px;}
+
+  /* 进度条 */
+  .bar{height:10px;border-radius:99px;background:#15151c;border:1px solid var(--line);overflow:hidden;margin:6px 0 4px;}
+  .bar > i{display:block;height:100%;background:linear-gradient(90deg,var(--acc),var(--acc2));border-radius:99px;transition:width .4s;}
+  .stats{font-family:var(--mono);font-size:12.5px;color:var(--ink-dim);display:flex;gap:18px;flex-wrap:wrap;}
+  .stats b{color:var(--acc2);}
+
+  /* 流程说明 */
+  .howto{border:1px solid #2c2c36;background:#0f0f15;border-radius:11px;padding:14px 16px;margin:18px 0;font-size:13.5px;color:var(--ink-dim);line-height:1.9;}
+  .howto b{color:var(--acc);font-family:var(--mono);}
+
+  /* 推荐主线条 */
+  .sec-t{font-size:14px;color:var(--ink-dim);margin:24px 0 10px;padding-left:10px;border-left:3px solid var(--acc);font-family:var(--mono);}
+  .path{display:flex;flex-wrap:wrap;gap:6px;align-items:center;}
+  .pc{padding:7px 12px;border:1px solid var(--line);border-radius:999px;font-size:12.5px;background:var(--panel);color:var(--ink-faint);cursor:pointer;transition:.15s;}
+  .pc.done{border-color:var(--acc);color:var(--ink);}
+  .pc.cur{border-color:var(--warn);color:var(--warn);box-shadow:0 0 0 2px rgba(255,157,107,.2);}
+  .pc.undim{opacity:.5;}
+  .pc:hover{filter:brightness(1.12);}
+  .arrow{color:var(--ink-faint);font-size:12px;}
+
+  /* 分层流程图 */
+  .flow{display:flex;gap:0;align-items:stretch;overflow-x:auto;padding:6px 2px 12px;}
+  .col{flex:1;min-width:172px;display:flex;flex-direction:column;}
+  .col-h{font-family:var(--mono);font-size:11.5px;color:var(--ink-faint);text-align:center;padding:6px 4px 10px;border-bottom:1px solid var(--line);margin-bottom:10px;}
+  .col-sep{display:flex;align-items:center;color:var(--ink-faint);font-size:14px;padding:0 4px;}
+  .node{border:1px solid var(--line);border-radius:10px;padding:10px 11px;margin:0 4px 9px;background:var(--panel);font-size:13px;color:var(--ink-faint);cursor:pointer;transition:.15s;position:relative;}
+  .node:hover{filter:brightness(1.12);}
+  .node .tag{display:block;font-family:var(--mono);font-size:10.5px;margin-top:5px;opacity:.8;}
+  .node .leads{display:block;font-family:var(--mono);font-size:10.5px;color:var(--ink-faint);margin-top:4px;line-height:1.5;}
+  .node.done{border-color:var(--acc);color:var(--ink);background:#101820;}
+  .node.done .tag{color:var(--acc2);}
+  .node.cur{border-color:var(--warn);color:var(--warn);background:#1c1410;box-shadow:0 0 0 2px rgba(255,157,107,.18);}
+  .node.cur .tag{color:var(--warn);}
+  .node.miss{opacity:.62;}
+
+  /* 漏掉清单 */
+  .missed{border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:14px 16px;margin-top:8px;}
+  .missed ul{margin:8px 0 0;padding-left:18px;font-size:13.5px;color:var(--ink-dim);line-height:1.9;}
+  .missed li b{color:var(--warn);font-family:var(--mono);cursor:pointer;}
+  .missed li b:hover{text-decoration:underline;}
+  .note{color:var(--ink-faint);font-size:12px;margin-top:10px;font-family:var(--mono);}
+  .legend{display:flex;gap:16px;flex-wrap:wrap;font-size:12px;color:var(--ink-dim);margin-top:6px;font-family:var(--mono);}
+  .legend i{display:inline-block;width:11px;height:11px;border-radius:3px;vertical-align:-1px;margin-right:5px;border:1px solid var(--line);}
+  .legend .d{background:#101820;border-color:var(--acc);}
+  .legend .c{background:#1c1410;border-color:var(--warn);}
+  .legend .m{background:var(--panel);}
+  #toast{position:fixed;left:50%;bottom:34px;transform:translateX(-50%) translateY(14px);background:var(--acc);
+    color:#0a0a0c;border-radius:20px;padding:9px 18px;font-size:13px;font-weight:600;z-index:60;opacity:0;
+    pointer-events:none;transition:.25s;}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+</style>
+</head>
+<body>
+<div id="topbar">
+  <div id="brand"><span class="gl">⊙</span>探索地图</div>
+  <div class="grow"></div>
+  <div id="progress">进度 0 / 0</div>
+  <button class="tbtn" onclick="render()">↻ 刷新</button>
+  <button class="tbtn" onclick="window.open('browser.html','_blank','noopener')">打开浏览器</button>
+</div>
+
+<div class="wrap">
+  <h1>从零开始的探索流程</h1>
+  <div class="sub">FLOWMAP · 随游戏进度实时高亮</div>
+
+  <div class="stats" id="stats"></div>
+  <div class="bar"><i id="barfill" style="width:0%"></i></div>
+
+  <div class="howto">
+    本页显示你已到达与尚未到达的界面，随检索实时更新。绿色=已到达，橙色=当前位置，灰色=未到达。
+  </div>
+
+  <div class="sec-t">分层流程图（界面清单）</div>
+  <div class="flow" id="flow"></div>
+  <div class="legend">
+    <span><i class="d"></i>已到达</span>
+    <span><i class="c"></i>当前位置</span>
+    <span><i class="m"></i>漏掉的界面</span>
+  </div>
+
+  <div class="sec-t">漏掉的界面</div>
+  <div class="missed" id="missed"></div>
+  <div class="note" id="notefoot"></div>
+</div>
+
+<div id="toast"></div>
+
+<script>
+"use strict";
+const SAVE_KEY='huaian1998_v3';
+
+/* 节点：id 与浏览器 found 集合中的页面 id 一致；site_* 为五大站点首页（浏览器 SITE_MAP 计入） */
+const NODES=[
+  {id:'__browser__',name:'浏览器',layer:0,site:'browser',always:true,search:'',leads:'输入站点名或读到的名词'},
+  /* L1 背景容器：四大站点 + 博客 + 散落旧网页 */
+  {id:'S_ARCHIVE',name:'档案馆',layer:1,site:'archive',search:'档案馆',leads:'旧档补录 / 怀安水利志'},
+  {id:'S_NEWS',name:'新闻网',layer:1,site:'news',search:'新闻主页',leads:'永宁堤 / 汛情通报'},
+  {id:'S_TIEBA',name:'怀安贴吧',layer:1,site:'tieba',search:'贴吧主页',leads:'老故事征集 / 渡口村'},
+  {id:'S_WX',name:'怀安发布',layer:1,site:'wx',search:'公众号主页',leads:'那年防汛记忆'},
+  {id:'S_BLOG',name:'江边旧事',layer:1,site:'blog',search:'博客',leads:'我爹是摆渡的 / 江边那盏灯'},
+  {id:'B1998',name:'1998年洪水',layer:1,search:'1998年洪水',leads:'汛情背景'},
+  {id:'B_BBS',name:'怀安之声',layer:1,search:'怀安之声',leads:'决口夜直播帖'},
+  /* L2 表层裂缝 */
+  {id:'T01',name:'旧档补录',layer:2,search:'旧档补录',leads:'防汛失踪案'},
+  {id:'T02',name:'防汛失踪案',layer:2,search:'防汛失踪案',leads:'决口夜直播帖'},
+  {id:'T03',name:'决口夜直播帖',layer:2,search:'决口夜直播帖',leads:'堤上那盏灯 / 郑晓棠'},
+  {id:'T04',name:'堤上那盏灯',layer:2,search:'堤上那盏灯',leads:'目击者老船工'},
+  {id:'T05',name:'目击者老船工',layer:2,search:'目击者老船工',leads:'救生衣编号 / 决口夜录音'},
+  {id:'T06',name:'郑晓棠',layer:2,search:'郑晓棠',leads:'洪水退去之后'},
+  {id:'T07',name:'洪水退去之后',layer:2,search:'洪水退去之后',leads:'删帖公告'},
+  {id:'T08',name:'删帖公告',layer:2,search:'删帖公告',leads:'论坛版规 / 卫生院系统'},
+  {id:'T09',name:'论坛版规',layer:2,search:'论坛版规',leads:'决口夜直播帖'},
+  /* L3 卫生院 · 系统 */
+  {id:'T10',name:'卫生院系统',layer:3,search:'卫生院系统',leads:'卫字003 / 卫字017'},
+  {id:'T11',name:'卫字003接诊单',layer:3,search:'卫字003号接诊单',leads:'匿名接诊记录'},
+  {id:'T12',name:'卫字017接诊单',layer:3,search:'卫字017号接诊单',leads:'值班医生留言'},
+  {id:'T13',name:'匿名接诊记录',layer:3,search:'匿名接诊记录',leads:'失访记录'},
+  {id:'T14',name:'值班医生留言',layer:3,search:'值班医生留言',leads:'药品申领单 / 遗物袋'},
+  {id:'T15',name:'药品申领单',layer:3,search:'药品申领单',leads:'救生衣编号'},
+  {id:'T16',name:'卫生院概况',layer:3,search:'怀安卫生院',leads:'失访记录'},
+  {id:'T17',name:'失访记录',layer:3,search:'失访记录',leads:'生还者日记'},
+  /* L4 指挥部 · 公文 */
+  {id:'T18',name:'防汛内网',layer:4,search:'防汛内网',leads:'防汛日志 7月20日'},
+  {id:'T19',name:'防汛日志 7月20日',layer:4,search:'防汛日志 7月20日',leads:'水文站数据'},
+  {id:'T20',name:'防汛日志 7月21日',layer:4,search:'防汛日志 7月21日',leads:'决口记录'},
+  {id:'T21',name:'决口记录',layer:4,search:'决口记录',leads:'结案报告'},
+  {id:'T22',name:'结案报告',layer:4,search:'结案报告',leads:'指挥部工单'},
+  {id:'T23',name:'指挥部工单',layer:4,search:'指挥部工单',leads:'县长批示'},
+  {id:'T24',name:'县长批示',layer:4,search:'县长批示',leads:'等一个人回家'},
+  {id:'T25',name:'防汛队名册',layer:4,search:'防汛队名册',leads:'救生衣编号'},
+  {id:'T26',name:'慰问金',layer:4,search:'慰问金',leads:'立功喜报'},
+  {id:'T27',name:'立功喜报',layer:4,search:'立功喜报',leads:'三人名单'},
+  /* L5 家庭 */
+  {id:'T28',name:'等一个人回家',layer:5,search:'等一个人回家',leads:'三个家庭的帖'},
+  {id:'T29',name:'妻子的帖',layer:5,search:'队员甲 妻子的帖',leads:'二十年后的回帖'},
+  {id:'T30',name:'母亲的帖',layer:5,search:'队员乙 母亲的帖',leads:'寻人启事'},
+  {id:'T31',name:'弟弟的帖',layer:5,search:'队员丙 弟弟的帖',leads:'生还者日记'},
+  {id:'T32',name:'寻人启事',layer:5,search:'寻人启事',leads:'媒体报道'},
+  {id:'T33',name:'二十年后的回帖',layer:5,search:'二十年后的回帖',leads:'怀安旧档'},
+  {id:'T34',name:'寻亲志愿者',layer:5,search:'寻亲志愿者',leads:'怀安旧档'},
+  {id:'T35',name:'媒体报道',layer:5,search:'媒体报道',leads:'怀安旧档'},
+  /* L6 物证 */
+  {id:'T36',name:'怀安旧档',layer:6,search:'怀安旧档',leads:'决口夜照片 / 遗物袋'},
+  {id:'T37',name:'决口夜照片',layer:6,search:'决口夜照片',leads:'决口夜录音'},
+  {id:'T38',name:'决口夜录音',layer:6,search:'决口夜录音',leads:'三人名单'},
+  {id:'T39',name:'涂改的签到表',layer:6,search:'涂改的签到表',leads:'指挥部工单'},
+  {id:'T40',name:'救生衣编号',layer:6,search:'救生衣编号',leads:'三人名单'},
+  {id:'T41',name:'水文站数据',layer:6,search:'水文站数据',leads:'落闸'},
+  {id:'T42',name:'遗物袋',layer:6,search:'遗物袋',leads:'生还者日记'},
+  {id:'T43',name:'决口位置图',layer:6,search:'决口位置',leads:'落闸'},
+  {id:'T44',name:'怀安晚报',layer:6,search:'怀安晚报',leads:'等一个人回家'},
+  /* L7 真相 · 终章 */
+  {id:'T45',name:'三人名单',layer:7,search:'三人名单',leads:'决口夜真相'},
+  {id:'T46',name:'决口夜真相',layer:7,search:'决口夜真相',leads:'生还者日记'},
+  {id:'T47',name:'生还者日记',layer:7,search:'生还者日记',leads:'生还者的后来'},
+  {id:'T48',name:'生还者的后来',layer:7,search:'生还者的后来',leads:'周年生的后人'},
+  {id:'T49',name:'周年生的后人',layer:7,search:'周年生的后人',leads:'终章'},
+  {id:'T50',name:'落闸',layer:7,search:'落闸',leads:'探照灯'},
+  {id:'T51',name:'探照灯',layer:7,search:'探照灯',leads:'终章'},
+  {id:'T52',name:'终章',layer:7,search:'终章',leads:''}
+];
+
+const LAYER_NAME=['浏览器（起点）','背景容器（四大站点）','表层裂缝','卫生院 · 系统','指挥部 · 公文','家庭','物证','真相 · 终章'];
+
+/* 已到达节点 → 打开对应网页 */
+const NODE_OPEN={
+  'S_ARCHIVE':['sites/archive/index.html',''],'S_ABOUT':['sites/archive/intro.html','about'],'S_NEWS':['sites/news/index.html',''],'S_TIEBA':['sites/tieba/index.html',''],'S_WX':['sites/wx/index.html',''],'S_BLOG':['sites/blog/index.html',''],
+  'B1998':['sites/web/1998.html',''],'B_BBS':['sites/web/bbs.html',''],'B_DIKE':['sites/news/index.html','dike'],'B_NEWS_DIG':['sites/news/index.html','photos'],'B_NEWS_REP':['sites/news/index.html','report'],'B_TIEBA_STORY':['sites/tieba/index.html','story'],
+  'B_WX_DIKE':['sites/wx/index.html','dike'],'B_WX_PHOTO':['sites/wx/index.html','photo'],'B_WX_MEM':['sites/wx/index.html','memory'],'B_BLOG_FERRY':['sites/blog/index.html','ferry'],'B_BLOG_LAMP':['sites/blog/index.html','lamp'],
+  'T01':['truth/act1/t01-oldfile.html',''],'T02':['truth/act1/t02-case.html',''],'T03':['truth/act1/t03-live.html',''],'T04':['truth/act1/t04-lamp.html',''],
+  'T05':['truth/act1/t05-witness.html',''],'T06':['truth/act1/t06-broadcaster.html',''],'T07':['truth/act1/t07-after.html',''],'T08':['truth/act1/t08-delete.html',''],'T09':['truth/act1/t09-rules.html',''],
+  'T10':['truth/act2/t10-hospital.html',''],'T11':['truth/act2/t11-clinic003.html',''],'T12':['truth/act2/t12-clinic017.html',''],'T13':['truth/act2/t13-anon.html',''],'T14':['truth/act2/t14-doctor.html',''],
+  'T15':['truth/act2/t15-meds.html',''],'T16':['truth/act2/t16-hisinfo.html',''],'T17':['truth/act2/t17-lost.html',''],
+  'T18':['truth/act3/t18-intranet.html',''],'T19':['truth/act3/t19-log0720.html',''],'T20':['truth/act3/t20-log0721.html',''],'T21':['truth/act3/t21-breach.html',''],'T22':['truth/act3/t22-report.html',''],
+  'T23':['truth/act3/t23-order.html',''],'T24':['truth/act3/t24-mayor.html',''],'T25':['truth/act3/t25-roster.html',''],'T26':['truth/act3/t26-money.html',''],'T27':['truth/act3/t27-honor.html',''],
+  'T28':['truth/act4/t28-forum.html',''],'T29':['truth/act4/t29-wife.html',''],'T30':['truth/act4/t30-mother.html',''],'T31':['truth/act4/t31-brother.html',''],'T32':['truth/act4/t32-notice.html',''],
+  'T33':['truth/act4/t33-reply20y.html',''],'T34':['truth/act4/t34-volunteer.html',''],'T35':['truth/act4/t35-media.html',''],
+  'T36':['truth/act5/t36-scanroom.html',''],'T37':['truth/act5/t37-photo.html',''],'T38':['truth/act5/t38-tape.html',''],'T39':['truth/act5/t39-signsheet.html',''],'T40':['truth/act5/t40-vest.html',''],
+  'T41':['truth/act5/t41-hydro.html',''],'T42':['truth/act5/t42-relic.html',''],'T43':['truth/act5/t43-map.html',''],'T44':['truth/act5/t44-newspaper.html',''],
+  'T45':['truth/act6/t45-list.html',''],'T46':['truth/act6/t46-truth.html',''],'T47':['truth/act6/t47-diary.html',''],'T48':['truth/act6/t48-later.html',''],'T49':['truth/act6/t49-heir.html',''],
+  'T50':['truth/act6/t50-gate.html',''],'T51':['truth/act6/t51-light.html',''],'T52':['truth/act6/t52-final.html','']
+};
+
+/* 当前位置：取最靠后到达的界面 */
+function loadFound(){
+  const s=new Set();
+  try{
+    const raw=localStorage.getItem(SAVE_KEY); if(!raw) return s;
+    const d=JSON.parse(raw); if(Array.isArray(d.f)) d.f.forEach(x=>s.add(x));
+  }catch(e){}
+  return s;
+}
+function isDone(n,found){ return n.always || found.has(n.id); }
+
+function toast(msg){
+  const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
+  clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200);
+}
+function openNode(n,found){
+  if(isDone(n,found)){
+    const rt=NODE_OPEN[n.id];
+    if(rt){ window.open(rt[0]+'?node='+encodeURIComponent(n.id)+(rt[1]?('#'+rt[1]):''),'_blank','noopener'); return; }
+    toast('该界面没有独立页面');
+  }else{
+    if(!n.search){ toast('暂时没有可直接检索的词'); return; }
+    window.open('browser.html?q='+encodeURIComponent(n.search),'_blank','noopener');
+  }
+}
+
+function render(){
+  const found=loadFound();
+  const total=NODES.length;
+  const done=NODES.filter(n=>isDone(n,found)).length;
+  const miss=total-done;
+
+  document.getElementById('progress').textContent='进度 '+done+' / '+total;
+  document.getElementById('barfill').style.width=(done/total*100).toFixed(0)+'%';
+  document.getElementById('stats').innerHTML=
+    '已解锁 <b>'+done+'</b> 个界面　·　漏了 <b>'+miss+'</b> 个　·　通关需到达「终章」';
+
+  /* 当前位置 */
+  let curId=null;
+  for(let i=NODES.length-1;i>=0;i--){ if(isDone(NODES[i],found)){ curId=NODES[i].id; break; } }
+
+  /* 分层流程图 */
+  const flowEl=document.getElementById('flow'); flowEl.innerHTML='';
+  for(let L=0;L<5;L++){
+    const col=document.createElement('div'); col.className='col';
+    const h=document.createElement('div'); h.className='col-h'; h.textContent=LAYER_NAME[L]; col.appendChild(h);
+    NODES.filter(n=>n.layer===L).forEach(n=>{
+      const d=isDone(n,found); const cur=(n.id===curId);
+      const card=document.createElement('div');
+      card.className='node '+(d?(cur?'cur':'done'):'miss');
+      card.innerHTML='<div>'+n.name+'</div>'+
+        '<span class="tag">'+(d?(cur?'● 当前位置':'✓ 已到达'):'○ 未到达')+'</span>';
+      card.onclick=()=>openNode(n,found);
+      col.appendChild(card);
+    });
+    flowEl.appendChild(col);
+    if(L<4){ const sep=document.createElement('div'); sep.className='col-sep'; sep.textContent='→'; flowEl.appendChild(sep); }
+  }
+
+  /* 漏掉清单 */
+  const missedEl=document.getElementById('missed');
+  const missNodes=NODES.filter(n=>!isDone(n,found));
+  if(missNodes.length===0){
+    missedEl.innerHTML='<div style="color:var(--acc2);font-size:14px">全部界面已到达，恭喜通关 ◎</div>';
+  }else{
+    missedEl.innerHTML='<div style="font-size:13px;color:var(--ink-dim)">共 '+missNodes.length+' 个界面还没到达：</div>'+
+      '<ul>'+missNodes.map(n=>'<li><b onclick="jumpSearch(\''+(n.search||'').replace(/'/g,"\\'")+'\')">'+n.name+'</b></li>').join('')+'</ul>';
+  }
+  document.getElementById('notefoot').textContent='进度来自浏览器写入的本地存档，与浏览器实时同步。';
+}
+function jumpSearch(q){ if(!q) return; window.open('browser.html?q='+encodeURIComponent(q),'_blank','noopener'); }
+
+/* 同步：浏览器检索写入 localStorage 后，本页实时刷新 */
+window.addEventListener('storage',e=>{ if(e.key===SAVE_KEY||e.key===null) render(); });
+window.addEventListener('focus',render);
+render();
+</script>
+</body>
+</html>

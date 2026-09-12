@@ -1,0 +1,55 @@
+/* =========================================================================
+ *  assets/base.css —— 站点通用基础层
+ *  在各自 style.css 之前加载：只提供设计令牌、字体栈、无障碍与滚动条默认值，
+ *  优先级低于各站样式，因此不会覆盖站点自身的视觉风格。
+ *  参照通行规范：间距 4/8/16/32/64 · 正文字号 16–18 · 行高 1.5–1.7 ·
+ *  阅读容器 600–750px · 圆角统一 8px · 单一主色 · 触控目标 ~44px。
+ * ========================================================================= */
+
+:root{
+  /* 间距刻度 */
+  --s1:4px;  --s2:8px;  --s3:16px; --s4:24px; --s5:32px; --s6:48px; --s7:64px;
+  /* 字号阶梯 */
+  --fs-xs:12px; --fs-sm:13px; --fs-base:15px; --fs-lg:16px;
+  --fs-h3:18px; --fs-h2:22px; --fs-h1:30px; --fs-hero:38px;
+  /* 圆角 */
+  --r:8px; --r-lg:12px;
+  /* 字体栈 */
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+  --serif:"Noto Serif SC","Songti SC",STSong,SimSun,serif;
+  --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  /* 中性灰阶（站点若自定义则以其为准） */
+  --n0:#fff; --n1:#f7f8fa; --n2:#eceef2; --n3:#d9dce3;
+  --n4:#b9bec8; --n5:#8b909b; --n6:#5f636c; --n7:#33363d; --n8:#1c1e22;
+}
+
+*{box-sizing:border-box;}
+html{-webkit-text-size-adjust:100%;text-size-adjust:100%;}
+body{
+  font-family:var(--sans);
+  line-height:1.7;
+  -webkit-font-smoothing:antialiased;
+  -moz-osx-font-smoothing:grayscale;
+}
+img,svg,video{max-width:100%;}
+img{height:auto;}
+a{transition:color .15s,background-color .15s,border-color .15s,opacity .15s;}
+button,input,select,textarea{font:inherit;color:inherit;}
+button{cursor:pointer;}
+:focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:4px;}
+::selection{background:rgba(111,177,255,.28);}
+::-webkit-scrollbar{width:10px;height:10px;}
+::-webkit-scrollbar-thumb{background:rgba(128,128,128,.35);border-radius:99px;
+  border:3px solid transparent;background-clip:content-box;}
+::-webkit-scrollbar-thumb:hover{background:rgba(128,128,128,.55);background-clip:content-box;}
+
+@media (prefers-reduced-motion:reduce){
+  *,*::before,*::after{
+    animation-duration:.001s!important;animation-iteration-count:1!important;
+    transition-duration:.001s!important;scroll-behavior:auto!important;
+  }
+}
+@media print{
+  .backbar,.tip,.bbtn,.follow,.bot{display:none!important;}
+  body{background:#fff!important;color:#000!important;}
+}

@@ -1,0 +1,164 @@
+/* =========================================================================
+ *  怀安县数字方志馆 · 站点样式
+ *  仿政务 / 档案信息网站：顶部服务条、站头 + 站内搜索、横向栏目导航、
+ *  要闻 + 通知公告 + 专题专栏三栏、快捷服务、规范页脚。
+ * ========================================================================= */
+:root{
+  --gov:#1a56a8; --gov-d:#134785; --gov-l:#e8f0fb;
+  --red:#b8232b;
+  --ink:#2b2f36; --ink2:#5b6270; --ink3:#8a9099;
+  --line:#dfe4ea; --line2:#eef1f5;
+  --bg:#f5f7fa; --paper:#fff;
+  --serif:"Noto Serif SC","Songti SC",STSong,SimSun,serif;
+  --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Microsoft YaHei",sans-serif;
+  --r:4px; --sh:0 1px 3px rgba(24,39,75,.06);
+}
+*{box-sizing:border-box;}
+body{margin:0;background:var(--bg);color:var(--ink);font-family:var(--sans);font-size:15px;line-height:1.75;}
+a{color:inherit;text-decoration:none;}
+a:hover{color:var(--gov);}
+img{display:block;max-width:100%;height:auto;}
+
+/* ---------- 顶部服务条 ---------- */
+.govbar{background:#f2f5f9;border-bottom:1px solid var(--line);font-size:12.5px;color:var(--ink2);}
+.govbar .in{max-width:1200px;margin:0 auto;padding:7px 16px;display:flex;align-items:center;gap:14px;flex-wrap:wrap;}
+.govbar .sp{flex:1;}
+.govbar a{color:var(--ink2);}
+.govbar a:hover{color:var(--gov);}
+.govbar .hl{color:var(--red);}
+
+/* ---------- 站头 ---------- */
+header{background:var(--paper);border-bottom:3px solid var(--gov);}
+.hd{max-width:1200px;margin:0 auto;padding:18px 16px;display:flex;align-items:center;gap:16px;flex-wrap:wrap;}
+.hd .lg{width:58px;height:58px;flex:none;}
+.hd .lg img{width:100%;height:100%;object-fit:contain;}
+.hd .tt{flex:1;min-width:220px;}
+.hd .tt b{display:block;font-family:var(--serif);font-size:27px;letter-spacing:2px;color:var(--gov-d);line-height:1.25;}
+.hd .tt span{display:block;font-size:11px;letter-spacing:1.4px;color:var(--ink3);margin-top:4px;text-transform:uppercase;}
+.hd .tools{display:flex;align-items:center;gap:8px;}
+.hd-search{display:flex;border:1px solid var(--line);border-radius:var(--r);overflow:hidden;background:#fff;}
+.hd-search input{border:0;outline:none;padding:9px 12px;width:210px;font-size:13.5px;font-family:inherit;color:var(--ink);}
+.hd-search button{border:0;background:var(--gov);color:#fff;padding:0 18px;font-size:13.5px;cursor:pointer;font-family:inherit;}
+.hd-search button:hover{background:var(--gov-d);}
+
+/* ---------- 栏目导航 ---------- */
+nav.gnav{background:var(--gov);}
+nav.gnav .in{max-width:1200px;margin:0 auto;padding:0 16px;display:flex;flex-wrap:wrap;}
+nav.gnav a{color:#eaf1fb;padding:13px 24px;font-size:15.5px;border-right:1px solid rgba(255,255,255,.14);}
+nav.gnav a:hover{background:var(--gov-d);color:#fff;}
+nav.gnav a.on{background:var(--gov-d);color:#fff;font-weight:700;box-shadow:inset 0 -3px 0 #ffd24d;}
+
+/* 兼容 about.html 等旧页：header 内的裸 nav 也套栏目样式 */
+header nav{display:flex;flex-wrap:wrap;background:var(--gov);}
+header nav a{color:#eaf1fb;padding:13px 24px;font-size:15.5px;border-right:1px solid rgba(255,255,255,.14);}
+header nav a:hover{background:var(--gov-d);color:#fff;}
+header nav a.on{background:var(--gov-d);color:#fff;font-weight:700;box-shadow:inset 0 -3px 0 #ffd24d;}
+
+/* 兼容旧页脚 */
+footer:not(.sitefoot){margin-top:26px;background:#2c3444;color:#aeb6c4;font-size:13px;
+  text-align:center;padding:20px 16px;line-height:2;}
+footer:not(.sitefoot) a{color:#cfd6e2;}
+footer:not(.sitefoot) a:hover{color:#fff;}
+
+/* ---------- 面包屑 ---------- */
+.crumb{max-width:1200px;margin:14px auto 0;padding:0 16px;font-size:12.5px;color:var(--ink3);}
+.crumb a{color:var(--ink3);}
+.crumb a:hover{color:var(--gov);}
+
+/* ---------- 版心 ---------- */
+.wrap{max-width:1200px;margin:0 auto;padding:16px;display:grid;grid-template-columns:236px 1fr;gap:20px;align-items:start;}
+
+/* ---------- 侧栏 ---------- */
+.side{display:flex;flex-direction:column;gap:14px;}
+.side h2{margin:0;font-size:15px;font-family:var(--serif);color:#fff;background:var(--gov);
+  padding:10px 14px;border-radius:var(--r) var(--r) 0 0;letter-spacing:1px;}
+.side .g{background:var(--paper);border:1px solid var(--line);border-top:0;border-radius:0 0 var(--r) var(--r);padding:10px 12px 12px;}
+.side .g b{display:block;font-size:12.5px;color:var(--ink3);margin:8px 0 6px;letter-spacing:.5px;}
+.side .g b:first-child{margin-top:2px;}
+.side .g a{display:block;font-size:14px;padding:8px 10px;border-radius:var(--r);color:var(--ink2);}
+.side .g a:hover{background:var(--gov-l);color:var(--gov);}
+.side .g a.on{background:var(--gov-l);color:var(--gov);font-weight:700;}
+
+/* ---------- 主区 ---------- */
+.main{min-width:0;display:flex;flex-direction:column;gap:20px;}
+.main > h1{font-family:var(--serif);font-size:24px;margin:0;padding-bottom:12px;border-bottom:2px solid var(--gov);letter-spacing:1px;}
+
+.card{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:20px;box-shadow:var(--sh);}
+.card h2{font-family:var(--serif);font-size:18px;margin:0 0 14px;padding-left:12px;position:relative;letter-spacing:.5px;}
+.card h2::before{content:"";position:absolute;left:0;top:4px;bottom:4px;width:4px;background:var(--gov);border-radius:2px;}
+.meta{font-size:12.5px;color:var(--ink3);margin:-8px 0 14px;}
+.card p{margin:0 0 14px;color:#3d434d;line-height:1.9;}
+.card p:last-child{margin-bottom:0;}
+
+/* 图片 */
+figure.pic{margin:0 0 16px;border:1px solid var(--line2);background:#fafbfc;padding:8px;}
+figure.pic img{width:100%;border-radius:2px;}
+figure.pic figcaption{font-size:12.5px;color:var(--ink3);text-align:center;margin-top:8px;}
+
+/* 图文列表 / 条目列表 */
+ul.items{list-style:none;margin:0;padding:0;}
+ul.items li{padding:12px 0;border-bottom:1px dashed var(--line);}
+ul.items li:last-child{border-bottom:0;padding-bottom:0;}
+ul.items li .t{display:block;font-size:15.5px;}
+ul.items li .t small{display:block;font-size:12.5px;color:var(--ink3);margin-top:4px;font-weight:400;}
+ul.items li:hover .t{color:var(--gov);}
+
+/* 通知公告（带日期） */
+.notice{margin:0;padding:0;list-style:none;}
+.notice li{display:flex;gap:14px;align-items:baseline;padding:11px 0;border-bottom:1px dashed var(--line);}
+.notice li:last-child{border-bottom:0;}
+.notice li .tt{flex:1;min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:15px;}
+.notice li .dt{font-size:12.5px;color:var(--ink3);font-family:var(--mono,monospace);flex:none;}
+.notice li:hover .tt{color:var(--gov);}
+
+/* 要闻大图 */
+.banner{display:grid;grid-template-columns:1fr 1fr;gap:18px;background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:18px;box-shadow:var(--sh);}
+.banner .fig img{width:100%;border-radius:2px;}
+.banner .tx h2{font-family:var(--serif);font-size:21px;line-height:1.5;margin:6px 0 10px;}
+.banner .tx p{margin:0;font-size:14px;color:var(--ink2);line-height:1.85;}
+
+/* 快捷服务 */
+.quick{display:grid;grid-template-columns:repeat(4,1fr);gap:12px;}
+.quick a{background:var(--paper);border:1px solid var(--line);border-radius:var(--r);padding:16px 10px;text-align:center;font-size:14px;transition:.15s;}
+.quick a b{display:block;font-size:20px;margin-bottom:6px;color:var(--gov);}
+.quick a:hover{border-color:var(--gov);color:var(--gov);transform:translateY(-2px);box-shadow:var(--sh);}
+
+/* 提示框 */
+.box{background:var(--gov-l);border:1px solid #cfe0f6;border-left:4px solid var(--gov);border-radius:var(--r);
+  padding:14px 16px;margin:14px 0 0;font-size:14px;color:#2c4a76;line-height:1.85;}
+.box .h{display:block;font-weight:700;color:var(--gov-d);margin-bottom:6px;}
+.box a{color:var(--gov-d);text-decoration:underline;}
+
+/* 术语表 */
+.dl{margin:0;display:grid;grid-template-columns:96px 1fr;gap:10px 16px;font-size:14.5px;}
+.dl dt{color:var(--ink3);}
+.dl dd{margin:0;color:#3d434d;}
+
+/* 归档整理稿 */
+.arch{border:1px solid var(--line);border-left:4px solid #b6bfcc;background:#fbfcfd;border-radius:var(--r);padding:16px 18px;margin-top:16px;}
+.arch-h{font-family:var(--serif);font-weight:700;color:#4a5261;margin-bottom:4px;}
+.arch-meta{font-size:12.5px;color:var(--ink3);margin-bottom:12px;}
+.fig{border:1px dashed var(--line);background:#fafbfc;color:var(--ink3);font-size:13px;
+  padding:22px;text-align:center;border-radius:var(--r);margin-top:12px;}
+
+/* 底部 */
+footer.sitefoot{margin-top:28px;background:#2c3444;color:#aeb6c4;font-size:13px;line-height:2;}
+footer.sitefoot .in{max-width:1200px;margin:0 auto;padding:22px 16px;display:flex;gap:24px;flex-wrap:wrap;}
+footer.sitefoot a{color:#cfd6e2;}
+footer.sitefoot a:hover{color:#fff;}
+footer.sitefoot .sp{flex:1;}
+
+/* 回浏览器 */
+.backbar{position:fixed;right:16px;bottom:16px;z-index:90;background:var(--gov);color:#fff;
+  border-radius:99px;padding:10px 20px;font-size:13.5px;cursor:pointer;box-shadow:0 4px 14px rgba(26,86,168,.35);}
+.backbar:hover{background:var(--gov-d);}
+
+@media(max-width:980px){
+  .wrap{grid-template-columns:1fr;}
+  .banner{grid-template-columns:1fr;}
+  .quick{grid-template-columns:repeat(2,1fr);}
+  .hd .tt b{font-size:22px;}
+  .hd-search input{width:140px;}
+  nav.gnav a{padding:12px 16px;font-size:14.5px;}
+  .backbar{padding:12px 22px;min-height:44px;}
+}

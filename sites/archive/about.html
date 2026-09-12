@@ -1,0 +1,72 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>关于本站 · 怀安县数字方志馆</title>
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header><div class="hd">
+  <div class="lg"><img src="../../pic/logo.png" alt="馆徽" onerror="picMiss(this)"></div>
+  <div class="tt"><b>怀安县数字方志馆</b><span>HUAI'AN DIGITAL LOCAL CHRONICLES</span></div>
+  <nav>
+    <a href="index.html">首页</a><a href="intro.html">本馆</a><a href="about.html" class="on">关于</a>
+  </nav>
+</div></header>
+
+<div class="crumb"><a href="index.html">首页</a> › 关于本站</div>
+
+<div class="wrap">
+  <aside class="side">
+    <h2>关于本站</h2>
+    <div class="g"><b>条目</b>
+      <a href="#site" class="on">站点说明</a><a href="#disc">内容说明</a><a href="#contact">联系方式</a></div>
+    <div class="g"><b>返回</b>
+      <a href="index.html">返回首页</a><a href="intro.html">本馆概况</a></div>
+  </aside>
+
+  <main class="main">
+    <h1>关于本站</h1>
+    <section id="site" class="card">
+      <h2>站点说明</h2>
+      <div class="meta">网站维护 · 信息技术科</div>
+      <p>怀安县数字方志馆网站由本馆信息技术科建设维护，提供地情资料检索、补录材料查阅、馆务资讯发布等服务。</p>
+      <p>补录专区所收录的 1998 年汛期相关材料，均为数字化过程中依规范扫描、著录的副本，原件仍存于本馆库房。材料中有部分内容前后记述不一，本馆按原样保留，并在附注栏标注"待核"，不作删改。</p>
+    </section>
+
+    <section id="disc" class="card">
+      <h2>关于本站</h2>
+      <div class="box"><span class="h">服务范围</span>怀安县数字方志馆数字档案查阅平台，提供馆藏档案目录检索、数字化影印件阅览与补录投稿服务。涉密档案须经审批后调阅。</div>
+    </section>
+
+    <section id="contact" class="card">
+      <h2>联系方式</h2>
+      <div class="meta">办公信息</div>
+      <dl class="dl">
+        <dt>地址</dt><dd>怀安县永宁镇老街 1 号（演示）</dd>
+        <dt>电话</dt><dd>0000-0000000（演示）</dd>
+        <dt>邮箱</dt><dd>demo@example.invalid（演示）</dd>
+      </dl>
+    </section>
+  </main>
+</div>
+
+<footer>© 怀安县数字方志馆　·　<a href="about.html">关于本站</a></footer>
+<div class="backbar" onclick="backHome()">↩ 回到浏览器</div>
+
+<script>
+function go(q){
+  const url='../../browser.html?q='+encodeURIComponent(q);
+  /* 优先直接调用浏览器的检索函数：不刷新页面，"已查阅"进度不会丢 */
+  try{ if(window.parent && window.parent!==window){ window.parent.postMessage({t:'kw',q:q},'*'); return; } }catch(e){}
+  window.open(url,'_blank','noopener');
+}
+function backHome(){ go('home'); }
+function picMiss(img){ img.style.display='none'; }
+</script>
+<script src='../../assets/nav.js'></script>
+</body>
+</html>

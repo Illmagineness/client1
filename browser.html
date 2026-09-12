@@ -1,0 +1,619 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
+<title>怀安在线 · 浏览器</title>
+<style>
+  /* =====================================================================
+   *  设计令牌：间距 4/8/16/32/64 · 字号阶梯 · 统一圆角 8px · 单一主色
+   *  参照通行规范：正文容器 600–750px、行高 1.5–1.7、触控目标 ~44px、
+   *  标题字重 600–700、正文字重 400、一处强调色。
+   * =================================================================== */
+  :root{
+    /* 颜色 */
+    --bg:#0b0c10; --bg2:#0f1116; --panel:#14161d; --panel2:#1a1d26;
+    --ink:#e9eaef; --ink-dim:#a8abb6; --ink-faint:#71757f;
+    --line:#232733; --line2:#2f3442;
+    --acc:#6fb1ff; --acc-ink:#08111c; --acc2:#7fe0c0; --warn:#ffa46b;
+    /* 间距刻度 */
+    --s1:4px; --s2:8px; --s3:16px; --s4:24px; --s5:32px; --s6:48px; --s7:64px;
+    /* 字号阶梯 */
+    --fs-xs:12px; --fs-sm:13px; --fs-base:15px; --fs-lg:16px; --fs-h3:18px;
+    --fs-h2:22px; --fs-h1:30px; --fs-hero:38px;
+    /* 圆角 / 阴影 */
+    --r:8px; --r-lg:12px;
+    --sh:0 1px 2px rgba(0,0,0,.4), 0 10px 28px rgba(0,0,0,.3);
+    /* 字体：UI 用无衬线，阅读区用衬线 */
+    --sans:-apple-system,BlinkMacSystemFont,"Segoe UI","PingFang SC","Hiragino Sans GB","Microsoft YaHei",sans-serif;
+    --serif:"Noto Serif SC","Songti SC",STSong,SimSun,serif;
+    --mono:ui-monospace,"SFMono-Regular",Menlo,Consolas,monospace;
+  }
+  *{box-sizing:border-box;}
+  html,body{margin:0;padding:0;height:100%;}
+  html{-webkit-text-size-adjust:100%;}
+  body{background:var(--bg);color:var(--ink);font-family:var(--sans);
+    font-size:var(--fs-base);line-height:1.7;-webkit-font-smoothing:antialiased;
+    display:flex;flex-direction:column;overflow:hidden;}
+  a{color:var(--acc);text-decoration:none;}
+  img{max-width:100%;height:auto;}
+  ::selection{background:rgba(111,177,255,.3);}
+  :focus-visible{outline:2px solid var(--acc);outline-offset:2px;border-radius:4px;}
+  #page::-webkit-scrollbar,.box-ov::-webkit-scrollbar{width:10px;}
+  #page::-webkit-scrollbar-thumb,.box-ov::-webkit-scrollbar-thumb{background:#272b36;border-radius:99px;border:3px solid transparent;background-clip:content-box;}
+  #page::-webkit-scrollbar-thumb:hover{background:#3a4050;background-clip:content-box;}
+
+  /* ---------- 浏览器外框 ---------- */
+  #chrome{flex:none;background:linear-gradient(180deg,#0d0f14,#0b0c10);border-bottom:1px solid var(--line);}
+  #tabbar{display:flex;align-items:flex-end;gap:var(--s2);padding:var(--s2) var(--s3) 0;}
+  .tab{display:flex;align-items:center;gap:var(--s2);min-width:0;max-width:340px;
+    background:var(--bg);border:1px solid var(--line);border-bottom-color:var(--bg);
+    border-radius:10px 10px 0 0;padding:9px 14px 8px;font-size:var(--fs-sm);color:var(--ink-dim);}
+  .tab.on{color:var(--ink);}
+  .tab .tdot{width:9px;height:9px;border-radius:99px;background:linear-gradient(135deg,var(--acc),var(--acc2));flex:none;}
+  #tabtitle{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
+  .tabghost{flex:1;border-bottom:1px solid var(--line);height:20px;}
+  .wctl{display:flex;gap:var(--s2);align-items:center;padding-bottom:10px;}
+  .wctl i{width:11px;height:11px;border-radius:99px;background:#2a2f3b;display:block;}
+  .wctl i:nth-child(1){background:#3a4250;}
+  .wctl i:nth-child(2){background:#333b48;}
+
+  /* ---------- 工具栏 ---------- */
+  #topbar{display:flex;align-items:center;gap:var(--s2);padding:var(--s2) var(--s3);
+    background:var(--bg);border-bottom:1px solid var(--line);flex-wrap:wrap;}
+  #brand{font-size:var(--fs-sm);font-weight:700;letter-spacing:.4px;cursor:pointer;
+    display:flex;align-items:center;gap:var(--s2);color:var(--ink);padding-right:var(--s2);}
+  #brand .gl{width:20px;height:20px;border-radius:6px;background:linear-gradient(135deg,var(--acc),#3f7fd6);
+    display:grid;place-items:center;font-size:11px;color:#07101c;font-weight:800;}
+  .navbtn{background:transparent;border:1px solid var(--line2);color:var(--ink-dim);
+    min-height:36px;padding:0 12px;border-radius:var(--r);cursor:pointer;
+    font-size:var(--fs-sm);font-family:inherit;transition:border-color .15s,color .15s,background .15s;}
+  .navbtn:hover{border-color:var(--acc);color:var(--acc);}
+  .navbtn[disabled]{opacity:.35;cursor:not-allowed;}
+  .navbtn[disabled]:hover{border-color:var(--line2);color:var(--ink-dim);}
+  .addrwrap{flex:1;min-width:200px;display:flex;align-items:center;gap:var(--s2);
+    background:var(--bg2);border:1px solid var(--line2);border-radius:var(--r);padding:0 12px;transition:border-color .15s,box-shadow .15s;}
+  .addrwrap:focus-within{border-color:var(--acc);box-shadow:0 0 0 3px rgba(111,177,255,.16);}
+  .addrwrap .glb{font-size:13px;color:var(--ink-faint);flex:none;}
+  #addr{flex:1;min-width:0;background:transparent;border:0;color:var(--ink);
+    min-height:38px;padding:0;font-size:var(--fs-sm);font-family:var(--mono);outline:none;}
+  #addr::placeholder{color:var(--ink-faint);font-family:var(--sans);}
+  #toolbtns{display:flex;gap:var(--s2);}
+  #progress{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);
+    min-width:76px;text-align:right;white-space:nowrap;}
+
+  /* ---------- 视口 ---------- */
+  #viewport{position:relative;flex:1;min-height:0;background:var(--bg);}
+  #page{position:absolute;inset:0;width:100%;height:100%;overflow:auto;}
+
+  /* 阅读区：容器 720px（约 60–75 字符/行） */
+  .page{max-width:720px;margin:0 auto;padding:var(--s4) var(--s3) var(--s7);
+    font-family:var(--serif);font-size:var(--fs-lg);line-height:1.85;}
+  .page p{margin:0 0 var(--s3);}
+  .page h1{font-size:var(--fs-h1);line-height:1.45;margin:var(--s2) 0 var(--s2);}
+  .page h2{font-size:var(--fs-h2);line-height:1.45;color:var(--ink);margin:var(--s5) 0 var(--s2);}
+  .meta{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);margin:0 0 var(--s3);letter-spacing:.3px;}
+  .arch-note{margin:var(--s4) 0 0;padding:var(--s3) var(--s3);background:var(--bg2);
+    border-left:3px solid var(--line2);border-radius:0 var(--r) var(--r) 0;
+    font-size:var(--fs-sm);color:var(--ink-dim);line-height:1.8;}
+  .arch-note b{color:var(--acc);font-weight:700;}
+  .box{border:1px solid var(--line2);background:var(--bg2);border-radius:var(--r);
+    padding:var(--s3);margin:var(--s3) 0;font-size:var(--fs-sm);color:var(--ink-dim);line-height:1.75;}
+  .kw{font-weight:700;}
+
+  /* 搜索结果页 */
+  .sr-h{font-family:var(--mono);font-size:var(--fs-sm);color:var(--ink-dim);
+    padding:var(--s1) 0 var(--s3);border-bottom:1px solid var(--line);margin-bottom:var(--s3);}
+  .sr-h b{color:var(--ink);}
+  .sr-list{display:flex;flex-direction:column;gap:var(--s2);}
+  .sr{position:relative;padding:var(--s3) var(--s3) var(--s3) calc(var(--s3) + 4px);
+    border:1px solid var(--line);border-radius:var(--r);background:var(--panel);
+    cursor:pointer;transition:border-color .15s,background .15s,transform .15s;}
+  .sr::before{content:"";position:absolute;left:0;top:12px;bottom:12px;width:3px;border-radius:99px;background:transparent;transition:background .15s;}
+  .sr:hover{border-color:var(--acc);background:#171a23;transform:translateY(-1px);}
+  .sr:hover::before{background:var(--acc);}
+  .sr-t{font-family:var(--sans);font-size:var(--fs-lg);font-weight:600;color:var(--acc);line-height:1.5;}
+  .sr-u{font-family:var(--mono);font-size:var(--fs-xs);color:var(--acc2);margin:var(--s1) 0 var(--s1);word-break:break-all;}
+  .sr-d{font-family:var(--sans);font-size:var(--fs-xs);color:var(--ink-faint);}
+  .sr-none{font-family:var(--sans);font-size:var(--fs-sm);color:var(--ink-dim);margin-top:var(--s3);line-height:1.8;}
+
+  /* 起始页 */
+  .start{padding:var(--s3) 0;}
+  .start-t{font-size:var(--fs-hero);letter-spacing:var(--s2);font-weight:700;color:var(--ink);
+    text-align:center;line-height:1.3;margin-bottom:var(--s2);}
+  .start-s{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);
+    text-align:center;letter-spacing:.5px;margin-bottom:var(--s5);}
+  .sites{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
+  .site{border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s4) var(--s3);
+    background:var(--panel);cursor:pointer;text-align:center;
+    transition:border-color .16s,background .16s,transform .16s,box-shadow .16s;}
+  .site:hover{border-color:var(--acc);background:#171a23;transform:translateY(-2px);box-shadow:var(--sh);}
+  .site-ic{width:52px;height:52px;border-radius:var(--r-lg);margin:0 auto var(--s3);
+    display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;}
+  .site-nm{font-family:var(--sans);font-size:var(--fs-base);font-weight:600;color:var(--ink);margin-bottom:var(--s1);}
+  .site-d{font-family:var(--sans);font-size:var(--fs-xs);color:var(--ink-faint);line-height:1.6;}
+
+  /* 浮层 */
+  .ov{position:fixed;inset:0;background:rgba(4,6,10,.62);backdrop-filter:blur(2px);
+    display:none;align-items:center;justify-content:center;z-index:100;padding:var(--s4);}
+  .ov.show{display:flex;}
+  .box-ov{background:var(--panel);border:1px solid var(--line2);border-radius:var(--r-lg);
+    padding:var(--s4);max-width:560px;width:100%;max-height:80vh;overflow:auto;position:relative;box-shadow:var(--sh);}
+  .box-ov h2{margin:0 0 var(--s3);font-size:var(--fs-h3);font-family:var(--sans);}
+  .box-ov p{color:var(--ink-dim);font-size:var(--fs-sm);line-height:1.8;}
+  .close{position:absolute;top:var(--s3);right:var(--s3);background:transparent;border:1px solid var(--line2);
+    color:var(--ink-dim);border-radius:var(--r);min-height:32px;padding:0 12px;cursor:pointer;font-size:var(--fs-xs);font-family:inherit;}
+  .close:hover{border-color:var(--acc);color:var(--acc);}
+  #helphint{font-family:var(--sans);font-size:var(--fs-sm);line-height:1.85;color:var(--ink-dim);}
+  #helphint h3{color:var(--ink);margin:var(--s3) 0 var(--s1);font-size:var(--fs-base);}
+  #helphint h3:first-child{margin-top:0;}
+  #helphint .k{font-family:var(--mono);color:var(--acc);}
+  #toast{position:fixed;left:50%;bottom:var(--s5);transform:translateX(-50%) translateY(14px);
+    background:var(--acc);color:var(--acc-ink);border-radius:99px;padding:10px 20px;
+    font-size:var(--fs-sm);font-weight:600;z-index:60;opacity:0;pointer-events:none;
+    transition:opacity .25s,transform .25s;box-shadow:var(--sh);}
+  #toast.show{opacity:1;transform:translateX(-50%) translateY(0);}
+
+  /* ---------- 响应式 ---------- */
+  @media(max-width:1024px){ .sites{grid-template-columns:repeat(2,1fr);} }
+  @media(max-width:720px){
+    :root{--fs-hero:30px; --fs-h1:26px; --fs-h2:20px;}
+    #topbar{gap:var(--s1);}
+    #brand span:not(.gl){display:none;}
+    #progress{order:9;min-width:auto;margin-left:auto;}
+    .navbtn{min-height:44px;padding:0 10px;}
+    #addr{min-height:44px;}
+    .page{padding:var(--s3) var(--s3) var(--s6);font-size:var(--fs-base);}
+    #tabbar{padding-left:var(--s2);}
+    .tab{max-width:none;flex:1;}
+  }
+  @media (prefers-reduced-motion:reduce){
+    *{transition:none!important;animation:none!important;}
+  }
+</style>
+</head>
+<body>
+
+<!-- 浏览器外框 -->
+<div id="chrome">
+  <!-- 标签栏 -->
+  <div id="tabbar">
+    <div class="tab on"><span class="tdot"></span><span id="tabtitle">怀安在线 · 起始页</span></div>
+    <div class="tabghost"></div>
+    <div class="wctl"><i></i><i></i><i></i></div>
+  </div>
+
+  <!-- 工具栏 -->
+  <div id="topbar">
+    <div id="brand" onclick="renderHome()"><span class="gl">⊙</span><span>怀安在线</span></div>
+    <button class="navbtn" id="backbtn" onclick="goBack()" title="后退">←</button>
+    <button class="navbtn" id="fwdbtn" onclick="goFwd()" title="前进">→</button>
+    <button class="navbtn" onclick="renderHome()" title="起始页">⌂</button>
+    <div class="addrwrap">
+      <span class="glb">⊙</span>
+      <input id="addr" placeholder="在地址栏输入网址，或检索你读到的名词……" autocomplete="off"
+        onkeydown="if(event.key==='Enter'){doSearch(this.value);}">
+    </div>
+    <button class="navbtn" onclick="doSearch(document.getElementById('addr').value)">检索</button>
+    <div id="toolbtns">
+      <button class="navbtn" id="mapbtn" onclick="openMap()">探索地图</button>
+      <button class="navbtn" id="logbtn" onclick="openLog()">⌗ 日志</button>
+      <button class="navbtn" id="helpbtn" onclick="helpHint()">？帮助</button>
+      <button class="navbtn" id="resetbtn" onclick="restartGame()" title="清空进度，重新开始">↺ 重新开始</button>
+    </div>
+    <div id="progress">0 / 37</div>
+  </div>
+</div>
+
+<!-- 视口 -->
+<div id="viewport">
+  <div id="page" class="page"></div>
+</div>
+
+<!-- 帮助浮层 -->
+<div class="ov" id="helpov"><div class="box-ov"><button class="close" data-close="helpov">关闭</button><h2>帮助中心</h2><div id="helphint"></div></div></div>
+<!-- 日志浮层 -->
+<div class="ov" id="logov"><div class="box-ov"><button class="close" data-close="logov">关闭</button><h2>检索日志</h2><div id="loglist2" style="font-family:var(--mono);font-size:12px;line-height:1.9;color:var(--ink-dim)"></div></div></div>
+<!-- 轻提示 -->
+<div id="toast"></div>
+
+<script>
+"use strict";
+/* =========================================================================
+ *  怀安在线 · 浏览器（检索中枢）
+ *  - 顶栏地址/搜索栏；站点页都是独立 html，搜词后在本页列出「搜索结果」。
+ *  - 点结果链接 / 站点名，均在新标签页打开对应网页（原页面保留，不覆盖）。
+ *  - 站点正文里的关键词点击后，开新标签回到本浏览器继续检索。
+ * ========================================================================= */
+
+/* ====================== 1. 站点路由：页面 → 独立站点文件 + 锚点 ====================== */
+const PAGE_ROUTE = {
+  /* 背景容器：四大站点 + 博客 + 散落的旧网页（只放氛围/背景词） */
+  S_ARCHIVE:['sites/archive/index.html',''], S_ABOUT:['sites/archive/intro.html','about'],
+  S_NEWS:['sites/news/index.html',''], S_TIEBA:['sites/tieba/index.html',''], S_WX:['sites/wx/index.html',''],
+  S_BLOG:['sites/blog/index.html',''], B1998:['sites/web/1998.html',''], B_BBS:['sites/web/bbs.html',''],
+  B_DIKE:['sites/news/index.html','dike'], B_NEWS_DIG:['sites/news/index.html','photos'], B_NEWS_REP:['sites/news/index.html','report'],
+  B_TIEBA_STORY:['sites/tieba/index.html','story'],
+  B_WX_DIKE:['sites/wx/index.html','dike'], B_WX_PHOTO:['sites/wx/index.html','photo'], B_WX_MEM:['sites/wx/index.html','memory'],
+  B_BLOG_FERRY:['sites/blog/index.html','ferry'], B_BLOG_LAMP:['sites/blog/index.html','lamp'],
+  /* 真相线：一词一页（一一对应），按 Act 分目录 */
+  T01:['truth/act1/t01-oldfile.html',''],   T02:['truth/act1/t02-case.html',''],        T03:['truth/act1/t03-live.html',''],
+  T04:['truth/act1/t04-lamp.html',''],      T05:['truth/act1/t05-witness.html',''],     T06:['truth/act1/t06-broadcaster.html',''],
+  T07:['truth/act1/t07-after.html',''],     T08:['truth/act1/t08-delete.html',''],      T09:['truth/act1/t09-rules.html',''],
+  T10:['truth/act2/t10-hospital.html',''],  T11:['truth/act2/t11-clinic003.html',''],   T12:['truth/act2/t12-clinic017.html',''],
+  T13:['truth/act2/t13-anon.html',''],      T14:['truth/act2/t14-doctor.html',''],      T15:['truth/act2/t15-meds.html',''],
+  T16:['truth/act2/t16-hisinfo.html',''],   T17:['truth/act2/t17-lost.html',''],
+  T18:['truth/act3/t18-intranet.html',''],  T19:['truth/act3/t19-log0720.html',''],     T20:['truth/act3/t20-log0721.html',''],
+  T21:['truth/act3/t21-breach.html',''],    T22:['truth/act3/t22-report.html',''],      T23:['truth/act3/t23-order.html',''],
+  T24:['truth/act3/t24-mayor.html',''],     T25:['truth/act3/t25-roster.html',''],      T26:['truth/act3/t26-money.html',''],
+  T27:['truth/act3/t27-honor.html',''],
+  T28:['truth/act4/t28-forum.html',''],     T29:['truth/act4/t29-wife.html',''],        T30:['truth/act4/t30-mother.html',''],
+  T31:['truth/act4/t31-brother.html',''],   T32:['truth/act4/t32-notice.html',''],      T33:['truth/act4/t33-reply20y.html',''],
+  T34:['truth/act4/t34-volunteer.html',''], T35:['truth/act4/t35-media.html',''],
+  T36:['truth/act5/t36-scanroom.html',''],  T37:['truth/act5/t37-photo.html',''],       T38:['truth/act5/t38-tape.html',''],
+  T39:['truth/act5/t39-signsheet.html',''], T40:['truth/act5/t40-vest.html',''],        T41:['truth/act5/t41-hydro.html',''],
+  T42:['truth/act5/t42-relic.html',''],     T43:['truth/act5/t43-map.html',''],         T44:['truth/act5/t44-newspaper.html',''],
+  T45:['truth/act6/t45-list.html',''],      T46:['truth/act6/t46-truth.html',''],       T47:['truth/act6/t47-diary.html',''],
+  T48:['truth/act6/t48-later.html',''],     T49:['truth/act6/t49-heir.html',''],        T50:['truth/act6/t50-gate.html',''],
+  T51:['truth/act6/t51-light.html',''],     T52:['truth/act6/t52-final.html',''],
+  noise:null
+};
+
+/* 站点名（输入即直达站点首页，类似输入网址） */
+const SITES = {
+  '档案馆':['sites/archive/index.html','S_ARCHIVE','怀安县数字方志馆'],
+  '数字方志馆':['sites/archive/index.html','S_ARCHIVE','怀安县数字方志馆'],
+  '方志馆':['sites/archive/index.html','S_ARCHIVE','怀安县数字方志馆'],
+  '新闻主页':['sites/news/index.html','S_NEWS','怀安新闻网'],
+  '新闻网':['sites/news/index.html','S_NEWS','怀安新闻网'],
+  '怀安新闻网':['sites/news/index.html','S_NEWS','怀安新闻网'],
+  '贴吧主页':['sites/tieba/index.html','S_TIEBA','怀安贴吧'],
+  '贴吧':['sites/tieba/index.html','S_TIEBA','怀安贴吧'],
+  '怀安贴吧':['sites/tieba/index.html','S_TIEBA','怀安贴吧'],
+  '公众号主页':['sites/wx/index.html','S_WX','怀安发布'],
+  '公众号':['sites/wx/index.html','S_WX','怀安发布'],
+  '怀安发布':['sites/wx/index.html','S_WX','怀安发布'],
+  '江边旧事':['sites/blog/index.html','S_BLOG','江边旧事'],
+  '博客':['sites/blog/index.html','S_BLOG','江边旧事']
+};
+
+/* ====================== 2. 检索索引 ====================== */
+const SEARCH_INDEX = [
+  /* —— 背景容器：四大站点 + 博客（输入站点名直达，类似输入网址） —— */
+  {k:['怀安县数字方志馆','档案馆','数字方志馆','方志馆'], p:'S_ARCHIVE'},
+  {k:['馆情简介','方志馆简介'], p:'S_ABOUT'},
+  {k:['新闻主页','新闻网','怀安新闻网'], p:'S_NEWS'},
+  {k:['贴吧主页','贴吧','怀安贴吧'], p:'S_TIEBA'},
+  {k:['公众号主页','公众号','怀安发布'], p:'S_WX'},
+  {k:['江边旧事','博客'], p:'S_BLOG'},
+  {k:['密码','门禁'], p:'S_ARCHIVE'},
+
+  /* —— 初期背景关键词（只出现在站点里，是氛围，不是真相） —— */
+  {k:['1998年洪水','1998洪水'], p:'B1998'},
+  {k:['怀水河'], p:'B1998'},
+  {k:['拦河闸'], p:'B1998'},
+  {k:['永宁镇'], p:'B1998'},
+  {k:['县志'], p:'B1998'},
+  {k:['怀安水利志','怀安水利'], p:'B1998'},
+  {k:['怀安之声'], p:'B_BBS'},
+  {k:['永宁堤'], p:'B_DIKE'},
+  {k:['渡口村'], p:'B_TIEBA_STORY'},
+  {k:['怀安话老故事征集','怀安话·老故事征集','老故事征集'], p:'B_TIEBA_STORY'},
+  {k:['永宁堤加固工程纪实'], p:'B_WX_DIKE'},
+  {k:['怀安旧照征集令'], p:'B_WX_PHOTO'},
+  {k:['那年防汛记忆','那年，我们一起守堤'], p:'B_WX_MEM'},
+  {k:['怀安旧照数字化上线'], p:'B_NEWS_DIG'},
+  {k:['怀安日报 汛情通报','汛情通报'], p:'B_NEWS_REP'},
+  {k:['我爹是摆渡的'], p:'B_BLOG_FERRY'},
+  {k:['江边那盏灯'], p:'B_BLOG_LAMP'},
+
+  /* —— 真相线：一词一页（一一对应） —— */
+  {k:['旧档补录'], p:'T01'},
+  {k:['防汛失踪案','失踪案','已安全转移安置','安全转移安置','转移安置'], p:'T02'},
+  {k:['决口夜直播帖','直播帖'], p:'T03'},
+  {k:['堤上那盏灯','那盏灯'], p:'T04'},
+  {k:['目击者老船工','老船工','老船工何老栓','何老栓','船老大','摆渡人'], p:'T05'},
+  {k:['郑晓棠','广播员郑晓棠','镇广播站'], p:'T06'},
+  {k:['洪水退去之后','灾后'], p:'T07'},
+  {k:['删帖公告'], p:'T08'},
+  {k:['论坛版规','版规','限流'], p:'T09'},
+  {k:['卫生院系统','卫生院'], p:'T10'},
+  {k:['卫字003号接诊单','接诊单 卫字003','卫字003'], p:'T11'},
+  {k:['卫字017号接诊单','接诊单 卫字017','卫字017'], p:'T12'},
+  {k:['匿名接诊记录','匿名记录'], p:'T13'},
+  {k:['值班医生留言','医生留言'], p:'T14'},
+  {k:['药品申领单','申领单'], p:'T15'},
+  {k:['怀安卫生院','卫生院概况'], p:'T16'},
+  {k:['失访记录'], p:'T17'},
+  {k:['防汛内网','指挥部内网'], p:'T18'},
+  {k:['防汛日志 7月20日','防汛日志7月20日','日志7.20'], p:'T19'},
+  {k:['防汛日志 7月21日','防汛日志7月21日','日志7.21','防汛日志','当年的日志','当年日志'], p:'T20'},
+  {k:['决口记录','决口'], p:'T21'},
+  {k:['结案报告'], p:'T22'},
+  {k:['指挥部工单','工单'], p:'T23'},
+  {k:['县长批示','批示'], p:'T24'},
+  {k:['防汛队名册','防汛队员','名册'], p:'T25'},
+  {k:['慰问金','抚恤'], p:'T26'},
+  {k:['立功喜报','表彰'], p:'T27'},
+  {k:['等一个人回家','寻亲论坛'], p:'T28'},
+  {k:['队员甲 妻子的帖','赵建国妻子','刘秀芝'], p:'T29'},
+  {k:['队员乙 母亲的帖','孙长海母亲','王桂兰'], p:'T30'},
+  {k:['队员丙 弟弟的帖','周文斌弟弟','周文涛'], p:'T31'},
+  {k:['寻人启事'], p:'T32'},
+  {k:['二十年后的回帖','二十年后'], p:'T33'},
+  {k:['寻亲志愿者','志愿者'], p:'T34'},
+  {k:['媒体报道'], p:'T35'},
+  {k:['怀安旧档','旧档扫描室'], p:'T36'},
+  {k:['决口夜照片','照片'], p:'T37'},
+  {k:['决口夜录音','录音'], p:'T38'},
+  {k:['涂改的签到表','签到表'], p:'T39'},
+  {k:['救生衣编号','救生衣'], p:'T40'},
+  {k:['水文站数据','水文数据','水文站'], p:'T41'},
+  {k:['遗物袋','遗物'], p:'T42'},
+  {k:['决口位置','位置图'], p:'T43'},
+  {k:['怀安晚报','旧报纸'], p:'T44'},
+  {k:['三人名单','周文斌'], p:'T45'},
+  {k:['决口夜真相','真相'], p:'T46'},
+  {k:['生还者日记','日记'], p:'T47'},
+  {k:['生还者的后来','后来','周年生'], p:'T48'},
+  {k:['周年生的后人','后人'], p:'T49'},
+  {k:['落闸','闸'], p:'T50'},
+  {k:['探照灯'], p:'T51'},
+  {k:['终章','合上档案'], p:'T52'}
+];
+
+/* 进度统计用的全部界面节点（与 map.html 一致） */
+const NODE_IDS = ['__browser__','S_ARCHIVE','S_NEWS','S_TIEBA','S_WX','S_BLOG','B1998','B_BBS',
+  'T01','T02','T03','T04','T05','T06','T07','T08','T09',
+  'T10','T11','T12','T13','T14','T15','T16','T17','T18','T19','T20','T21','T22','T23','T24','T25','T26','T27',
+  'T28','T29','T30','T31','T32','T33','T34','T35',
+  'T36','T37','T38','T39','T40','T41','T42','T43','T44',
+  'T45','T46','T47','T48','T49','T50','T51','T52'];
+const NODE_TOTAL = NODE_IDS.length;
+
+/* ====================== 3. 关键词加粗（仅内联页） ====================== */
+const EXCLUDE_KW = new Set([
+  '馆情简介','方志馆简介','馆藏指南','读者须知','怀安历史沿革','历史沿革','怀安风物','风物',
+  '怀安非遗','非遗','怀安名人','名人','怀安大事记','大事记','新闻动态','馆务新闻','馆员手记',
+  '林知夏手记','数字化规范','数字化','怀安交通','交通','怀安水利','水利','怀安地名','地名',
+  '怀安方言','方言','怀安气象','气象','怀安老照片','老照片','怀安县数字方志馆',
+  '民国地契高清扫描','怀安年鉴2025终审','怀安老照片征集收官','档案里的怀安开放日','1998汛期旧档补录启动',
+  '怀安交通志校订','怀安水利志补录','永宁镇地名考新增','1998防汛专辑录入','怀安方言语音库上线','历年洪水档案整理',
+  '档案馆','数字方志馆','方志馆','新闻主页','新闻网','怀安新闻网','贴吧主页','怀安贴吧','公众号主页','公众号','怀安发布'
+]);
+const ALLKW = (function(){ const s=new Set(); SEARCH_INDEX.forEach(e=>e.k.forEach(k=>{ if(k.length>=2 && !EXCLUDE_KW.has(k)) s.add(k); })); return [...s].sort((a,b)=>b.length-a.length); })();
+function highlightKeywords(root){
+  const walker=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
+  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
+  nodes.forEach(n=>{
+    const text=n.nodeValue; const ranges=[]; let changed=false;
+    for(const w of ALLKW){ if(w.length<2) continue; let i=0;
+      while((i=text.indexOf(w,i))!==-1){ ranges.push([i,i+w.length]); i+=w.length; changed=true; } }
+    if(!changed) return;
+    ranges.sort((a,b)=> a[0]-b[0] || (b[1]-b[0])-(a[1]-a[0]));
+    const merged=[]; for(const r of ranges){ if(merged.length && r[0]<merged[merged.length-1][1]) continue; merged.push(r); }
+    const frag=document.createDocumentFragment(); let pos=0;
+    merged.forEach(([s,e])=>{
+      if(s>pos) frag.appendChild(document.createTextNode(text.slice(pos,s)));
+      const b=document.createElement('b'); b.className='kw'; b.textContent=text.slice(s,e); frag.appendChild(b); pos=e;
+    });
+    if(pos<text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+    n.parentNode.replaceChild(frag, n);
+  });
+}
+
+/* ====================== 4. 状态 / 持久化 ====================== */
+const found = new Set();
+const log = [];
+const SAVE_KEY = 'huaian1998_v3';
+const pageEl = document.getElementById('page');
+const addrEl = document.getElementById('addr');
+let hist = [];   // 视图历史：{kind:'home'|'results'|'site', ...}
+let hi = -1;
+let lastEntries = [];
+
+function saveProgress(){
+  try{
+    if(!found.size && !log.length) localStorage.removeItem(SAVE_KEY);
+    else localStorage.setItem(SAVE_KEY, JSON.stringify({f:[...found], l:log.slice(0,60)}));
+  }catch(e){}
+}
+function loadProgress(){
+  try{ const raw=localStorage.getItem(SAVE_KEY); if(!raw) return; const d=JSON.parse(raw);
+    if(Array.isArray(d.f)) d.f.forEach(x=>found.add(x));
+    if(Array.isArray(d.l)) log.push(...d.l.slice(0,60));
+  }catch(e){}
+}
+function updateProgress(){
+  let done=0; for(const id of NODE_IDS){ if(id==='__browser__'||found.has(id)) done++; }
+  const el=document.getElementById('progress'); if(el) el.textContent = done+' / '+NODE_TOTAL;
+}
+
+/* ====================== 5. 检索匹配 ====================== */
+function matchAll(q){
+  q=(q||'').trim(); if(!q) return [];
+  const out=[]; const seen=new Set();
+  for(const e of SEARCH_INDEX){
+    let hit=false;
+    for(const k of e.k){ if(k===q || q.includes(k) || k.includes(q)){ hit=true; break; } }
+    if(hit){ if(seen.has(e.p)) continue; seen.add(e.p); out.push(e); }
+  }
+  out.sort((a,b)=> rank(b,q)-rank(a,q));
+  return out;
+}
+function rank(e,q){ return e.k.some(k=>k===q)?2:(e.k.some(k=>q.includes(k)||k.includes(q))?1:0); }
+
+/* ====================== 6. 视口切换 ====================== */
+function showInline(){ pageEl.style.display='block'; }
+function setAddr(v){
+  addrEl.value=v||'';
+  const t=document.getElementById('tabtitle');
+  if(t) t.textContent = (!v || v==='about:home') ? '怀安在线 · 起始页' : String(v).replace(/^search:\s*/,'检索：');
+}
+function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
+function siteNameOf(file){
+  if(!file) return '';
+  if(file.indexOf('sites/archive/')===0) return '怀安县数字方志馆';
+  if(file.indexOf('sites/news/')===0) return '怀安新闻网';
+  if(file.indexOf('sites/tieba/')===0) return '怀安贴吧';
+  if(file.indexOf('sites/wx/')===0) return '怀安发布';
+  if(file.indexOf('sites/web/')===0) return '散落的旧网页';
+  if(file.indexOf('truth/')===0) return '未公开整理稿';
+  if(file.indexOf('sites/blog/')===0) return '江边旧事';
+  return '';
+}
+
+/* ====================== 7. 渲染：首页 / 结果 / 站点 ====================== */
+function applyHome(){
+  showInline();
+  pageEl.innerHTML = `
+    <div class="start">
+      <div class="start-t">怀 安 在 线</div>
+      <div class="start-s">本地导航 · 网友常用站点</div>
+      <div class="sites">
+        <div class="site" onclick="doSearch('档案馆')">
+          <div class="site-ic" style="background:linear-gradient(135deg,#8B6F47,#A98A5F)">志</div>
+          <div class="site-nm">怀安县数字方志馆</div><div class="site-d">地情档案 · 旧档补录</div>
+        </div>
+        <div class="site" onclick="doSearch('新闻主页')">
+          <div class="site-ic" style="background:linear-gradient(135deg,#C8161D,#E34A50)">闻</div>
+          <div class="site-nm">怀安新闻网</div><div class="site-d">本地报道 · 旧报</div>
+        </div>
+        <div class="site" onclick="doSearch('贴吧主页')">
+          <div class="site-ic" style="background:linear-gradient(135deg,#3B7DE0,#5B9BF3)">吧</div>
+          <div class="site-nm">怀安贴吧</div><div class="site-d">网友闲聊 · 老故事</div>
+        </div>
+        <div class="site" onclick="doSearch('公众号主页')">
+          <div class="site-ic" style="background:linear-gradient(135deg,#07C160,#3DDC84)">微</div>
+          <div class="site-nm">怀安发布</div><div class="site-d">官方公众号</div>
+        </div>
+      </div>
+    </div>`;
+  highlightKeywords(pageEl);
+  window.scrollTo(0,0);
+  setAddr('about:home');
+}
+function renderHome(){ applyHome(); pushHistory({kind:'home'}); updateProgress(); }
+
+function applyResults(q, entries){
+  showInline();
+  let html = `<div class="sr-h">搜索结果 · <b>${esc(q)}</b></div>`;
+  if(!entries.length){
+    html += `<div class="sr-none">没有找到与「${esc(q)}」相关的网页。</div>`;
+  }else{
+    html += `<div class="sr-list">` + entries.map(e=>{
+      const rt = PAGE_ROUTE[e.p]; const file = rt?rt[0]:''; const anchor = rt?rt[1]:'';
+      const url = file + (anchor?('#'+anchor):'');
+      return `<div class="sr" onclick="openResult('${e.p}')">
+        <div class="sr-t">${esc(e.k[0])}</div>
+        <div class="sr-u">${esc(url)}</div>
+        <div class="sr-d">${esc(siteNameOf(file))} · 点击进入查看</div></div>`;
+    }).join('') + `</div>`;
+    html += `<div class="sr-tip">这些结果都来自你读到的正文关键词。点上面的标题，会在本窗口打开对应网页；网页里又有新词，再拿回来搜，一层层往下挖。</div>`;
+  }
+  pageEl.innerHTML = html;
+  window.scrollTo(0,0);
+  setAddr('search: '+q);
+}
+function showResults(q, entries){
+  lastEntries = entries;
+  applyResults(q, entries);
+  if(entries.length && log.indexOf('✓ '+q)===-1){ log.unshift('✓ '+q); if(log.length>60) log.length=60; }
+  syncLog();
+  pushHistory({kind:'results', q, entries});
+  updateProgress();
+}
+function openResult(p){
+  const e = lastEntries.find(x=>x.p===p); if(!e) return;
+  const rt = PAGE_ROUTE[p]; if(!rt) return;
+  const file = rt[0], anchor = rt[1]||'';
+  const url = file + '?node=' + encodeURIComponent(p) + (anchor?('#'+anchor):'');
+  window.open(url, '_blank', 'noopener');
+}
+
+/* 站点页均作为独立网页在新标签页打开，这里不再使用 iframe / navTo */
+
+/* ====================== 8. 历史 / 导航 ====================== */
+function pushHistory(v){
+  if(hi < hist.length-1) hist = hist.slice(0, hi+1);
+  hist.push(v); hi = hist.length-1;
+  syncNavBtns();
+}
+function syncNavBtns(){
+  document.getElementById('backbtn').disabled = hi<=0;
+  document.getElementById('fwdbtn').disabled = hi>=hist.length-1;
+}
+function applyView(v){
+  if(v.kind==='results'){ lastEntries=v.entries||[]; applyResults(v.q, v.entries||[]); }
+  else applyHome();
+}
+function goBack(){ if(hi>0){ hi--; applyView(hist[hi]); syncNavBtns(); } }
+function goFwd(){ if(hi<hist.length-1){ hi++; applyView(hist[hi]); syncNavBtns(); } }
+
+/* ====================== 9. 主检索入口 ====================== */
+function doSearch(raw){
+  const q=(raw||'').trim(); if(!q) return;
+  if(SITES[q]){ const s=SITES[q]; window.open(s[0]+'?node='+encodeURIComponent(s[1]), '_blank', 'noopener'); return; }
+  const entries = matchAll(q);
+  showResults(q, entries);   // 命中→结果列表（点链接在新标签打开）；未命中→"未收录"结果页
+}
+
+/* ====================== 10. 跨标签页进度同步 ====================== */
+window.addEventListener('storage', function(e){
+  if(e.key!=='huaian1998_v3') return;
+  try{
+    found.clear();
+    const raw=localStorage.getItem('huaian1998_v3');
+    if(raw){ const d=JSON.parse(raw); if(Array.isArray(d.f)) d.f.forEach(x=>found.add(x)); }
+  }catch(_){}
+  updateProgress();
+});
+
+/* ====================== 11. 浮层 / 日志 / 帮助 ====================== */
+function openMap(){ window.open('map.html','_blank','noopener'); }
+function openLog(){ syncLog(); document.getElementById('logov').classList.add('show'); }
+function syncLog(){
+  const txt = log.length ? log.join('\n') : '（暂无检索记录）';
+  const l2=document.getElementById('loglist2'); if(l2) l2.textContent=txt;
+  saveProgress();
+}
+function helpHint(){
+  document.getElementById('helphint').innerHTML = `
+    <h3>这是什么</h3>
+    <p>这是一个用"上网查资料"包装的叙事解谜。你是一个普通网友，在本窗口里输入关键词、打开一个个网页，拼出 1998 年怀安洪水那夜，三名守堤队员失踪的真相。</p>
+    <h3>怎么玩</h3>
+    <p>· 在顶部地址/搜索栏输入网站名，会在<b>新标签页</b>打开对应站点首页；<br>· 输入你在网页正文里读到的名词，本页先列出<b>搜索结果</b>；<br>· 点结果标题，在<b>新标签页</b>打开对应网页（每个链接都是新页面，不覆盖当前页）。<br>· 顶部「← →」在本浏览器页内翻页，「⌂」回到起始页，「探索地图」看进度。</p>`;
+  document.getElementById('helpov').classList.add('show');
+}
+let toastTimer=null;
+function toast(msg){ const t=document.getElementById('toast'); if(!t) return; t.textContent=msg; t.classList.add('show');
+  clearTimeout(toastTimer); toastTimer=setTimeout(()=>t.classList.remove('show'),2200); }
+
+/* 重新开始：清空全部游戏进度（已访问界面 / 检索日志），并重新锁定机密档案室 */
+function restartGame(){
+  if(!confirm('确定清空游戏进度（已访问界面、检索日志），并重新锁定机密档案室吗？此操作不可撤销。')) return;
+  try{
+    localStorage.removeItem('huaian1998_v3');     /* 探索进度 */
+    localStorage.removeItem('huaian1998_secret_v2'); /* 机密档案室解锁态 */
+  }catch(e){}
+  found.clear();
+  log.length = 0;
+  syncLog();
+  updateProgress();
+  renderHome();
+  toast('已清空进度，重新开始');
+}
+
+/* ====================== 12. 初始化 ====================== */
+document.querySelectorAll('[data-close]').forEach(b=>{ b.addEventListener('click', ()=>{ const o=document.getElementById(b.dataset.close); if(o) o.classList.remove('show'); }); });
+document.querySelectorAll('.ov').forEach(o=>{ o.addEventListener('click', e=>{ if(e.target===o) o.classList.remove('show'); }); });
+
+loadProgress(); syncLog(); updateProgress();
+(function(){
+  const m=location.search.match(/[?&]q=([^&]*)/);
+  if(m){ const q=decodeURIComponent(m[1]); if(q) setTimeout(()=>doSearch(q),80); }
+  else renderHome();
+})();
+</script>
+</body>
+</html>
