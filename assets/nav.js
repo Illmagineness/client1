@@ -110,6 +110,86 @@
     location.reload();
   };
 
+  /* ── 真相页的"背景呼吸"──────────────────────────────────────
+   * 剧情页不能一路紧绷到底。这里做两件事：
+   *   ① 正文里原本就写到的地情名（永宁堤 / 怀水河 / 渡口村 …）
+   *      就地变成可点的背景链接，玩家能随时退回背景层再回来；
+   *   ② 若整页没提到任何地情名，末尾补一行"地情背景"注记做出口。
+   * 只对 truth/ 下的关键词网页生效，站点网页保持各自原样。
+   * ─────────────────────────────────────────────────────────── */
+  var BG_POOL = {
+    act1:['永宁堤','怀水河','渡口村'],
+    act2:['永宁镇','怀水河','县志'],
+    act3:['永宁堤','拦河闸','怀安水利志'],
+    act4:['渡口村','怀水河','永宁镇'],
+    act5:['永宁堤','怀安水利志','县志'],
+    act6:['怀水河','渡口村','永宁堤']
+  };
+  var BG_SKIP = { 'script':1, 'style':1, 'button':1, 'a':1, 'b':1 };
+
+  /* 把正文里出现的地情名就地包成 <b class="kw">，返回命中的词表 */
+  function weaveBg(){
+    var wrap = document.querySelector('.wrap'); if(!wrap) return {};
+    var words = [];
+    for(var k in KW_BG){ if(k.length >= 2) words.push(k); }
+    words.sort(function(a,b){ return b.length - a.length; });
+
+    var walker = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT, null);
+    var nodes = [], n;
+    while((n = walker.nextNode())){
+      var p = n.parentNode; if(!p) continue;
+      if(BG_SKIP[(p.nodeName || '').toLowerCase()]) continue;
+      if(p.closest && p.closest('.tb')) continue;
+      nodes.push(n);
+    }
+
+    var seen = {};
+    nodes.forEach(function(node){
+      var text = node.nodeValue, ranges = [], i, word, idx;
+      for(i = 0; i < words.length; i++){
+        word = words[i]; idx = 0;
+        while((idx = text.indexOf(word, idx)) !== -1){
+          ranges.push([idx, idx + word.length]); idx += word.length;
+        }
+      }
+      if(!ranges.length) return;
+      ranges.sort(function(a,b){ return a[0]-b[0] || (b[1]-b[0])-(a[1]-a[0]); });
+      var merged = [];
+      ranges.forEach(function(r){
+        if(merged.length && r[0] < merged[merged.length-1][1]) return;
+        merged.push(r);
+      });
+      var frag = document.createDocumentFragment(), pos = 0;
+      merged.forEach(function(r){
+        if(r[0] > pos) frag.appendChild(document.createTextNode(text.slice(pos, r[0])));
+        var b = document.createElement('b');
+        b.className = 'kw'; b.textContent = text.slice(r[0], r[1]);
+        seen[b.textContent] = 1;
+        frag.appendChild(b); pos = r[1];
+      });
+      if(pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
+      node.parentNode.replaceChild(frag, node);
+    });
+    return seen;
+  }
+
+  /* 整页都没有地情名时，末尾补一行出口 */
+  function bgNote(seen){
+    var wrap = document.querySelector('.wrap'); if(!wrap) return;
+    var list = [], k;
+    for(k in seen) list.push(k);
+    if(!list.length){
+      var act = relPath().split('/')[1] || 'act1';
+      list = (BG_POOL[act] || BG_POOL.act1).slice(0, 3);
+      var box = document.createElement('div');
+      box.className = 'bg-note';
+      box.innerHTML = '<span class="lbl">地情背景</span>' + list.map(function(x){
+        return '<b class="kw">' + x + '</b>';
+      }).join('<span class="sep">·</span>');
+      wrap.appendChild(box);
+    }
+  }
+
   function init(){
     /* 机密卷宗页未解锁：整页已被遮蔽，跳过进度上报与绑定 */
     if(document.querySelector('.secret-block')) return;
@@ -134,6 +214,11 @@
     var lastDir = parts[parts.length - 1];
     if(SITE_BY_DIR[lastDir]) register(SITE_BY_DIR[lastDir]);
     if(lastDir === 'blog') register('S_BLOG');
+
+    /* 2.5) 真相页：把正文里的地情名变回背景链接，必要时在末尾补一行地情注 */
+    if(relPath().indexOf('truth/') === 0){
+      bgNote(weaveBg());
+    }
 
     /* 3) 正文关键词点击
      *    · 背景词（氛围 / 地情）→ 直接在新标签打开对应网页，像普通超链接

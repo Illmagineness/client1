@@ -46,6 +46,12 @@ p{margin:0 0 13px;}
 .foot a{border-bottom:1px solid var(--acc);}
 .gap{height:26px;}
 
+/* 地情注：真相页的"背景呼吸"出口（由 assets/nav.js 追加） */
+.bg-note{margin:28px 0 0;padding-top:12px;border-top:1px dashed var(--line);
+  font-family:ui-monospace,Consolas,monospace;font-size:12.5px;letter-spacing:.3px;opacity:.9;}
+.bg-note .lbl{opacity:.6;margin-right:10px;}
+.bg-note .sep{opacity:.35;margin:0 8px;}
+
 /* fix 底栏 */
 .fix{position:fixed;left:50%;bottom:16px;transform:translateX(-50%);background:var(--acc);color:#0a0a0c;
   border-radius:18px;padding:7px 16px;font-size:12.5px;font-weight:600;opacity:.92;pointer-events:none;z-index:9;}
