@@ -97,7 +97,8 @@
   <div class="bar"><i id="barfill" style="width:0%"></i></div>
 
   <div class="howto">
-    本页显示你已到达与尚未到达的界面，随检索实时更新。绿色=已到达，橙色=当前位置，灰色=未到达。
+    本页显示你已到达与尚未到达的界面，随检索实时更新。绿色=已到达，橙色=当前位置，灰色=未到达。<br>
+    点击节点即可打开对应网页；属于真相线的节点，会替你在「怀安在线」里检索该词。
   </div>
 
   <div class="sec-t">分层流程图（界面清单）</div>
@@ -226,16 +227,17 @@ function toast(msg){
   const t=document.getElementById('toast'); t.textContent=msg; t.classList.add('show');
   clearTimeout(toast._t); toast._t=setTimeout(()=>t.classList.remove('show'),2200);
 }
+/* 背景容器节点（四大站点 / 地情背景）：点击直接打开对应网页，与站点里关键词的行为一致 */
+function isBgNode(id){ return /^[SB]/.test(id); }
 function openNode(n,found){
-  if(isDone(n,found)){
-    const rt=NODE_OPEN[n.id];
-    if(rt){ window.open(rt[0]+'?node='+encodeURIComponent(n.id)+(rt[1]?('#'+rt[1]):''),'_blank','noopener'); return; }
-    toast('该界面没有独立页面');
-  }else{
-    if(!n.search){ toast('暂时没有可直接检索的词'); return; }
-    window.open('browser.html?q='+encodeURIComponent(n.search),'_blank','noopener');
+  const rt=NODE_OPEN[n.id];
+  if(rt && (isDone(n,found) || isBgNode(n.id))){
+    window.open(rt[0]+'?node='+encodeURIComponent(n.id)+(rt[1]?('#'+rt[1]):''),'_blank','noopener'); return;
   }
+  if(!n.search){ toast('暂时没有可直接检索的词'); return; }
+  window.open('browser.html?q='+encodeURIComponent(n.search),'_blank','noopener');
 }
+function openNodeById(id){ const n=NODES.find(x=>x.id===id); if(n) openNode(n, loadFound()); }
 
 function render(){
   const found=loadFound();
@@ -277,11 +279,10 @@ function render(){
     missedEl.innerHTML='<div style="color:var(--acc2);font-size:14px">全部界面已到达，恭喜通关 ◎</div>';
   }else{
     missedEl.innerHTML='<div style="font-size:13px;color:var(--ink-dim)">共 '+missNodes.length+' 个界面还没到达：</div>'+
-      '<ul>'+missNodes.map(n=>'<li><b onclick="jumpSearch(\''+(n.search||'').replace(/'/g,"\\'")+'\')">'+n.name+'</b></li>').join('')+'</ul>';
+      '<ul>'+missNodes.map(n=>'<li><b onclick="openNodeById(\''+n.id+'\')">'+n.name+'</b></li>').join('')+'</ul>';
   }
   document.getElementById('notefoot').textContent='进度来自浏览器写入的本地存档，与浏览器实时同步。';
 }
-function jumpSearch(q){ if(!q) return; window.open('browser.html?q='+encodeURIComponent(q),'_blank','noopener'); }
 
 /* 同步：浏览器检索写入 localStorage 后，本页实时刷新 */
 window.addEventListener('storage',e=>{ if(e.key===SAVE_KEY||e.key===null) render(); });

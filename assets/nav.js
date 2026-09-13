@@ -42,6 +42,28 @@
   };
   var SITE_BY_DIR = { 'archive':'S_ARCHIVE', 'news':'S_NEWS', 'tieba':'S_TIEBA', 'wx':'S_WX' };
 
+  /* 背景关键词 → 节点：点击后【直接打开对应网页】，像普通超链接一样。
+     只收录"氛围 / 地情背景"词；真相词一律不在表内，点击仍回浏览器检索。
+     与 browser.html 的 SEARCH_INDEX 中「背景容器 / 初期背景关键词」两段保持一致。 */
+  var KW_BG = {
+    /* 散落的旧网页 · 地情 */
+    '1998年洪水':'B1998', '1998洪水':'B1998', '怀水河':'B1998', '拦河闸':'B1998',
+    '永宁镇':'B1998', '县志':'B1998', '怀安水利志':'B1998', '怀安水利':'B1998',
+    '怀安之声':'B_BBS',
+    /* 新闻网 · 永宁堤 */
+    '永宁堤':'B_DIKE',
+    '怀安旧照数字化上线':'B_NEWS_DIG',
+    '怀安日报 汛情通报':'B_NEWS_REP', '汛情通报':'B_NEWS_REP',
+    /* 贴吧 · 渡口村 */
+    '渡口村':'B_TIEBA_STORY', '怀安话老故事征集':'B_TIEBA_STORY',
+    '怀安话·老故事征集':'B_TIEBA_STORY', '老故事征集':'B_TIEBA_STORY',
+    /* 公众号 · 怀安发布 */
+    '永宁堤加固工程纪实':'B_WX_DIKE', '怀安旧照征集令':'B_WX_PHOTO',
+    '那年防汛记忆':'B_WX_MEM', '那年，我们一起守堤':'B_WX_MEM',
+    /* 博客 · 江边旧事 */
+    '我爹是摆渡的':'B_BLOG_FERRY', '江边那盏灯':'B_BLOG_LAMP'
+  };
+
   /* 计算页面到项目根目录的相对前缀（本文件固定在 <root>/assets/nav.js） */
   var SELF_SRC = (function(){ try{ return document.currentScript ? document.currentScript.src : ''; }catch(e){ return ''; } })();
   var ROOT_PATH = (function(){
@@ -113,13 +135,33 @@
     if(SITE_BY_DIR[lastDir]) register(SITE_BY_DIR[lastDir]);
     if(lastDir === 'blog') register('S_BLOG');
 
-    /* 3) 正文关键词点击 → 新标签检索 */
+    /* 3) 正文关键词点击
+     *    · 背景词（氛围 / 地情）→ 直接在新标签打开对应网页，像普通超链接
+     *    · 真相词 → 回「怀安在线」检索（线索要自己一点点搜出来）
+     */
     document.querySelectorAll('.kw').forEach(function(el){
       if(el.closest && el.closest('a')) return;   /* 已被链接包裹则不重复绑定 */
+      var txt = (el.textContent || '').trim();
+      var rt = KW_BG[txt] ? PAGE_ROUTE[KW_BG[txt]] : null;
       el.style.cursor = 'pointer';
-      el.addEventListener('click', function(){
-        window.open(browserUrl(el.textContent.trim()), '_blank', 'noopener');
-      });
+      if(rt){
+        var anchor = rt[1] ? ('#' + rt[1]) : '';
+        if(rt[0] === relPath()){
+          /* 指向本页的板块：就地滚动过去，不再开重复标签页 */
+          el.title = anchor ? ('跳到本页 ' + anchor) : '回到本页顶部';
+          el.addEventListener('click', function(){
+            if(anchor) location.hash = rt[1]; else window.scrollTo({top:0, behavior:'smooth'});
+          });
+        }else{
+          /* 背景词：直接在新标签打开对应网页，并定位到对应板块 */
+          var url = ROOT_PREFIX + rt[0] + anchor;
+          el.title = '打开网页：' + rt[0] + anchor;
+          el.addEventListener('click', function(){ window.open(url, '_blank', 'noopener'); });
+        }
+      }else{
+        el.title = '在怀安在线检索「' + txt + '」';
+        el.addEventListener('click', function(){ window.open(browserUrl(txt), '_blank', 'noopener'); });
+      }
     });
 
     /* 4) 跨页面链接 → 新标签页打开（原页保留） */
