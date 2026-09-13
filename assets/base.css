@@ -34,6 +34,11 @@ body{
 img,svg,video{max-width:100%;}
 img{height:auto;}
 a{transition:color .15s,background-color .15s,border-color .15s,opacity .15s;}
+
+/* 页脚 / 底部的站内导航（各站点共用）。只在同一个站内跳转。 */
+.footnav{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 10px;font-size:13px;}
+.footnav a{opacity:.85;}
+.footnav a:hover{opacity:1;}
 button,input,select,textarea{font:inherit;color:inherit;}
 button{cursor:pointer;}
 :focus-visible{outline:2px solid currentColor;outline-offset:2px;border-radius:4px;}

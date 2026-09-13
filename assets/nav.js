@@ -1,8 +1,10 @@
 /* =========================================================================
- *  nav.js —— 站点页共享脚本
- *  - 点击正文蓝色关键词 → 新标签页打开「怀安在线」并带入检索词。
- *  - 一切跨页面链接（站内外）默认新标签页打开，原网页不覆盖。
- *  - 页面载入时把"当前节点"上报到 localStorage，供探索地图/进度同步。
+ *  nav.js —— 站点页 / 真相页共享脚本
+ *  - 点击正文里的关键词（加粗）→ 新标签页打开「怀安在线」并带入检索词。
+ *  - 关键词只靠"加粗"被认出来：不给 title、不加提示。
+ *  - 站内链接（顶部导航 / 栏目标题 / 侧栏 / 页脚 / 关于页 / 页内锚点）
+ *    按正常网页的方式**同标签页**跳转，全部留在本站内。
+ *  - 页面载入时把"当前节点"上报到 localStorage，供探索地图 / 进度同步。
  *  由 browser.html 注入的 ?node= 参数决定精确节点；无参数时按 文件#锚点 推断。
  * ========================================================================= */
 (function(){
@@ -41,28 +43,6 @@
     noise:null
   };
   var SITE_BY_DIR = { 'archive':'S_ARCHIVE', 'news':'S_NEWS', 'tieba':'S_TIEBA', 'wx':'S_WX' };
-
-  /* 背景关键词 → 节点：点击后【直接打开对应网页】，像普通超链接一样。
-     只收录"氛围 / 地情背景"词；真相词一律不在表内，点击仍回浏览器检索。
-     与 browser.html 的 SEARCH_INDEX 中「背景容器 / 初期背景关键词」两段保持一致。 */
-  var KW_BG = {
-    /* 散落的旧网页 · 地情 */
-    '1998年洪水':'B1998', '1998洪水':'B1998', '怀水河':'B1998', '拦河闸':'B1998',
-    '永宁镇':'B1998', '县志':'B1998', '怀安水利志':'B1998', '怀安水利':'B1998',
-    '怀安之声':'B_BBS',
-    /* 新闻网 · 永宁堤 */
-    '永宁堤':'B_DIKE',
-    '怀安旧照数字化上线':'B_NEWS_DIG',
-    '怀安日报 汛情通报':'B_NEWS_REP', '汛情通报':'B_NEWS_REP',
-    /* 贴吧 · 渡口村 */
-    '渡口村':'B_TIEBA_STORY', '怀安话老故事征集':'B_TIEBA_STORY',
-    '怀安话·老故事征集':'B_TIEBA_STORY', '老故事征集':'B_TIEBA_STORY',
-    /* 公众号 · 怀安发布 */
-    '永宁堤加固工程纪实':'B_WX_DIKE', '怀安旧照征集令':'B_WX_PHOTO',
-    '那年防汛记忆':'B_WX_MEM', '那年，我们一起守堤':'B_WX_MEM',
-    /* 博客 · 江边旧事 */
-    '我爹是摆渡的':'B_BLOG_FERRY', '江边那盏灯':'B_BLOG_LAMP'
-  };
 
   /* 计算页面到项目根目录的相对前缀（本文件固定在 <root>/assets/nav.js） */
   var SELF_SRC = (function(){ try{ return document.currentScript ? document.currentScript.src : ''; }catch(e){ return ''; } })();
@@ -110,86 +90,6 @@
     location.reload();
   };
 
-  /* ── 真相页的"背景呼吸"──────────────────────────────────────
-   * 剧情页不能一路紧绷到底。这里做两件事：
-   *   ① 正文里原本就写到的地情名（永宁堤 / 怀水河 / 渡口村 …）
-   *      就地变成可点的背景链接，玩家能随时退回背景层再回来；
-   *   ② 若整页没提到任何地情名，末尾补一行"地情背景"注记做出口。
-   * 只对 truth/ 下的关键词网页生效，站点网页保持各自原样。
-   * ─────────────────────────────────────────────────────────── */
-  var BG_POOL = {
-    act1:['永宁堤','怀水河','渡口村'],
-    act2:['永宁镇','怀水河','县志'],
-    act3:['永宁堤','拦河闸','怀安水利志'],
-    act4:['渡口村','怀水河','永宁镇'],
-    act5:['永宁堤','怀安水利志','县志'],
-    act6:['怀水河','渡口村','永宁堤']
-  };
-  var BG_SKIP = { 'script':1, 'style':1, 'button':1, 'a':1, 'b':1 };
-
-  /* 把正文里出现的地情名就地包成 <b class="kw">，返回命中的词表 */
-  function weaveBg(){
-    var wrap = document.querySelector('.wrap'); if(!wrap) return {};
-    var words = [];
-    for(var k in KW_BG){ if(k.length >= 2) words.push(k); }
-    words.sort(function(a,b){ return b.length - a.length; });
-
-    var walker = document.createTreeWalker(wrap, NodeFilter.SHOW_TEXT, null);
-    var nodes = [], n;
-    while((n = walker.nextNode())){
-      var p = n.parentNode; if(!p) continue;
-      if(BG_SKIP[(p.nodeName || '').toLowerCase()]) continue;
-      if(p.closest && p.closest('.tb')) continue;
-      nodes.push(n);
-    }
-
-    var seen = {};
-    nodes.forEach(function(node){
-      var text = node.nodeValue, ranges = [], i, word, idx;
-      for(i = 0; i < words.length; i++){
-        word = words[i]; idx = 0;
-        while((idx = text.indexOf(word, idx)) !== -1){
-          ranges.push([idx, idx + word.length]); idx += word.length;
-        }
-      }
-      if(!ranges.length) return;
-      ranges.sort(function(a,b){ return a[0]-b[0] || (b[1]-b[0])-(a[1]-a[0]); });
-      var merged = [];
-      ranges.forEach(function(r){
-        if(merged.length && r[0] < merged[merged.length-1][1]) return;
-        merged.push(r);
-      });
-      var frag = document.createDocumentFragment(), pos = 0;
-      merged.forEach(function(r){
-        if(r[0] > pos) frag.appendChild(document.createTextNode(text.slice(pos, r[0])));
-        var b = document.createElement('b');
-        b.className = 'kw'; b.textContent = text.slice(r[0], r[1]);
-        seen[b.textContent] = 1;
-        frag.appendChild(b); pos = r[1];
-      });
-      if(pos < text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
-      node.parentNode.replaceChild(frag, node);
-    });
-    return seen;
-  }
-
-  /* 整页都没有地情名时，末尾补一行出口 */
-  function bgNote(seen){
-    var wrap = document.querySelector('.wrap'); if(!wrap) return;
-    var list = [], k;
-    for(k in seen) list.push(k);
-    if(!list.length){
-      var act = relPath().split('/')[1] || 'act1';
-      list = (BG_POOL[act] || BG_POOL.act1).slice(0, 3);
-      var box = document.createElement('div');
-      box.className = 'bg-note';
-      box.innerHTML = '<span class="lbl">地情背景</span>' + list.map(function(x){
-        return '<b class="kw">' + x + '</b>';
-      }).join('<span class="sep">·</span>');
-      wrap.appendChild(box);
-    }
-  }
-
   function init(){
     /* 机密卷宗页未解锁：整页已被遮蔽，跳过进度上报与绑定 */
     if(document.querySelector('.secret-block')) return;
@@ -215,50 +115,18 @@
     if(SITE_BY_DIR[lastDir]) register(SITE_BY_DIR[lastDir]);
     if(lastDir === 'blog') register('S_BLOG');
 
-    /* 2.5) 真相页：把正文里的地情名变回背景链接，必要时在末尾补一行地情注 */
-    if(relPath().indexOf('truth/') === 0){
-      bgNote(weaveBg());
-    }
-
-    /* 3) 正文关键词点击
-     *    · 背景词（氛围 / 地情）→ 直接在新标签打开对应网页，像普通超链接
-     *    · 真相词 → 回「怀安在线」检索（线索要自己一点点搜出来）
-     */
+    /* 3) 正文关键词点击 → 回「怀安在线」检索
+     *    关键词只靠"加粗"被认出来；不给 title、不加任何提示。
+     *    背景词不承担跳转职责——站内浏览由普通链接负责，换站由浏览器负责。 */
     document.querySelectorAll('.kw').forEach(function(el){
       if(el.closest && el.closest('a')) return;   /* 已被链接包裹则不重复绑定 */
       var txt = (el.textContent || '').trim();
-      var rt = KW_BG[txt] ? PAGE_ROUTE[KW_BG[txt]] : null;
+      if(!txt) return;
       el.style.cursor = 'pointer';
-      if(rt){
-        var anchor = rt[1] ? ('#' + rt[1]) : '';
-        if(rt[0] === relPath()){
-          /* 指向本页的板块：就地滚动过去，不再开重复标签页 */
-          el.title = anchor ? ('跳到本页 ' + anchor) : '回到本页顶部';
-          el.addEventListener('click', function(){
-            if(anchor) location.hash = rt[1]; else window.scrollTo({top:0, behavior:'smooth'});
-          });
-        }else{
-          /* 背景词：直接在新标签打开对应网页，并定位到对应板块 */
-          var url = ROOT_PREFIX + rt[0] + anchor;
-          el.title = '打开网页：' + rt[0] + anchor;
-          el.addEventListener('click', function(){ window.open(url, '_blank', 'noopener'); });
-        }
-      }else{
-        el.title = '在怀安在线检索「' + txt + '」';
-        el.addEventListener('click', function(){ window.open(browserUrl(txt), '_blank', 'noopener'); });
-      }
+      el.addEventListener('click', function(){ window.open(browserUrl(txt), '_blank', 'noopener'); });
     });
 
-    /* 4) 跨页面链接 → 新标签页打开（原页保留） */
-    document.querySelectorAll('a[href]').forEach(function(a){
-      var h = a.getAttribute('href') || '';
-      if(h.indexOf('.html') !== -1 && h.charAt(0) !== '#'){
-        a.setAttribute('target', '_blank');
-        a.setAttribute('rel', 'noopener');
-      }
-    });
-
-    /* 5) 机密卷宗页：已解锁时浮出"锁上档案室" */
+    /* 4) 机密卷宗页：已解锁时浮出"锁上档案室" */
     var _fn = location.pathname.split('/').pop();
     if(SECRET_PAGES.indexOf(_fn) !== -1 && !document.querySelector('.secret-block')){
       var _lb = document.createElement('button');

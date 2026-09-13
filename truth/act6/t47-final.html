@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>撤并 · 未公开整理稿</title>
+<link rel="stylesheet" href="../../assets/base.css">
+<link rel="stylesheet" href="../truth.css">
+<script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
+</head>
+<body class="th-term fx-glitch">
+<div class="top"><span class="ic">终</span><span>未公开整理稿</span><span class="tag">终章</span><span class="sp"></span><a href="../../browser.html" target="_blank">↩ 浏览器</a></div>
+<div class="wrap">
+  <h1>撤并</h1>
+  <div class="meta">未公开整理稿 · 撤并</div>
+  <p class="noind" style="font-size:21px;font-weight:700" id="fin-title">撤　并</p>
+  <p id="e1">柳政函〔2016〕27 号。四十四行名单。一扇新换的地窖门。一把没有落下去的钥匙。</p>
+  <p id="e2">乌石镇不是被洪水冲走的，也不是被谁杀掉的。它是被一份"已联系"的通报、一张补录的名单、一条"查无此人"的答复，一行一行归档掉的。</p>
+  <p id="e3">周砚生没有应答。他成了第四十四行。</p>
+  <div class="box" id="e4"><span class="h">整理注记</span>本稿至此。</div>
+  <div class="foot" id="fin">乌石镇，见柳津镇。</div>
+  <div class="foot">（终章）</div>
+</div>
+<div class="backbar" onclick="go()">↩ 回到浏览器</div>
+<script>
+function go(){ window.open('../../browser.html','_blank','noopener'); }
+
+/* 终章：页面按时间自行撤并 */
+setTimeout(function(){ var e=document.querySelector('.foot'); if(e) e.remove(); },1500);
+setTimeout(function(){ var t=document.querySelector('.top span'); if(t) t.textContent='无此条目'; },2500);
+setTimeout(function(){ var e=document.getElementById('e3'); if(e) e.classList.add('fx-erase-line'); },3500);
+setTimeout(function(){ var e=document.getElementById('e2'); if(e) e.classList.add('fx-erase-line'); },4500);
+setTimeout(function(){ var e=document.querySelector('.box'); if(e) e.remove(); },5500);
+setTimeout(function(){ var e=document.getElementById('fin-title'); if(e){ e.style.fontSize='16px'; e.style.letterSpacing='1.2em'; } },6500);
+setTimeout(function(){
+  var w=document.querySelector('.wrap');
+  w.innerHTML='<div class="sr-h">搜索结果 · <b>乌石镇</b></div>'
+   +'<div class="sr-gone"><div class="sr-gone-t">乌石镇（待核）</div>'
+   +'<div class="sr-gone-s">乌石镇，见柳津镇。</div></div>'
+   +'<div class="sr-none">没有找到与「乌石镇」相关的网页。</div>';
+},7500);
+
+</script>
+<script src="../../assets/nav.js"></script>
+</body>
+</html>

@@ -3,98 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>关于本吧 · 怀安吧</title>
+<title>柳津贴吧 · 吧规</title>
 <link rel="stylesheet" href="../../assets/base.css">
-<link rel="stylesheet" href="style.css">
+<style>:root{--c:#3B7DE0;--bg:#f4f6f8}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:#23272e;font-size:15px;line-height:1.9}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
+.top{background:var(--c);color:#fff;font-size:12.5px;padding:6px 18px;display:flex;gap:14px;align-items:center}
+.top .sp{flex:1}
+.hd{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid #e3e6ea;background:#fff}
+.hd .lg{width:44px;height:44px;border-radius:6px;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
+.hd .nm{font-size:20px;font-weight:700}
+.hd .ds{font-size:12px;color:#8a929c}
+.nav{background:var(--c);padding:0 18px;display:flex;gap:2px;flex-wrap:wrap}
+.nav a{color:#fff;font-size:14px;padding:9px 14px;opacity:.92}
+.nav a.on{background:rgba(255,255,255,.16);font-weight:600}
+.wrap{max-width:1000px;margin:0 auto;padding:18px}
+.crumb{font-size:12.5px;color:#8a929c;margin-bottom:12px}
+.crumb a{color:#5c6773}
+.grid{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:6px;padding:16px 18px;margin-bottom:14px}
+.card h2{font-size:17px;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #eef0f3}
+.card h3{font-size:15px;margin:14px 0 8px}
+p{margin:0 0 12px}
+.side .card{padding:12px 14px}
+ul.ls{list-style:none;margin:0;padding:0}
+ul.ls li{padding:9px 0;border-bottom:1px dashed #e8eaee;display:flex;gap:10px;align-items:baseline}
+ul.ls li:last-child{border-bottom:0}
+ul.ls .t{flex:1}
+ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
+.meta{font-size:12px;color:#98a0aa;margin:4px 0 12px}
+.pager{font-size:13px;color:#8a929c;margin:14px 0}
+.footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
+.backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
+.kw{font-weight:700;color:inherit;cursor:pointer}
+.kw:hover{background:rgba(0,0,0,.05)}
+.thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
+.item:last-child{border-bottom:0}
+.it-t{font-size:16px;font-weight:600}
+.it-d{font-size:13px;color:#6d7680;margin-top:4px}
+.it-p{color:#d96b3c;font-weight:700;margin-top:6px}
+.tag{display:inline-block;font-size:11px;color:#fff;background:#a9b2bd;border-radius:3px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.price{color:#d96b3c;font-weight:700}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+</style>
+<script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-
-<div class="bar">
-  <span class="lg">贴吧</span>
-    <a href="index.html" class="n">首页</a><span class="n">我的关注</span><span class="n">全吧搜索</span>
-  <span class="sp"></span><span class="u">游客 · 登录</span>
-</div>
-
-<div class="bhead"><div class="bhead-in">
-  <div class="bava">怀</div>
-  <div class="binfo"><div class="bname">怀安吧</div>
-    <div class="st">关注：<b>42,860</b>　帖子：<b>1,284,306</b></div></div>
-  <div class="bbtn"><button class="f" onclick="this.classList.add('done');this.textContent='已关注'">+ 关注</button>
-    <button class="p" onclick="this.textContent='已签到'">签到</button></div>
-</div></div>
-
+<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津贴吧</span></div>
+<div class="hd"><div class="lg">柳</div><div><div class="nm">柳津贴吧</div><div class="ds">兴趣吧 · 闲聊</div></div></div>
 <div class="wrap">
-  <div class="left">
-    <section class="card">
-      <div class="th2">
-        <h1>关于本吧</h1>
-        <div class="m"><span>吧务公告</span><span>置顶</span></div>
-      </div>
-      <div class="fl">
-        <div class="ava"><div class="a">吧</div><div class="lv">吧务</div></div>
-        <div class="bd">
-          <div class="nm">怀安吧吧务组<span class="lzt">楼主</span></div>
-          <div class="tx">本吧为怀安本地网友交流版面，讨论范围包括本地生活、旧事回忆、防汛与渡口相关话题等。发帖请遵守<a href="index.html">吧规</a>。</div>
-          <div class="ft"><span>1楼</span><span>长期置顶</span><span>赞 1204</span></div>
-        </div>
-      </div>
-      <div class="fl">
-        <div class="ava"><div class="a">吧</div><div class="lv">吧务</div></div>
-        <div class="bd">
-          <div class="nm">怀安吧吧务组</div>
-          <div class="tx">【吧规】禁止发布广告、引战及与版面主题无关的内容；举报请 @吧务。本吧为怀安地方话题交流版面。</div>
-          <div class="ft"><span>2楼</span><span>长期置顶</span><span>赞 866</span></div>
-        </div>
-      </div>
-    </section>
-  </div>
-
-  <aside class="side">
-    <div class="card">
-      <h2>吧内导航</h2>
-      <div class="jp">
-        <a href="index.html">‹ 返回帖子列表</a>
-        <a href="about.html" class="on">关于本吧</a>
-        <a href="index.html#story">【吧务】老故事征集第17期</a>
-        <a href="index.html#story">渡口村摆渡史</a>
-        <a href="index.html#dike">【资料】永宁堤加固年表</a>
-        <a href="index.html#chat">98 年那场大水</a>
-      </div>
-    </div>
-    <div class="card">
-      <h2>精品区</h2>
-      <div class="jp">
-        <a href="index.html#story">【吧务】老故事征集第17期</a>
-        <a href="index.html#story">渡口村摆渡史，最后的船家</a>
-        <a href="index.html#dike">【资料】永宁堤历次加固工程年表</a>
-      </div>
-    </div>
-    <div class="card">
-      <h2>吧务团队</h2>
-      <div class="mem"><span class="mava">务</span>怀安吧务组（吧主）</div>
-      <div class="mem"><span class="mava">小</span>小吧·江上清风</div>
-    </div>
-    <div class="card">
-      <h2>本吧公告</h2>
-      <div class="pad" style="font-size:13px;line-height:1.9;color:#8a8a8a">
-        关于 1998 年汛情的资料，本吧不作讨论。
-      </div>
-    </div>
-  </aside>
+<div class="crumb">柳津贴吧 · 吧规</div>
+<div class="card"><h2>柳津吧规</h2><p>涉旧镇区划话题一律下沉。</p></div>
 </div>
-
-<div class="foot">© 怀安吧　·　<a href="about.html">关于本吧</a></div>
-<div class="backbar" onclick="go('home')">↩ 回到浏览器</div>
-
-<script>
-function go(q){
-  const url='../../browser.html?q='+encodeURIComponent(q);
-  /* 优先直接调用浏览器的检索函数：不刷新页面，"已查阅"进度不会丢 */
-  try{ if(window.parent && window.parent!==window){ window.parent.postMessage({t:'kw',q:q},'*'); return; } }catch(e){}
-  window.open(url,'_blank','noopener');
-}
-function picMiss(img){ img.style.display='none'; }
-</script>
-<script src='../../assets/nav.js'></script>
+<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">沅川论坛</b> · <b class="kw">网上纪念馆</b></div>
+<div class="backbar" onclick="go()">↩ 回到浏览器</div>
+<script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
+<script src="../../assets/nav.js"></script>
 </body>
 </html>

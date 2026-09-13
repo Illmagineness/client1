@@ -3,72 +3,65 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1">
-<title>关于我们 · 怀安新闻网</title>
+<title>沅川日报网 · 关于我们</title>
 <link rel="stylesheet" href="../../assets/base.css">
-<link rel="stylesheet" href="style.css">
+<style>:root{--c:#C8161D;--bg:#f4f6f8}
+*{box-sizing:border-box}html,body{margin:0;padding:0}
+body{font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;background:var(--bg);color:#23272e;font-size:15px;line-height:1.9}
+a{color:inherit;text-decoration:none}
+img{max-width:100%;height:auto}
+.top{background:var(--c);color:#fff;font-size:12.5px;padding:6px 18px;display:flex;gap:14px;align-items:center}
+.top .sp{flex:1}
+.hd{display:flex;align-items:center;gap:14px;padding:16px 18px;border-bottom:1px solid #e3e6ea;background:#fff}
+.hd .lg{width:44px;height:44px;border-radius:6px;background:var(--c);color:#fff;display:flex;align-items:center;justify-content:center;font-weight:700;font-size:20px}
+.hd .nm{font-size:20px;font-weight:700}
+.hd .ds{font-size:12px;color:#8a929c}
+.nav{background:var(--c);padding:0 18px;display:flex;gap:2px;flex-wrap:wrap}
+.nav a{color:#fff;font-size:14px;padding:9px 14px;opacity:.92}
+.nav a.on{background:rgba(255,255,255,.16);font-weight:600}
+.wrap{max-width:1000px;margin:0 auto;padding:18px}
+.crumb{font-size:12.5px;color:#8a929c;margin-bottom:12px}
+.crumb a{color:#5c6773}
+.grid{display:grid;grid-template-columns:1fr 300px;gap:16px;align-items:start}
+.card{background:#fff;border:1px solid #e3e6ea;border-radius:6px;padding:16px 18px;margin-bottom:14px}
+.card h2{font-size:17px;margin:0 0 10px;padding-bottom:8px;border-bottom:1px solid #eef0f3}
+.card h3{font-size:15px;margin:14px 0 8px}
+p{margin:0 0 12px}
+.side .card{padding:12px 14px}
+ul.ls{list-style:none;margin:0;padding:0}
+ul.ls li{padding:9px 0;border-bottom:1px dashed #e8eaee;display:flex;gap:10px;align-items:baseline}
+ul.ls li:last-child{border-bottom:0}
+ul.ls .t{flex:1}
+ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
+.meta{font-size:12px;color:#98a0aa;margin:4px 0 12px}
+.pager{font-size:13px;color:#8a929c;margin:14px 0}
+.footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
+.backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
+.kw{font-weight:700;color:inherit;cursor:pointer}
+.kw:hover{background:rgba(0,0,0,.05)}
+.thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
+.thumb img{width:100%;height:100%;object-fit:cover}
+.item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
+.item:last-child{border-bottom:0}
+.it-t{font-size:16px;font-weight:600}
+.it-d{font-size:13px;color:#6d7680;margin-top:4px}
+.it-p{color:#d96b3c;font-weight:700;margin-top:6px}
+.tag{display:inline-block;font-size:11px;color:#fff;background:#a9b2bd;border-radius:3px;padding:1px 6px;margin-right:6px;vertical-align:1px}
+.price{color:#d96b3c;font-weight:700}
+@media(max-width:860px){.grid{grid-template-columns:1fr}}
+</style>
+<script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-
-<div class="top"><div class="top-in">
-  <div class="logo">怀安新闻网<small>HUAI'AN NEWS</small></div>
-  <div class="nav"><a href="index.html">首页</a><a href="index.html#dike">本地</a><a href="index.html#report">旧报</a><a href="index.html#culture">文化</a><a href="about.html" class="on">关于</a></div>
-</div></div>
-
-<div class="crumb"><a href="index.html">怀安新闻网</a> › 关于我们</div>
-
+<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>沅川日报网</span></div>
+<div class="hd"><div class="lg">沅</div><div><div class="nm">沅川日报网</div><div class="ds">本地报道 · 旧报影印</div></div></div>
 <div class="wrap">
-  <div class="main">
-    <h1>关于我们</h1>
-    <div class="src"><span>本站说明</span><span>最后更新：2026-06</span></div>
-    <div class="art">
-      <p>怀安新闻网是本地资讯发布平台，报道怀安县域内的时政、民生、文化与历史资料整理动态。</p>
-      <p>"旧报"栏目收录本县历年报纸的数字化影印件，按原版式呈现，供读者查阅。影印件中涉及的历史记述以当时报道为准，未作删改。</p>
-      <p>怀安新闻网报道县域内的时政、民生、文化与历史资料整理动态；"旧报"栏目收录本县历年报纸的数字化影印件，按原版式呈现，供读者查阅。如需检索更多资料，可使用顶部检索框。</p>
-    </div>
-  </div>
-
-  <aside class="side">
-    <div class="card">
-      <h2>24 小时热点榜</h2>
-      <div class="hot">
-        <div><i>1</i><span>永宁堤新一轮护坡整治开工</span></div>
-        <div><i>2</i><span>县方志馆旧照数字化上线</span></div>
-        <div><i>3</i><span>我县启动 1998 年汛期材料数字化</span></div>
-        <div><i>4</i><span>渡口村摆渡史入选县级非遗</span></div>
-        <div><i>5</i><span>怀安方言语音库第二批上线</span></div>
-        <div><i>6</i><span>老照片征集收官，投稿 1400 余张</span></div>
-      </div>
-    </div>
-    <div class="card">
-      <h2>栏目</h2>
-      <div class="rel">
-        <a href="index.html">返回首页</a>
-        <a href="index.html#dike">本地</a>
-        <a href="index.html#report">旧报</a>
-        <a href="index.html#culture">文化</a>
-      </div>
-    </div>
-    <div class="card">
-      <h2>本站说明</h2>
-      <div class="pad" style="line-height:2.2">
-        <a href="about.html">关于我们</a>
-      </div>
-    </div>
-  </aside>
+<div class="crumb">沅川日报网 · 关于我们</div>
+<div class="card"><h2>关于我们</h2><p>沅川日报网。</p></div>
 </div>
-
-<div class="foot">© 1998–2026 怀安新闻网　·　<a href="about.html">关于我们</a></div>
-<div class="backbar" onclick="go('home')">↩ 回到浏览器</div>
-
-<script>
-function go(q){
-  const url='../../browser.html?q='+encodeURIComponent(q);
-  /* 优先直接调用浏览器的检索函数：不刷新页面，"已查阅"进度不会丢 */
-  try{ if(window.parent && window.parent!==window){ window.parent.postMessage({t:'kw',q:q},'*'); return; } }catch(e){}
-  window.open(url,'_blank','noopener');
-}
-function picMiss(img){ img.style.display='none'; }
-</script>
-<script src='../../assets/nav.js'></script>
+<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津县人民政府</b> · <b class="kw">柳津贴吧</b></div>
+<div class="backbar" onclick="go()">↩ 回到浏览器</div>
+<script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
+<script src="../../assets/nav.js"></script>
 </body>
 </html>

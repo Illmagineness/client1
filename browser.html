@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width,initial-scale=1,viewport-fit=cover">
-<title>怀安在线 · 浏览器</title>
+<title>沅川在线 · 浏览器</title>
 <style>
   /* =====================================================================
    *  设计令牌：间距 4/8/16/32/64 · 字号阶梯 · 统一圆角 8px · 单一主色
@@ -116,6 +116,10 @@
   .sr-u{font-family:var(--mono);font-size:var(--fs-xs);color:var(--acc2);margin:var(--s1) 0 var(--s1);word-break:break-all;}
   .sr-d{font-family:var(--sans);font-size:var(--fs-xs);color:var(--ink-faint);}
   .sr-none{font-family:var(--sans);font-size:var(--fs-sm);color:var(--ink-dim);margin-top:var(--s3);line-height:1.8;}
+.sr-gone{margin-top:var(--s3);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:18px 20px;background:rgba(255,255,255,.02);}
+.sr-gone-t{font-family:var(--sans);font-size:var(--fs-sm);color:var(--ink);line-height:1.8;}
+.sr-gone-s{font-family:var(--mono);font-size:var(--fs-sm);color:var(--ink-dim);margin-top:8px;}
+#idxcount{font-family:var(--mono);font-size:var(--fs-sm);color:var(--ink-dim);opacity:.7;margin-right:12px;white-space:nowrap;}
 
   /* 起始页 */
   .start{padding:var(--s3) 0;}
@@ -178,14 +182,14 @@
 <div id="chrome">
   <!-- 标签栏 -->
   <div id="tabbar">
-    <div class="tab on"><span class="tdot"></span><span id="tabtitle">怀安在线 · 起始页</span></div>
+    <div class="tab on"><span class="tdot"></span><span id="tabtitle">沅川在线 · 起始页</span></div>
     <div class="tabghost"></div>
     <div class="wctl"><i></i><i></i><i></i></div>
   </div>
 
   <!-- 工具栏 -->
   <div id="topbar">
-    <div id="brand" onclick="renderHome()"><span class="gl">⊙</span><span>怀安在线</span></div>
+    <div id="brand" onclick="renderHome()"><span class="gl">⊙</span><span>沅川在线</span></div>
     <button class="navbtn" id="backbtn" onclick="goBack()" title="后退">←</button>
     <button class="navbtn" id="fwdbtn" onclick="goFwd()" title="前进">→</button>
     <button class="navbtn" onclick="renderHome()" title="起始页">⌂</button>
@@ -201,7 +205,7 @@
       <button class="navbtn" id="helpbtn" onclick="helpHint()">？帮助</button>
       <button class="navbtn" id="resetbtn" onclick="restartGame()" title="清空进度，重新开始">↺ 重新开始</button>
     </div>
-    <div id="progress">0 / 60</div>
+    <div id="idxcount">索引 40 条</div><div id="progress">0 / 66</div>
   </div>
 </div>
 
@@ -220,7 +224,7 @@
 <script>
 "use strict";
 /* =========================================================================
- *  怀安在线 · 浏览器（检索中枢）
+ *  沅川在线 · 浏览器（检索中枢）
  *  - 顶栏地址/搜索栏；站点页都是独立 html，搜词后在本页列出「搜索结果」。
  *  - 点结果链接 / 站点名，均在新标签页打开对应网页（原页面保留，不覆盖）。
  *  - 站点正文里的关键词点击后，开新标签回到本浏览器继续检索。
@@ -228,184 +232,231 @@
 
 /* ====================== 1. 站点路由：页面 → 独立站点文件 + 锚点 ====================== */
 const PAGE_ROUTE = {
-  /* 背景容器：四大站点 + 博客 + 散落的旧网页（只放氛围/背景词） */
-  S_ARCHIVE:['sites/archive/index.html',''], S_ABOUT:['sites/archive/intro.html','about'],
-  S_NEWS:['sites/news/index.html',''], S_TIEBA:['sites/tieba/index.html',''], S_WX:['sites/wx/index.html',''],
-  S_BLOG:['sites/blog/index.html',''], B1998:['sites/web/1998.html',''], B_BBS:['sites/web/bbs.html',''],
-  B_DIKE:['sites/news/index.html','dike'], B_NEWS_DIG:['sites/news/index.html','photos'], B_NEWS_REP:['sites/news/index.html','report'],
-  B_TIEBA_STORY:['sites/tieba/index.html','story'],
-  B_WX_DIKE:['sites/wx/index.html','dike'], B_WX_PHOTO:['sites/wx/index.html','photo'], B_WX_MEM:['sites/wx/index.html','memory'],
-  B_BLOG_FERRY:['sites/blog/index.html','ferry'], B_BLOG_LAMP:['sites/blog/index.html','lamp'],
-  /* 真相线：一词一页（一一对应），按 Act 分目录 */
-  T01:['truth/act1/t01-oldfile.html',''],   T02:['truth/act1/t02-case.html',''],        T03:['truth/act1/t03-live.html',''],
-  T04:['truth/act1/t04-lamp.html',''],      T05:['truth/act1/t05-witness.html',''],     T06:['truth/act1/t06-broadcaster.html',''],
-  T07:['truth/act1/t07-after.html',''],     T08:['truth/act1/t08-delete.html',''],      T09:['truth/act1/t09-rules.html',''],
-  T10:['truth/act2/t10-hospital.html',''],  T11:['truth/act2/t11-clinic003.html',''],   T12:['truth/act2/t12-clinic017.html',''],
-  T13:['truth/act2/t13-anon.html',''],      T14:['truth/act2/t14-doctor.html',''],      T15:['truth/act2/t15-meds.html',''],
-  T16:['truth/act2/t16-hisinfo.html',''],   T17:['truth/act2/t17-lost.html',''],
-  T18:['truth/act3/t18-intranet.html',''],  T19:['truth/act3/t19-log0720.html',''],     T20:['truth/act3/t20-log0721.html',''],
-  T21:['truth/act3/t21-breach.html',''],    T22:['truth/act3/t22-report.html',''],      T23:['truth/act3/t23-order.html',''],
-  T24:['truth/act3/t24-mayor.html',''],     T25:['truth/act3/t25-roster.html',''],      T26:['truth/act3/t26-money.html',''],
-  T27:['truth/act3/t27-honor.html',''],
-  T28:['truth/act4/t28-forum.html',''],     T29:['truth/act4/t29-wife.html',''],        T30:['truth/act4/t30-mother.html',''],
-  T31:['truth/act4/t31-brother.html',''],   T32:['truth/act4/t32-notice.html',''],      T33:['truth/act4/t33-reply20y.html',''],
-  T34:['truth/act4/t34-volunteer.html',''], T35:['truth/act4/t35-media.html',''],
-  T36:['truth/act5/t36-scanroom.html',''],  T37:['truth/act5/t37-photo.html',''],       T38:['truth/act5/t38-tape.html',''],
-  T39:['truth/act5/t39-signsheet.html',''], T40:['truth/act5/t40-vest.html',''],        T41:['truth/act5/t41-hydro.html',''],
-  T42:['truth/act5/t42-relic.html',''],     T43:['truth/act5/t43-map.html',''],         T44:['truth/act5/t44-newspaper.html',''],
-  T45:['truth/act6/t45-list.html',''],      T46:['truth/act6/t46-truth.html',''],       T47:['truth/act6/t47-diary.html',''],
-  T48:['truth/act6/t48-later.html',''],     T49:['truth/act6/t49-heir.html',''],        T50:['truth/act6/t50-gate.html',''],
-  T51:['truth/act6/t51-light.html',''],     T52:['truth/act6/t52-final.html',''],
+  /* —— 站点层：16 个站点 —— */
+  S_GOV:['sites/gov/index.html',''],        S_GOV_OPEN:['sites/gov/open.html',''],
+  S_GOV_TENDER:['sites/gov/tender.html',''],S_GOV_PERMIT:['sites/gov/permit.html',''],
+  S_GOV_HOTLINE:['sites/gov/hotline.html',''],S_GOV_PETITION:['sites/gov/petition.html',''],
+  S_GOV_CADRE:['sites/gov/cadre.html',''],  S_GOV_ABOUT:['sites/gov/about.html',''],
+  S_NEWS:['sites/news/index.html',''],      S_NEWS_LOCAL:['sites/news/local.html',''],
+  S_NEWS_OLD:['sites/news/oldnews.html',''],S_NEWS_PHOTO:['sites/news/photos.html',''],
+  S_NEWS_CULT:['sites/news/culture.html',''],S_NEWS_WX:['sites/news/weather.html',''],
+  S_NEWS_T311:['sites/news/art-t311.html',''],S_NEWS_MERGE:['sites/news/art-merge.html',''],
+  S_NEWS_HALL:['sites/news/art-hall.html',''],S_NEWS_ABOUT:['sites/news/about.html',''],
+  S_FORUM:['sites/forum/index.html',''],    S_FORUM_BOARD:['sites/forum/board.html',''],
+  S_FORUM_T1:['sites/forum/t1.html',''],    S_FORUM_T2:['sites/forum/t2.html',''],
+  S_FORUM_T3:['sites/forum/t3.html',''],    S_FORUM_NOTICE:['sites/forum/notice.html',''],
+  S_FORUM_RULES:['sites/forum/rules.html',''],
+  S_TIEBA:['sites/tieba/index.html',''],    S_TIEBA_T1:['sites/tieba/t1.html',''],
+  S_TIEBA_T2:['sites/tieba/t2.html',''],    S_TIEBA_T3:['sites/tieba/t3.html',''],
+  S_TIEBA_GONE:['sites/tieba/gone.html',''],S_TIEBA_ABOUT:['sites/tieba/about.html',''],
+  S_WX:['sites/wx/index.html',''],          S_WX_A1:['sites/wx/a1.html',''],
+  S_WX_A2:['sites/wx/a2.html',''],          S_WX_A3:['sites/wx/a3.html',''],
+  S_WX_DEAD:['sites/wx/dead.html',''],      S_WX_ABOUT:['sites/wx/about.html',''],
+  S_MAP:['sites/map/index.html',''],        S_MAP_HALL:['sites/map/poi-hall.html',''],
+  S_MAP_SCHOOL:['sites/map/poi-school.html',''],S_MAP_ROUTE:['sites/map/route.html',''],
+  S_MK:['sites/market/index.html',''],      S_MK_ITEM:['sites/market/item-token.html',''],
+  S_MK_SELLER:['sites/market/seller.html',''],S_MK_REL:['sites/market/related.html',''],
+  S_MK_CHAT:['sites/market/chat.html',''],
+  S_VID:['sites/video/index.html',''],      S_VID_0311:['sites/video/v0311.html',''],
+  S_VID_LIVE:['sites/video/live.html',''],  S_VID_CMT:['sites/video/comments.html',''],
+  S_LIFE:['sites/life/index.html',''],      S_LIFE_SHOP:['sites/life/shop.html',''],
+  S_LIFE_CLOSED:['sites/life/closed.html',''],S_LIFE_FOOD:['sites/life/food.html',''],
+  S_LIFE_ABOUT:['sites/life/about.html',''],
+  S_JOB:['sites/job/index.html',''],        S_JOB_CO:['sites/job/company.html',''],
+  S_HOUSE:['sites/house/index.html',''],    S_HOUSE_XQ:['sites/house/xiaoqu.html',''],
+  S_LOGI:['sites/logi/index.html',''],      S_LOGI_TRK:['sites/logi/track.html',''],
+  S_EDU:['sites/edu/index.html',''],        S_EDU_HIS:['sites/edu/history.html',''],
+  S_EDU_ALUM:['sites/edu/alumni.html',''],  S_EDU_ABOUT:['sites/edu/about.html',''],
+  S_LIB:['sites/lib/index.html',''],        S_LIB_CHI:['sites/lib/chihzi.html',''],
+  S_LIB_CAT:['sites/lib/catalog.html',''],  S_LIB_ARC:['sites/lib/archive.html',''],
+  S_MEM:['sites/mem/index.html',''],        S_MEM_MSG:['sites/mem/msg.html',''],
+  S_BLOG:['sites/blog/index.html',''],      S_BLOG_311:['sites/blog/p-311.html',''],
+  S_BLOG_TOK:['sites/blog/p-token.html',''],S_BLOG_TOWN:['sites/blog/p-town.html',''],
+  S_BLOG_NAME:['sites/blog/p-name.html',''],S_BLOG_MEM:['sites/blog/p-mem.html',''],
+  S_BLOG_ABOUT:['sites/blog/about.html',''],
+  /* —— 真相层：一词一页（47 页） —— */
+  T01:['truth/act1/t01-token.html',''],     T02:['truth/act1/t02-seller.html',''],
+  T03:['truth/act1/t03-woodwork.html',''],  T04:['truth/act1/t04-wiki.html',''],
+  T05:['truth/act2/t05-chihzi.html',''],    T06:['truth/act2/t06-merge.html',''],
+  T07:['truth/act2/t07-poi.html',''],       T08:['truth/act2/t08-hydro.html',''],
+  T09:['truth/act2/t09-dialect.html',''],   T10:['truth/act2/t10-album.html',''],
+  T11:['truth/act2/t11-deadwx.html',''],
+  T12:['truth/act3/t12-news311.html',''],   T13:['truth/act3/t13-list.html',''],
+  T14:['truth/act3/t14-missing.html',''],   T15:['truth/act3/t15-staff.html',''],
+  T16:['truth/act3/t16-post.html',''],      T17:['truth/act3/t17-tieba.html',''],
+  T18:['truth/act3/t18-video.html',''],     T19:['truth/act3/t19-org.html',''],
+  T20:['truth/act4/t20-sutra.html',''],     T21:['truth/act4/t21-liu.html',''],
+  T22:['truth/act4/t22-rite.html',''],      T23:['truth/act4/t23-key.html',''],
+  T24:['truth/act4/t24-cadre.html',''],     T25:['truth/act4/t25-hotline.html',''],
+  T26:['truth/act4/t26-petition.html',''],  T27:['truth/act4/t27-memorial.html',''],
+  T28:['truth/act4/t28-notice.html',''],    T29:['truth/act4/t29-admin.html',''],
+  T30:['truth/act4/t30-court.html',''],
+  T31:['truth/act5/t31-satellite.html',''], T32:['truth/act5/t32-drive.html',''],
+  T33:['truth/act5/t33-sheet.html',''],     T34:['truth/act5/t34-tape.html',''],
+  T35:['truth/act5/t35-bell.html',''],      T36:['truth/act5/t36-related.html',''],
+  T37:['truth/act5/t37-permit.html',''],    T38:['truth/act5/t38-access.html',''],
+  T39:['truth/act5/t39-mail.html',''],      T40:['truth/act5/t40-call.html',''],
+  T41:['truth/act6/t41-44.html',''],        T42:['truth/act6/t42-route.html',''],
+  T43:['truth/act6/t43-blog.html',''],      T44:['truth/act6/t44-line.html',''],
+  T45:['truth/act6/t45-file.html',''],      T46:['truth/act6/t46-keykeeper.html',''],
+  T47:['truth/act6/t47-final.html',''],
+  S_SVC:['sites/svc/index.html',''],        S_SVC_SB:['sites/svc/shebao.html',''],
+  S_SVC_GJJ:['sites/svc/gongjijin.html',''],S_SVC_YY:['sites/svc/yiyuan.html',''],
+  S_SVC_XJ:['sites/svc/xueji.html',''],     S_SVC_MZ:['sites/svc/minzheng.html',''],
+  S_HOME:['index.html',''],
   noise:null
 };
 
 /* 站点名（输入即直达站点首页，类似输入网址） */
 const SITES = {
-  '档案馆':['sites/archive/index.html','S_ARCHIVE','怀安县数字方志馆'],
-  '数字方志馆':['sites/archive/index.html','S_ARCHIVE','怀安县数字方志馆'],
-  '方志馆':['sites/archive/index.html','S_ARCHIVE','怀安县数字方志馆'],
-  '新闻主页':['sites/news/index.html','S_NEWS','怀安新闻网'],
-  '新闻网':['sites/news/index.html','S_NEWS','怀安新闻网'],
-  '怀安新闻网':['sites/news/index.html','S_NEWS','怀安新闻网'],
-  '贴吧主页':['sites/tieba/index.html','S_TIEBA','怀安贴吧'],
-  '贴吧':['sites/tieba/index.html','S_TIEBA','怀安贴吧'],
-  '怀安贴吧':['sites/tieba/index.html','S_TIEBA','怀安贴吧'],
-  '公众号主页':['sites/wx/index.html','S_WX','怀安发布'],
-  '公众号':['sites/wx/index.html','S_WX','怀安发布'],
-  '怀安发布':['sites/wx/index.html','S_WX','怀安发布'],
-  '江边旧事':['sites/blog/index.html','S_BLOG','江边旧事'],
-  '博客':['sites/blog/index.html','S_BLOG','江边旧事']
+  '柳津县人民政府':['sites/gov/index.html','S_GOV','柳津县人民政府'],
+  '柳津县政府':['sites/gov/index.html','S_GOV','柳津县人民政府'],
+  '沅川日报':['sites/news/index.html','S_NEWS','沅川日报网'],
+  '柳津新闻':['sites/news/index.html','S_NEWS','沅川日报网'],
+  '沅川论坛':['sites/forum/index.html','S_FORUM','沅川论坛'],
+  '柳津贴吧':['sites/tieba/index.html','S_TIEBA','柳津贴吧'],
+  '柳津发布':['sites/wx/index.html','S_WX','柳津发布'],
+  '柳津地图':['sites/map/index.html','S_MAP','柳津地图'],
+  '沅川闲置':['sites/market/index.html','S_MK','沅川闲置'],
+  '沅川短视频':['sites/video/index.html','S_VID','沅川短视频'],
+  '柳津点评':['sites/life/index.html','S_LIFE','柳津点评'],
+  '沅川人才网':['sites/job/index.html','S_JOB','沅川人才网'],
+  '柳津房产网':['sites/house/index.html','S_HOUSE','柳津房产网'],
+  '柳津快递':['sites/logi/index.html','S_LOGI','柳津快递驿站'],
+  '柳津二中':['sites/edu/index.html','S_EDU','柳津二中'],
+  '柳津图书馆':['sites/lib/index.html','S_LIB','柳津图书馆'],
+  '柳津档案馆':['sites/lib/index.html','S_LIB','柳津图书馆'],
+  '柳津政务服务网':['sites/svc/index.html','S_SVC','柳津政务服务网']
 };
 
-/* ====================== 2. 检索索引 ====================== */
+/* ====================== 2. 检索索引 ======================
+ * 背景词（S*）：开局全开，随幕失效（until = 到第几幕结束时不可再搜）。
+ * 真相词（T*）：一词一页，永不失效。
+ * 幕次由已到达的真相页推算：T01–04=1，T05–11=2，T12–19=3，
+ *                              T20–30=4，T31–40=5，T41–47=6；到达 T47 后=7。
+ * ========================================================================= */
 const SEARCH_INDEX = [
-  /* —— 背景容器：四大站点 + 博客（输入站点名直达，类似输入网址） —— */
-  {k:['怀安县数字方志馆','档案馆','数字方志馆','方志馆'], p:'S_ARCHIVE'},
-  {k:['馆情简介','方志馆简介'], p:'S_ABOUT'},
-  {k:['新闻主页','新闻网','怀安新闻网'], p:'S_NEWS'},
-  {k:['贴吧主页','贴吧','怀安贴吧'], p:'S_TIEBA'},
-  {k:['公众号主页','公众号','怀安发布'], p:'S_WX'},
-  {k:['江边旧事','博客'], p:'S_BLOG'},
-  {k:['密码','门禁'], p:'S_ARCHIVE'},
+  /* —— 背景词（40 个 · until = 失效幕次） —— */
+  {k:['沅川在线','起始页','本地导航'], p:'S_HOME'},
+  {k:['柳津县人民政府','柳津县政府'], p:'S_GOV', until:6},
+  {k:['柳津县政务公开','政务公开'], p:'S_GOV_OPEN', until:6},
+  {k:['柳津招标公告','柳津招标'], p:'S_GOV_TENDER', until:3},
+  {k:['柳津住建局','施工许可公示'], p:'S_GOV_PERMIT', until:5},
+  {k:['12345 政务服务','12345'], p:'S_GOV_HOTLINE', until:4},
+  {k:['县长信箱'], p:'S_GOV_PETITION', until:4},
+  {k:['柳津干部公示','干部任免'], p:'S_GOV_CADRE', until:5},
+  {k:['沅川日报'], p:'S_NEWS', until:5},
+  {k:['柳津新闻'], p:'S_NEWS_LOCAL', until:5},
+  {k:['柳津旧报纸','旧报影印'], p:'S_NEWS_OLD', until:5},
+  {k:['柳津影像'], p:'S_NEWS_PHOTO', until:4},
+  {k:['柳津副刊','地方文化'], p:'S_NEWS_CULT', until:5},
+  {k:['柳津天气','柳津天气预报'], p:'S_NEWS_WX', until:5},
+  {k:['沅川论坛'], p:'S_FORUM', until:3},
+  {k:['沅川论坛灌水区','灌水区'], p:'S_FORUM_BOARD', until:3},
+  {k:['沅川论坛版规','论坛版规'], p:'S_FORUM_RULES', until:3},
+  {k:['柳津贴吧'], p:'S_TIEBA', until:4},
+  {k:['柳津吧规','吧规'], p:'S_TIEBA_ABOUT', until:4},
+  {k:['柳津发布'], p:'S_WX', until:5},
+  {k:['柳津公众号说明'], p:'S_WX_ABOUT', until:6},
+  {k:['柳津地图'], p:'S_MAP', until:3},
+  {k:['柳津街景'], p:'S_MAP_ROUTE', until:3},
+  {k:['沅川闲置','柳津二手'], p:'S_MK', until:5},
+  {k:['闲置客服'], p:'S_MK_CHAT', until:5},
+  {k:['沅川短视频'], p:'S_VID', until:5},
+  {k:['短视频评论'], p:'S_VID_CMT', until:5},
+  {k:['柳津点评'], p:'S_LIFE', until:4},
+  {k:['柳津美食'], p:'S_LIFE_FOOD', until:4},
+  {k:['沅川人才网'], p:'S_JOB', until:4},
+  {k:['柳津企业查询','企业信息查询'], p:'S_JOB_CO', until:4},
+  {k:['柳津房产网'], p:'S_HOUSE', until:3},
+  {k:['柳津二手房'], p:'S_HOUSE_XQ', until:3},
+  {k:['柳津快递'], p:'S_LOGI', until:7},
+  {k:['柳津物流'], p:'S_LOGI_TRK', until:3},
+  {k:['柳津政务服务网'], p:'S_SVC', until:6},
+  {k:['柳津社保'], p:'S_SVC_SB', until:6},
+  {k:['柳津公积金'], p:'S_SVC_GJJ', until:6},
+  {k:['柳津人民医院'], p:'S_SVC_YY', until:6},
+  {k:['柳津学籍查询'], p:'S_SVC_XJ', until:7},
+  {k:['网上纪念馆'], p:'S_MEM', until:4},
+  {k:['江边旧事'], p:'S_BLOG', until:6},
 
-  /* —— 初期背景关键词（只出现在站点里，是氛围，不是真相） —— */
-  {k:['1998年洪水','1998洪水'], p:'B1998'},
-  {k:['怀水河'], p:'B1998'},
-  {k:['拦河闸'], p:'B1998'},
-  {k:['永宁镇'], p:'B1998'},
-  {k:['县志'], p:'B1998'},
-  {k:['怀安水利志','怀安水利'], p:'B1998'},
-  {k:['怀安之声'], p:'B_BBS'},
-  {k:['永宁堤'], p:'B_DIKE'},
-  {k:['渡口村'], p:'B_TIEBA_STORY'},
-  {k:['怀安话老故事征集','怀安话·老故事征集','老故事征集'], p:'B_TIEBA_STORY'},
-  {k:['永宁堤加固工程纪实'], p:'B_WX_DIKE'},
-  {k:['怀安旧照征集令'], p:'B_WX_PHOTO'},
-  {k:['那年防汛记忆','那年，我们一起守堤'], p:'B_WX_MEM'},
-  {k:['怀安旧照数字化上线'], p:'B_NEWS_DIG'},
-  {k:['怀安日报 汛情通报','汛情通报'], p:'B_NEWS_REP'},
-  {k:['我爹是摆渡的'], p:'B_BLOG_FERRY'},
-  {k:['江边那盏灯'], p:'B_BLOG_LAMP'},
-
-  /* —— 真相线：一词一页（一一对应） —— */
-  {k:['旧档补录'], p:'T01'},
-  {k:['防汛失踪案','失踪案','已安全转移安置','安全转移安置','转移安置'], p:'T02'},
-  {k:['决口夜直播帖','直播帖'], p:'T03'},
-  {k:['堤上那盏灯','那盏灯'], p:'T04'},
-  {k:['目击者老船工','老船工','老船工何老栓','何老栓','船老大','摆渡人'], p:'T05'},
-  {k:['郑晓棠','广播员郑晓棠','镇广播站'], p:'T06'},
-  {k:['洪水退去之后','灾后'], p:'T07'},
-  {k:['删帖公告'], p:'T08'},
-  {k:['论坛版规','版规','限流'], p:'T09'},
-  {k:['卫生院系统','卫生院'], p:'T10'},
-  {k:['卫字003号接诊单','接诊单 卫字003','卫字003'], p:'T11'},
-  {k:['卫字017号接诊单','接诊单 卫字017','卫字017'], p:'T12'},
-  {k:['匿名接诊记录','匿名记录'], p:'T13'},
-  {k:['值班医生留言','医生留言'], p:'T14'},
-  {k:['药品申领单','申领单'], p:'T15'},
-  {k:['怀安卫生院','卫生院概况'], p:'T16'},
-  {k:['失访记录'], p:'T17'},
-  {k:['防汛内网','指挥部内网'], p:'T18'},
-  {k:['防汛日志 7月20日','防汛日志7月20日','日志7.20'], p:'T19'},
-  {k:['防汛日志 7月21日','防汛日志7月21日','日志7.21','防汛日志','当年的日志','当年日志'], p:'T20'},
-  {k:['决口记录','决口'], p:'T21'},
-  {k:['结案报告'], p:'T22'},
-  {k:['指挥部工单','工单'], p:'T23'},
-  {k:['县长批示','批示'], p:'T24'},
-  {k:['防汛队名册','防汛队员','名册'], p:'T25'},
-  {k:['慰问金','抚恤'], p:'T26'},
-  {k:['立功喜报','表彰'], p:'T27'},
-  {k:['等一个人回家','寻亲论坛'], p:'T28'},
-  {k:['队员甲 妻子的帖','赵建国妻子','刘秀芝'], p:'T29'},
-  {k:['队员乙 母亲的帖','孙长海母亲','王桂兰'], p:'T30'},
-  {k:['队员丙 弟弟的帖','周文斌弟弟','周文涛'], p:'T31'},
-  {k:['寻人启事'], p:'T32'},
-  {k:['二十年后的回帖','二十年后'], p:'T33'},
-  {k:['寻亲志愿者','志愿者'], p:'T34'},
-  {k:['媒体报道'], p:'T35'},
-  {k:['怀安旧档','旧档扫描室'], p:'T36'},
-  {k:['决口夜照片','照片'], p:'T37'},
-  {k:['决口夜录音','录音'], p:'T38'},
-  {k:['涂改的签到表','签到表'], p:'T39'},
-  {k:['救生衣编号','救生衣'], p:'T40'},
-  {k:['水文站数据','水文数据','水文站'], p:'T41'},
-  {k:['遗物袋','遗物'], p:'T42'},
-  {k:['决口位置','位置图'], p:'T43'},
-  {k:['怀安晚报','旧报纸'], p:'T44'},
-  {k:['三人名单','周文斌'], p:'T45'},
-  {k:['决口夜真相','真相'], p:'T46'},
-  {k:['生还者日记','日记'], p:'T47'},
-  {k:['生还者的后来','后来','周年生'], p:'T48'},
-  {k:['周年生的后人','后人'], p:'T49'},
-  {k:['落闸','闸'], p:'T50'},
-  {k:['探照灯'], p:'T51'},
-  {k:['终章','合上档案'], p:'T52'}
+  /* —— 真相词（47 个 · 一词一页 · 永不失效） —— */
+  {k:['倒钥匙','倒置的钥匙'], p:'T01'},
+  {k:['陈有德','老陈木匠'], p:'T02'},
+  {k:['乌石木工社'], p:'T03'},
+  {k:['乌石镇'], p:'T04'},
+  {k:['乌石乡志'], p:'T05'},
+  {k:['乡镇撤并批复','撤并批复'], p:'T06'},
+  {k:['乌石礼堂'], p:'T07'},
+  {k:['柳溪河'], p:'T08'},
+  {k:['乌石土话'], p:'T09'},
+  {k:['七班毕业照','七班合影'], p:'T10'},
+  {k:['乌石之声'], p:'T11'},
+  {k:['三一一'], p:'T12'},
+  {k:['外出务工名单'], p:'T13'},
+  {k:['寻人启事'], p:'T14'},
+  {k:['周砚生'], p:'T15'},
+  {k:['何小雨'], p:'T16'},
+  {k:['乌石吧'], p:'T17'},
+  {k:['三更'], p:'T18'},
+  {k:['还乡会','乌石乡贤互助会'], p:'T19'},
+  {k:['还乡经'], p:'T20'},
+  {k:['柳素芬','柳嬷嬷','引路人'], p:'T21'},
+  {k:['三更礼'], p:'T22'},
+  {k:['落钥礼','落钥'], p:'T23'},
+  {k:['曾繁明'], p:'T24'},
+  {k:['政务热线回执','12345 回执'], p:'T25'},
+  {k:['信访答复'], p:'T26'},
+  {k:['已还乡者名录','还乡名录'], p:'T27'},
+  {k:['删帖公告'], p:'T28'},
+  {k:['韩雪'], p:'T29'},
+  {k:['刑事裁定书','裁定书'], p:'T30'},
+  {k:['乌石小学'], p:'T31'},
+  {k:['地窖'], p:'T32'},
+  {k:['点名册'], p:'T33'},
+  {k:['广播录音','那盒录音带'], p:'T34'},
+  {k:['归钟'], p:'T35'},
+  {k:['木牌编号'], p:'T36'},
+  {k:['施工许可'], p:'T37'},
+  {k:['门禁记录'], p:'T38'},
+  {k:['求助信'], p:'T39'},
+  {k:['通话详单'], p:'T40'},
+  {k:['四十四','44'], p:'T41'},
+  {k:['乌石便道'], p:'T42'},
+  {k:['还乡堂'], p:'T43'},
+  {k:['第四十四行'], p:'T44'},
+  {k:['周砚生档案'], p:'T45'},
+  {k:['守钥人'], p:'T46'},
+  {k:['撤并'], p:'T47'}
 ];
 
+/* 幕次区间：由真相页编号推算当前幕 */
+const ACT_RANGE = [[1,4],[5,11],[12,19],[20,30],[31,40],[41,47]];
+
 /* 进度统计用的全部界面节点（与 map.html 一致） */
-const NODE_IDS = ['__browser__','S_ARCHIVE','S_NEWS','S_TIEBA','S_WX','S_BLOG','B1998','B_BBS',
-  'T01','T02','T03','T04','T05','T06','T07','T08','T09',
-  'T10','T11','T12','T13','T14','T15','T16','T17','T18','T19','T20','T21','T22','T23','T24','T25','T26','T27',
-  'T28','T29','T30','T31','T32','T33','T34','T35',
-  'T36','T37','T38','T39','T40','T41','T42','T43','T44',
-  'T45','T46','T47','T48','T49','T50','T51','T52'];
+const NODE_IDS = ['__browser__',
+  'S_GOV','S_NEWS','S_FORUM','S_TIEBA','S_WX','S_MAP','S_MK','S_VID',
+  'S_LIFE','S_JOB','S_HOUSE','S_LOGI','S_EDU','S_LIB','S_MEM','S_BLOG','S_SVC',
+  'T01','T02','T03','T04','T05','T06','T07','T08','T09','T10','T11',
+  'T12','T13','T14','T15','T16','T17','T18','T19',
+  'T20','T21','T22','T23','T24','T25','T26','T27','T28','T29','T30',
+  'T31','T32','T33','T34','T35','T36','T37','T38','T39','T40',
+  'T41','T42','T43','T44','T45','T46','T47'];
 const NODE_TOTAL = NODE_IDS.length;
 
-/* ====================== 3. 关键词加粗（仅内联页） ====================== */
-const EXCLUDE_KW = new Set([
-  '馆情简介','方志馆简介','馆藏指南','读者须知','怀安历史沿革','历史沿革','怀安风物','风物',
-  '怀安非遗','非遗','怀安名人','名人','怀安大事记','大事记','新闻动态','馆务新闻','馆员手记',
-  '林知夏手记','数字化规范','数字化','怀安交通','交通','怀安水利','水利','怀安地名','地名',
-  '怀安方言','方言','怀安气象','气象','怀安老照片','老照片','怀安县数字方志馆',
-  '民国地契高清扫描','怀安年鉴2025终审','怀安老照片征集收官','档案里的怀安开放日','1998汛期旧档补录启动',
-  '怀安交通志校订','怀安水利志补录','永宁镇地名考新增','1998防汛专辑录入','怀安方言语音库上线','历年洪水档案整理',
-  '档案馆','数字方志馆','方志馆','新闻主页','新闻网','怀安新闻网','贴吧主页','怀安贴吧','公众号主页','公众号','怀安发布'
-]);
-const ALLKW = (function(){ const s=new Set(); SEARCH_INDEX.forEach(e=>e.k.forEach(k=>{ if(k.length>=2 && !EXCLUDE_KW.has(k)) s.add(k); })); return [...s].sort((a,b)=>b.length-a.length); })();
-function highlightKeywords(root){
-  const walker=document.createTreeWalker(root, NodeFilter.SHOW_TEXT, null);
-  const nodes=[]; while(walker.nextNode()) nodes.push(walker.currentNode);
-  nodes.forEach(n=>{
-    const text=n.nodeValue; const ranges=[]; let changed=false;
-    for(const w of ALLKW){ if(w.length<2) continue; let i=0;
-      while((i=text.indexOf(w,i))!==-1){ ranges.push([i,i+w.length]); i+=w.length; changed=true; } }
-    if(!changed) return;
-    ranges.sort((a,b)=> a[0]-b[0] || (b[1]-b[0])-(a[1]-a[0]));
-    const merged=[]; for(const r of ranges){ if(merged.length && r[0]<merged[merged.length-1][1]) continue; merged.push(r); }
-    const frag=document.createDocumentFragment(); let pos=0;
-    merged.forEach(([s,e])=>{
-      if(s>pos) frag.appendChild(document.createTextNode(text.slice(pos,s)));
-      const b=document.createElement('b'); b.className='kw'; b.textContent=text.slice(s,e); frag.appendChild(b); pos=e;
-    });
-    if(pos<text.length) frag.appendChild(document.createTextNode(text.slice(pos)));
-    n.parentNode.replaceChild(frag, n);
-  });
-}
+/* ====================== 3. 内联页关键词加粗：已整体移除 ======================
+ * 起始页原先会按 SEARCH_INDEX 自动把正文里的词加粗成 .kw，带来三个问题：
+ *   ① 没有点击绑定 —— 加粗了却点不动，形同坏链接；
+ *   ② 会把站点名切坏 —— 「柳津贴吧」被切成「柳津·贴吧」；
+ *   ③ 属于刻意提示 —— 「旧档补录」这类剧情入口被直接摆在起始页上。
+ * 现在起始页只列站点卡片，正文一律不加粗、不给任何提示；
+ * 关键词只出现在站点页 / 真相页的正文里，且只靠"加粗"被认出来。
+ * ========================================================================== */
 
 /* ====================== 4. 状态 / 持久化 ====================== */
 const found = new Set();
 const log = [];
-const SAVE_KEY = 'huaian1998_v3';
+const SAVE_KEY = 'wushi_v1';
 const pageEl = document.getElementById('page');
 const addrEl = document.getElementById('addr');
 let hist = [];   // 视图历史：{kind:'home'|'results'|'site', ...}
@@ -427,13 +478,33 @@ function loadProgress(){
 function updateProgress(){
   let done=0; for(const id of NODE_IDS){ if(id==='__browser__'||found.has(id)) done++; }
   const el=document.getElementById('progress'); if(el) el.textContent = done+' / '+NODE_TOTAL;
+  const ic=document.getElementById('idxcount'); if(ic) ic.textContent = '索引 '+liveCount()+' 条';
 }
 
-/* ====================== 5. 检索匹配 ====================== */
+/* ====================== 5. 检索匹配 ======================
+ * 幕次由已到达的真相页推算；背景词一旦失效就**彻底搜不到**，
+ * 并返回专门的「已移除」结果页 —— 让玩家明确感到东西被拿走了。
+ * ========================================================================= */
+function curAct(){
+  let a=0;
+  for(const id of found){
+    const m=/^T(\d+)$/.exec(id); if(!m) continue;
+    const n=+m[1];
+    for(let i=0;i<ACT_RANGE.length;i++){ const r=ACT_RANGE[i];
+      if(n>=r[0]&&n<=r[1]){ if(i+1>a) a=i+1; break; } }
+  }
+  return a;
+}
+function isExpired(e){ return !!e.until && curAct()>=e.until; }
+function liveCount(){
+  let n=0; for(const e of SEARCH_INDEX){ if(e.p && e.p.charAt(0)==='S' && !isExpired(e)) n++; }
+  return n;
+}
 function matchAll(q){
   q=(q||'').trim(); if(!q) return [];
   const out=[]; const seen=new Set();
   for(const e of SEARCH_INDEX){
+    if(isExpired(e)) continue;
     let hit=false;
     for(const k of e.k){ if(k===q || q.includes(k) || k.includes(q)){ hit=true; break; } }
     if(hit){ if(seen.has(e.p)) continue; seen.add(e.p); out.push(e); }
@@ -442,54 +513,71 @@ function matchAll(q){
   return out;
 }
 function rank(e,q){ return e.k.some(k=>k===q)?2:(e.k.some(k=>q.includes(k)||k.includes(q))?1:0); }
+function expiredMatch(q){
+  q=(q||'').trim(); if(!q) return null;
+  for(const e of SEARCH_INDEX){ if(!e.until) continue;
+    for(const k of e.k){ if(k===q || q.includes(k) || k.includes(q)) return e; } }
+  return null;
+}
 
 /* ====================== 6. 视口切换 ====================== */
 function showInline(){ pageEl.style.display='block'; }
 function setAddr(v){
   addrEl.value=v||'';
   const t=document.getElementById('tabtitle');
-  if(t) t.textContent = (!v || v==='about:home') ? '怀安在线 · 起始页' : String(v).replace(/^search:\s*/,'检索：');
+  if(t) t.textContent = (!v || v==='about:home') ? '沅川在线 · 起始页' : String(v).replace(/^search:\s*/,'检索：');
 }
 function esc(s){ return String(s).replace(/[&<>"]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[c])); }
 function siteNameOf(file){
   if(!file) return '';
-  if(file.indexOf('sites/archive/')===0) return '怀安县数字方志馆';
-  if(file.indexOf('sites/news/')===0) return '怀安新闻网';
-  if(file.indexOf('sites/tieba/')===0) return '怀安贴吧';
-  if(file.indexOf('sites/wx/')===0) return '怀安发布';
-  if(file.indexOf('sites/web/')===0) return '散落的旧网页';
+  const m=/^sites\/([a-z]+)\//.exec(file);
+  if(m){ return ({gov:'柳津县人民政府',news:'沅川日报网',forum:'沅川论坛',tieba:'柳津贴吧',
+    wx:'柳津发布',map:'柳津地图',market:'沅川闲置',video:'沅川短视频',life:'柳津点评',
+    job:'沅川人才网',house:'柳津房产网',logi:'柳津快递驿站',edu:'柳津二中',lib:'柳津图书馆',
+    mem:'网上纪念馆',svc:'柳津政务服务网',blog:'江边旧事'})[m[1]]||''; }
   if(file.indexOf('truth/')===0) return '未公开整理稿';
-  if(file.indexOf('sites/blog/')===0) return '江边旧事';
   return '';
 }
 
 /* ====================== 7. 渲染：首页 / 结果 / 站点 ====================== */
+const SEED_SITES=['S_MK'];   /* 起始页最初只收录的站点：沅川闲置 */
 function applyHome(){
   showInline();
+  const cards=[
+    ['柳津县人民政府','gov','政','政务公开 · 通知公告','#2C5FA8','#3D74BE'],
+    ['沅川日报网','news','闻','本地报道 · 旧报','#C8161D','#E34A50'],
+    ['沅川论坛','forum','坛','网友讨论 · 旧帖','#3A5F8A','#4E77A8'],
+    ['柳津贴吧','tieba','吧','兴趣吧 · 闲聊','#3B7DE0','#5B9BF3'],
+    ['柳津发布','wx','微','官方公众号','#07C160','#3DDC84'],
+    ['柳津地图','map','图','地点 · 路线','#4A90D9','#6FAAE8'],
+    ['沅川闲置','market','闲','二手 · 旧物','#E8734A','#F0916E'],
+    ['沅川短视频','video','视','视频 · 直播','#1A1A22','#33333F'],
+    ['柳津点评','life','评','商户 · 评价','#FF6633','#FF855C'],
+    ['沅川人才网','job','聘','招聘 · 求职','#2B7DE0','#4A97F0'],
+    ['柳津房产网','house','房','小区 · 房源','#C9A66B','#D9BC85'],
+    ['柳津快递驿站','logi','递','包裹 · 网点','#5A6B7B','#748697'],
+    ['柳津二中','edu','学','学校 · 校友','#2E7D8F','#4197A8'],
+    ['柳津图书馆','lib','馆','馆藏 · 检索','#6B7B8C','#8595A6'],
+    ['网上纪念馆','mem','念','纪念 · 留言','#9A9A9A','#B4B4B4'],
+    ['柳津政务服务网','svc','服','社保 · 公积金','#1E6B5A','#2E8A76'],
+    ['江边旧事','blog','记','个人博客','#B08968','#C9A383']
+  ];
+  const nodes=cards.map(c=> c[1]==='market' ? 'S_MK' : 'S_'+c[1].toUpperCase());
+  const vis=cards.filter((c,i)=>SEED_SITES.indexOf(nodes[i])>=0 || found.has(nodes[i]));
   pageEl.innerHTML = `
     <div class="start">
-      <div class="start-t">怀 安 在 线</div>
-      <div class="start-s">本地导航 · 网友常用站点</div>
-      <div class="sites">
-        <div class="site" onclick="doSearch('档案馆')">
-          <div class="site-ic" style="background:linear-gradient(135deg,#8B6F47,#A98A5F)">志</div>
-          <div class="site-nm">怀安县数字方志馆</div><div class="site-d">地情档案 · 旧档补录</div>
-        </div>
-        <div class="site" onclick="doSearch('新闻主页')">
-          <div class="site-ic" style="background:linear-gradient(135deg,#C8161D,#E34A50)">闻</div>
-          <div class="site-nm">怀安新闻网</div><div class="site-d">本地报道 · 旧报</div>
-        </div>
-        <div class="site" onclick="doSearch('贴吧主页')">
-          <div class="site-ic" style="background:linear-gradient(135deg,#3B7DE0,#5B9BF3)">吧</div>
-          <div class="site-nm">怀安贴吧</div><div class="site-d">网友闲聊 · 老故事</div>
-        </div>
-        <div class="site" onclick="doSearch('公众号主页')">
-          <div class="site-ic" style="background:linear-gradient(135deg,#07C160,#3DDC84)">微</div>
-          <div class="site-nm">怀安发布</div><div class="site-d">官方公众号</div>
-        </div>
-      </div>
+      <div class="start-t">沅 川 在 线</div>
+      <div class="start-s">本地导航 · 已收录站点 ${vis.length} 个</div>
+      <div class="sites" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px">`
+      + (vis.length? vis.map(c=>`
+        <div class="site" onclick="doSearch('${c[0]}')">
+          <div class="site-ic" style="background:linear-gradient(135deg,${c[4]},${c[5]})">${c[2]}</div>
+          <div class="site-nm">${c[0]}</div><div class="site-d">${c[3]}</div>
+        </div>`).join('')
+        : `<div style="color:var(--ink-dim);font-family:var(--sans);font-size:var(--fs-sm);padding:10px 0">（尚无收录站点）</div>`)
+      + `</div>
+      <div class="start-f">在上方输入你在网页里读到的名字，可以找到更多站点。</div>
     </div>`;
-  highlightKeywords(pageEl);
   window.scrollTo(0,0);
   setAddr('about:home');
 }
@@ -509,7 +597,7 @@ function applyResults(q, entries){
         <div class="sr-u">${esc(url)}</div>
         <div class="sr-d">${esc(siteNameOf(file))} · 点击进入查看</div></div>`;
     }).join('') + `</div>`;
-    html += `<div class="sr-tip">这些结果都来自你读到的正文关键词。点上面的标题，会在本窗口打开对应网页；网页里又有新词，再拿回来搜，一层层往下挖。</div>`;
+    html += `<div class="sr-tip">共 ${entries.length} 条结果。</div>`;
   }
   pageEl.innerHTML = html;
   window.scrollTo(0,0);
@@ -521,6 +609,19 @@ function showResults(q, entries){
   if(entries.length && log.indexOf('✓ '+q)===-1){ log.unshift('✓ '+q); if(log.length>60) log.length=60; }
   syncLog();
   pushHistory({kind:'results', q, entries});
+  updateProgress();
+}
+/* 已失效：专门的「已移除」结果页（与「未找到」区分开） */
+function showRemoved(q, e){
+  showInline();
+  pageEl.innerHTML = `<div class="sr-h">搜索结果 · <b>${esc(q)}</b></div>
+    <div class="sr-gone">
+      <div class="sr-gone-t">该条目已从索引中移除。</div>
+      <div class="sr-gone-s">原条目：${esc(e.k[0])}　·　索引最后更新于 2026-09-0${Math.min(9,1+curAct())}</div>
+    </div>`;
+  window.scrollTo(0,0);
+  setAddr('search: '+q);
+  pushHistory({kind:'removed', q, e});
   updateProgress();
 }
 function openResult(p){
@@ -545,6 +646,7 @@ function syncNavBtns(){
 }
 function applyView(v){
   if(v.kind==='results'){ lastEntries=v.entries||[]; applyResults(v.q, v.entries||[]); }
+  else if(v.kind==='removed'){ showRemoved(v.q, v.e); }
   else applyHome();
 }
 function goBack(){ if(hi>0){ hi--; applyView(hist[hi]); syncNavBtns(); } }
@@ -555,15 +657,19 @@ function doSearch(raw){
   const q=(raw||'').trim(); if(!q) return;
   if(SITES[q]){ const s=SITES[q]; window.open(s[0]+'?node='+encodeURIComponent(s[1]), '_blank', 'noopener'); return; }
   const entries = matchAll(q);
-  showResults(q, entries);   // 命中→结果列表（点链接在新标签打开）；未命中→"未收录"结果页
+  if(!entries.length){
+    const ex = expiredMatch(q);
+    if(ex){ showRemoved(q, ex); return; }
+  }
+  showResults(q, entries);
 }
 
 /* ====================== 10. 跨标签页进度同步 ====================== */
 window.addEventListener('storage', function(e){
-  if(e.key!=='huaian1998_v3') return;
+  if(e.key!=='wushi_v1') return;
   try{
     found.clear();
-    const raw=localStorage.getItem('huaian1998_v3');
+    const raw=localStorage.getItem('wushi_v1');
     if(raw){ const d=JSON.parse(raw); if(Array.isArray(d.f)) d.f.forEach(x=>found.add(x)); }
   }catch(_){}
   updateProgress();
@@ -580,9 +686,11 @@ function syncLog(){
 function helpHint(){
   document.getElementById('helphint').innerHTML = `
     <h3>这是什么</h3>
-    <p>这是一个用"上网查资料"包装的叙事解谜。你是一个普通网友，在本窗口里输入关键词、打开一个个网页，拼出 1998 年怀安洪水那夜，三名守堤队员失踪的真相。</p>
+    <p>一个用「上网查资料」包装的叙事解谜。你是沅川的一个普通网友，在这个浏览器里输入关键词、打开一个个网页，把一座已经撤并的小镇从网上拼回来。</p>
     <h3>怎么玩</h3>
-    <p>· 在顶部地址/搜索栏输入网站名，会在<b>新标签页</b>打开对应站点首页；<br>· 输入你在网页正文里读到的名词，本页先列出<b>搜索结果</b>；<br>· 点结果标题，在<b>新标签页</b>打开对应网页（每个链接都是新页面，不覆盖当前页）。<br>· 顶部「← →」在本浏览器页内翻页，「⌂」回到起始页，「探索地图」看进度。</p>`;
+    <p>· 顶部地址/搜索栏输入<b>网站名</b>，会在新标签页打开对应站点；<br>· 输入你在网页正文里读到的<b>名词</b>，本页先列出搜索结果；<br>· 点结果标题，在新标签页打开对应网页（不覆盖当前页）。<br>· 「← →」页内翻页，「⌂」回起始页，「探索地图」看进度。</p>
+    <h3>注意</h3>
+    <p>索引不是一成不变的。有些东西，过些日子就搜不到了。</p>`;
   document.getElementById('helpov').classList.add('show');
 }
 let toastTimer=null;
@@ -593,8 +701,7 @@ function toast(msg){ const t=document.getElementById('toast'); if(!t) return; t.
 function restartGame(){
   if(!confirm('确定清空游戏进度（已访问界面、检索日志），并重新锁定机密档案室吗？此操作不可撤销。')) return;
   try{
-    localStorage.removeItem('huaian1998_v3');     /* 探索进度 */
-    localStorage.removeItem('huaian1998_secret_v2'); /* 机密档案室解锁态 */
+    localStorage.removeItem('wushi_v1');          /* 探索进度 */
   }catch(e){}
   found.clear();
   log.length = 0;
