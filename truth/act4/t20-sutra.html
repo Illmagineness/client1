@@ -13,7 +13,11 @@
 <div class="wrap">
   <h1>还乡经</h1>
   <div class="meta">乌石乡贤互助会 会规 · 手抄本 · 共七页</div>
-  <div class="viewer"><img src="../../pic/t20-book.jpg" alt="手抄的还乡经" onerror="picMiss(this)"></div>
+  <div class="ev ev-stain">
+    <span class="ev-cap">手抄本 · 共七页 · 每页一句</span>
+    <div class="ev-row" id="pg-row" style="gap:7px"></div>
+    <div class="ev-tape" style="text-align:center">第七页纸色偏白，折痕比前六页新</div>
+  </div>
   <p class="noind">《还乡经》全文七页，每页一句：</p>
   <div class="box"><span class="h">一</span>世上的人都是外出的。</div>
   <div class="box"><span class="h">二</span>外出的人会忘记路。</div>
@@ -21,18 +25,31 @@
   <div class="box"><span class="h">四</span>三更不是夜里，是天的另一面。</div>
   <div class="box"><span class="h">五</span>回来的人要落钥——锁在里面，不在外面。</div>
   <div class="box"><span class="h">六</span>点名时不应答的，就是已经还乡的。</div>
-  <div class="box"><span class="h">七</span>还乡不是回来，是不再外出。</div>
+  <div class="box" style="border-left-color:#141414"><span class="h" style="color:#141414">七</span><span class="ev-hand" style="color:#0d0d0d">还乡不是回来，是不再外出。</span></div>
   <p class="noind" style="color:var(--dim);font-size:13px">页脚小字：抄于二〇〇九年冬　柳素芬（第七页页脚只有"柳素芬"三字，无年份，墨色偏新）</p>
     <p>经末记着抄写人：<b class="kw">柳素芬</b>。她在页边另注了一句："此经只在 <b class="kw">三更礼</b> 上念，别的时候念了不算。"</p>
-<p>抄写时间是 1972 年冬。同一页的下半部分是空的，像是留给人续写的。</p>
+<p>抄写时间是 2009 年冬。同一页的下半部分是空的，像是留给人续写的——十七年后，那里被补上了第七页。</p>
   <p class="noind" id="rel-src" style="font-size:12.5px;color:var(--dim);margin-top:26px">来源：<b class="kw">柳津政务服务网</b>　·　柳津政务服务网 · 注销材料附卷</p>
   <div class="foot">本页为社会组织注销材料附卷整理稿。</div>
 </div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 七页：前六页纸色发黄，第七页偏白 */
+(function(){
+  var r=document.getElementById('pg-row'); if(!r) return;
+  for(var i=0;i<7;i++){
+    var d=document.createElement('span');
+    d.style.cssText='width:30px;height:40px;flex:none;border-radius:1px;border:1px solid rgba(0,0,0,.25);'+
+      (i===6 ? 'background:linear-gradient(160deg,#fbf8ef,#efe9d8);box-shadow:0 0 0 1px rgba(0,0,0,.15);'
+             : 'background:linear-gradient(160deg,#e3d7b8,#cfc0a0);');
+    d.title='';
+    r.appendChild(d);
+  }
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

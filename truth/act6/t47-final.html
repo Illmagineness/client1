@@ -41,7 +41,30 @@ setTimeout(function(){
    +'<div class="sr-none">没有找到与「乌石镇」相关的网页。</div>';
 },7500);
 
+/* 通关反馈：自我撤并之后，留给玩家的一段话 */
+setTimeout(function(){
+  var w=document.querySelector('.wrap'); if(!w) return;
+  var d=document.createElement('div');
+  d.className='sr-none'; d.style.marginTop='28px';
+  d.innerHTML='你把第四十四行拼出来了。<br>'
+    +'全文 47 页到此结束。现在还能搜到的，只剩两个词：<b>沅川在线</b> 与 <b>乌石镇</b>。<br>'
+    +'输「乌石镇」，你会回到第一页——那一页现在只剩一句：乌石镇，见柳津镇。'
+    +'<br><span style="opacity:.55">（本作人物、地名、机构均系虚构。）</span>'
+    +'<br><span class="fx-tick"></span>';
+  w.appendChild(d);
+  var b=document.createElement('button');
+  b.className='ev-play'; b.style.marginTop='16px';
+  b.textContent='▶ 播放归档音（00:00:20）';
+  b.onclick=function(){
+    if(window.WS){ WS.drone(41,20,0,0.06); WS.tape(1.4,0,0.03); }
+    b.disabled=true; b.textContent='▶ ……';
+  };
+  w.appendChild(b);
+},10500);
+
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

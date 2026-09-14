@@ -116,6 +116,11 @@
   .sr-u{font-family:var(--mono);font-size:var(--fs-xs);color:var(--acc2);margin:var(--s1) 0 var(--s1);word-break:break-all;}
   .sr-d{font-family:var(--sans);font-size:var(--fs-xs);color:var(--ink-faint);}
   .sr-none{font-family:var(--sans);font-size:var(--fs-sm);color:var(--ink-dim);margin-top:var(--s3);line-height:1.8;}
+  .sr-tip{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);margin-top:var(--s3);letter-spacing:.3px;}
+  .sr.is-gone{opacity:.62;border-style:dashed;}
+  .sr.is-gone .sr-t{color:var(--ink-dim);}
+  .sr.is-gone:hover{border-color:var(--warn);}
+  .sr-gone-tag{color:var(--warn);}
 .sr-gone{margin-top:var(--s3);border:1px solid rgba(255,255,255,.08);border-radius:8px;padding:18px 20px;background:rgba(255,255,255,.02);}
 .sr-gone-t{font-family:var(--sans);font-size:var(--fs-sm);color:var(--ink);line-height:1.8;}
 .sr-gone-s{font-family:var(--mono);font-size:var(--fs-sm);color:var(--ink-dim);margin-top:8px;}
@@ -127,16 +132,6 @@
     text-align:center;line-height:1.3;margin-bottom:var(--s2);}
   .start-s{font-family:var(--mono);font-size:var(--fs-xs);color:var(--ink-faint);
     text-align:center;letter-spacing:.5px;margin-bottom:var(--s5);}
-  .sites{display:grid;grid-template-columns:repeat(4,1fr);gap:var(--s3);}
-  .site{border:1px solid var(--line);border-radius:var(--r-lg);padding:var(--s4) var(--s3);
-    background:var(--panel);cursor:pointer;text-align:center;
-    transition:border-color .16s,background .16s,transform .16s,box-shadow .16s;}
-  .site:hover{border-color:var(--acc);background:#171a23;transform:translateY(-2px);box-shadow:var(--sh);}
-  .site-ic{width:52px;height:52px;border-radius:var(--r-lg);margin:0 auto var(--s3);
-    display:flex;align-items:center;justify-content:center;color:#fff;font-size:22px;font-weight:700;}
-  .site-nm{font-family:var(--sans);font-size:var(--fs-base);font-weight:600;color:var(--ink);margin-bottom:var(--s1);}
-  .site-d{font-family:var(--sans);font-size:var(--fs-xs);color:var(--ink-faint);line-height:1.6;}
-
   /* 浮层 */
   .ov{position:fixed;inset:0;background:rgba(4,6,10,.62);backdrop-filter:blur(2px);
     display:none;align-items:center;justify-content:center;z-index:100;padding:var(--s4);}
@@ -308,8 +303,8 @@ const PAGE_ROUTE = {
   S_SVC:['sites/svc/index.html',''],        S_SVC_SB:['sites/svc/shebao.html',''],
   S_SVC_GJJ:['sites/svc/gongjijin.html',''],S_SVC_YY:['sites/svc/yiyuan.html',''],
   S_SVC_XJ:['sites/svc/xueji.html',''],     S_SVC_MZ:['sites/svc/minzheng.html',''],
-  S_HOME:['index.html',''],
-  noise:null
+  S_JOB_ABOUT:['sites/job/about.html',''],  S_HOUSE_ABOUT:['sites/house/about.html',''],
+  S_LIB_ABOUT:['sites/lib/about.html',''],  S_MEM_ABOUT:['sites/mem/about.html','']
 };
 
 /* 站点名（输入即直达站点首页，类似输入网址） */
@@ -356,7 +351,7 @@ const SEARCH_INDEX = [
   {k:['沅川论坛'], p:'S_FORUM', until:3},
   {k:['沅川论坛灌水区','灌水区'], p:'S_FORUM_BOARD', until:3},
   {k:['沅川论坛版规','论坛版规'], p:'S_FORUM_RULES', until:3},
-  {k:['柳津贴吧'], p:'S_TIEBA'},
+  {k:['柳津贴吧'], p:'S_TIEBA', until:4, soft:true},
   {k:['柳津吧规','吧规'], p:'S_TIEBA_ABOUT', until:4},
   {k:['柳津发布'], p:'S_WX', until:5},
   {k:['柳津公众号说明'], p:'S_WX_ABOUT', until:6},
@@ -442,26 +437,27 @@ const SEARCH_INDEX = [
 
 
 
-  /* —— 站点名：常驻检索入口（不随幕失效）。
-   *    页面上的「来源」行与正文里出现的站名，玩家打字即可打开该站。 —— */
+  /* —— 站点名：常驻检索入口（soft 软失效）。
+   *    带 until 但不真正移除：过期后仍能搜到、仍能打开（不卡关），
+   *    但结果卡片与页面正文会把它标成「已移除」——退化感由视觉承担。 —— */
   {k:['沅川在线'], p:'S_HOME'},
-  {k:['柳津县人民政府','柳津县政府'], p:'S_GOV'},
-  {k:['沅川日报','沅川日报网'], p:'S_NEWS'},
-  {k:['沅川论坛'], p:'S_FORUM'},
-  {k:['柳津贴吧'], p:'S_TIEBA'},
-  {k:['柳津发布'], p:'S_WX'},
-  {k:['柳津地图'], p:'S_MAP'},
-  {k:['沅川闲置'], p:'S_MK'},
-  {k:['沅川短视频'], p:'S_VID'},
-  {k:['柳津点评'], p:'S_LIFE'},
-  {k:['沅川人才网'], p:'S_JOB'},
-  {k:['柳津房产网'], p:'S_HOUSE'},
-  {k:['柳津快递','柳津快递驿站'], p:'S_LOGI'},
-  {k:['柳津二中'], p:'S_EDU'},
-  {k:['柳津图书馆','柳津档案馆'], p:'S_LIB'},
-  {k:['网上纪念馆'], p:'S_MEM'},
-  {k:['柳津政务服务网'], p:'S_SVC'},
-  {k:['江边旧事'], p:'S_BLOG'},
+  {k:['柳津县人民政府','柳津县政府'], p:'S_GOV', until:6, soft:true},
+  {k:['沅川日报','沅川日报网'], p:'S_NEWS', until:5, soft:true},
+  {k:['沅川论坛'], p:'S_FORUM', until:3, soft:true},
+  {k:['柳津贴吧'], p:'S_TIEBA', until:4, soft:true},
+  {k:['柳津发布'], p:'S_WX', until:5, soft:true},
+  {k:['柳津地图'], p:'S_MAP', until:3, soft:true},
+  {k:['沅川闲置'], p:'S_MK', until:5, soft:true},
+  {k:['沅川短视频'], p:'S_VID', until:5, soft:true},
+  {k:['柳津点评'], p:'S_LIFE', until:4, soft:true},
+  {k:['沅川人才网'], p:'S_JOB', until:4, soft:true},
+  {k:['柳津房产网'], p:'S_HOUSE', until:3, soft:true},
+  {k:['柳津快递','柳津快递驿站'], p:'S_LOGI', until:7, soft:true},
+  {k:['柳津二中'], p:'S_EDU', until:6, soft:true},
+  {k:['柳津图书馆','柳津档案馆'], p:'S_LIB', until:6, soft:true},
+  {k:['网上纪念馆'], p:'S_MEM', until:4, soft:true},
+  {k:['柳津政务服务网'], p:'S_SVC', until:6, soft:true},
+  {k:['江边旧事'], p:'S_BLOG', until:6, soft:true},
 
   /* —— 真相词（47 个 · 一词一页 · 永不失效） —— */
   {k:['倒钥匙','倒置的钥匙'], p:'T01'},
@@ -583,23 +579,37 @@ function liveCount(){
   let n=0; for(const e of SEARCH_INDEX){ if(e.p && e.p.charAt(0)==='S' && !isExpired(e)) n++; }
   return n;
 }
+/* 命中判定（收紧版）：
+ *   ① 精确相等（含同义词组）→ rank 2
+ *   ② 前缀匹配 → rank 1；背景词要求输入 ≥2 字，真相词要求 ≥3 字
+ *   不再使用「互相包含」——否则输入「乌石」会一次列出全部未来关键词。 */
+function hitRank(e,q){
+  let r=0, kw='';
+  const isT = e.p && e.p.charAt(0)==='T';
+  const minLen = isT ? 3 : 2;
+  for(const k of e.k){
+    if(k===q){ r=2; kw=k; break; }
+    if(r<1 && q.length>=minLen && k.indexOf(q)===0){ r=1; kw=k; }
+  }
+  return {r:r, kw:kw};
+}
 function matchAll(q){
   q=(q||'').trim(); if(!q) return [];
   const out=[]; const seen=new Set();
   for(const e of SEARCH_INDEX){
-    if(isExpired(e)) continue;
-    let hit=false;
-    for(const k of e.k){ if(k===q || q.includes(k) || k.includes(q)){ hit=true; break; } }
-    if(hit){ if(seen.has(e.p)) continue; seen.add(e.p); out.push(e); }
+    if(isExpired(e) && !e.soft) continue;
+    const h=hitRank(e,q); if(!h.r) continue;
+    if(seen.has(e.p)) continue; seen.add(e.p);
+    const rest = e.k.filter(function(k){ return k!==h.kw; });
+    out.push({k:[h.kw].concat(rest), p:e.p, until:e.until, soft:!!e.soft, gone:isExpired(e), rank:h.r});
   }
-  out.sort((a,b)=> rank(b,q)-rank(a,q));
+  out.sort(function(a,b){ return b.rank-a.rank; });
   return out;
 }
-function rank(e,q){ return e.k.some(k=>k===q)?2:(e.k.some(k=>q.includes(k)||k.includes(q))?1:0); }
 function expiredMatch(q){
   q=(q||'').trim(); if(!q) return null;
-  for(const e of SEARCH_INDEX){ if(!e.until) continue;
-    for(const k of e.k){ if(k===q || q.includes(k) || k.includes(q)) return e; } }
+  for(const e of SEARCH_INDEX){ if(!e.until || e.soft) continue;
+    for(const k of e.k){ if(k===q || (q.length>=2 && k.indexOf(q)===0)) return e; } }
   return null;
 }
 
@@ -644,6 +654,10 @@ function applyResults(q, entries){
     html += `<div class="sr-list">` + entries.map(e=>{
       const rt = PAGE_ROUTE[e.p]; const file = rt?rt[0]:''; const anchor = rt?rt[1]:'';
       const url = file + (anchor?('#'+anchor):'');
+      if(e.gone) return `<div class="sr is-gone" onclick="openResult('${e.p}')">
+        <div class="sr-t">${esc(e.k[0])}</div>
+        <div class="sr-u">${esc(url)}</div>
+        <div class="sr-d"><s>${esc(siteNameOf(file))}</s> · <span class="sr-gone-tag">该条目已从索引中移除</span>（存档可阅）</div></div>`;
       return `<div class="sr" onclick="openResult('${e.p}')">
         <div class="sr-t">${esc(e.k[0])}</div>
         <div class="sr-u">${esc(url)}</div>
@@ -740,8 +754,10 @@ function helpHint(){
     <p>一个用「上网查资料」包装的叙事解谜。你是沅川的一个普通网友，在这个浏览器里输入关键词、打开一个个网页，把一座已经撤并的小镇从网上拼回来。</p>
     <h3>怎么玩</h3>
     <p>· 顶部地址/搜索栏输入<b>网站名</b>，会在新标签页打开对应站点；<br>· 输入你在网页正文里读到的<b>名词</b>，本页先列出搜索结果；<br>· 点结果标题，在新标签页打开对应网页（不覆盖当前页）。<br>· 「← →」页内翻页，「⌂」回起始页，「探索地图」看进度。</p>
+    <h3>检索口径</h3>
+    <p>本索引只认<b>完整的名字</b>：打全词最准；也可以只打前面几个字——查网站栏目 2 字起，查人名、档案、物件 3 字起。「<span class="k">乌石</span>」这种半个词是搜不到的。</p>
     <h3>注意</h3>
-    <p>索引不是一成不变的。有些东西，过些日子就搜不到了。</p>`;
+    <p>索引不是一成不变的。有些东西，过些日子就搜不到了——被移除的条目会划掉，只剩存档。</p>`;
   document.getElementById('helpov').classList.add('show');
 }
 let toastTimer=null;

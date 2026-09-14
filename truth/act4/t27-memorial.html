@@ -13,11 +13,15 @@
 <div class="wrap">
   <h1>已还乡者名录</h1>
   <div class="meta">网上纪念馆 · 名录 · 建于 2017-04</div>
-  <div class="viewer"><img src="../../pic/t27-names.jpg" alt="名录石板，最下一行是空的" onerror="picMiss(this)"></div>
+  <div class="ev">
+    <span class="ev-cap">名录刻板 · 已做姓名脱敏（本馆不公开在册者姓名）</span>
+    <div class="ev-row" id="nm-row" style="gap:6px 5px"></div>
+    <div class="ev-tape" style="text-align:center">第 44 位　·　刻好后又被磨平，磨痕比别的行新</div>
+  </div>
   <p class="noind"><b>已还乡者名录</b>　<span style="color:var(--dim);font-size:13px">依三更礼点名次序</span></p>
   <p>收录 1–43 号，共 43 人，均为 2016 年 3 月 11 日凌晨在册者。</p>
-  <div class="box"><span class="h">录入说明</span>名录由本馆代为录入，录入人（已注销）。<br>第 44 位：空。</div>
-  <p class="noind" style="color:var(--dim);font-size:13px">其中无"陈有德"，亦无"周砚生"。</p>
+  <div class="box"><span class="h">录入说明</span>名录由本馆代为录入，录入人（已注销）。<br>第 44 位：空。<br><span style="color:var(--dim)">本馆曾于 2019 年收到一份补录申请，申请人姓名与第 44 位一致，申请未通过。</span></div>
+  <p class="noind" style="color:var(--dim);font-size:13px">其中无"陈有德"，亦无"周砚生"。<br>——也没有任何一个姓周的。</p>
   <p>名录排序所依，是一份<b class="kw">点名册</b>。</p>
     <p class="noind" id="rel-src" style="font-size:12.5px;color:var(--dim);margin-top:26px">来源：<b class="kw">网上纪念馆</b>　·　网上纪念馆 · 名录</p>
   <div class="foot">本页为网络纪念馆名录页整理稿。</div>
@@ -25,8 +29,15 @@
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 43 个被抹平的名字 + 第 44 个空位 */
+(function(){
+  var r=document.getElementById('nm-row'); if(!r) return;
+  for(var i=0;i<43;i++){ var d=document.createElement('span'); d.className='ev-name'; r.appendChild(d); }
+  var b=document.createElement('span'); b.className='ev-name blank'; r.appendChild(b);
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

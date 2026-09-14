@@ -27,8 +27,25 @@
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 你看着它，它也会自己再删一次 */
+(function(){
+  var rows=document.querySelectorAll('table tr'), last=rows[rows.length-1];
+  if(!last) return;
+  setTimeout(function(){
+    var c=last.querySelector('td:nth-child(2)');
+    if(c) c.textContent='（此行正在被删除　·　2016-03-11 03:11）';
+  }, 9000);
+  setTimeout(function(){
+    last.classList.add('fx-erase-line');
+    setTimeout(function(){
+      var c=last.querySelector('td:nth-child(2)');
+      if(c){ c.textContent='（空）'; c.style.color='inherit'; }
+    },1200);
+  }, 13000);
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

@@ -13,6 +13,10 @@
 <div class="wrap">
   <h1>广播录音</h1>
   <div class="meta">转写 · 自动校对仅供参考 · 0310-晚间-未播.mp3</div>
+  <p class="noind">
+    <button class="ev-play" id="play">▶ 播放（0310-晚间-未播.mp3 · 02:14）</button>
+    <span class="ev-count" id="cnt">未播放　·　建议戴耳机，中间有 12 秒什么都没有</span>
+  </p>
   <pre>录制时间：2016-03-10 22:47　地点：乌石镇广播站
 
 ……（电流声）
@@ -33,15 +37,39 @@
 （录音在此处中断）</pre>
   <p>同夜 23:58，他给县广播电台写了一封<b class="kw">求助信</b>，未发送。</p>
     <p>录音的最后一段不是广播，是钟声。镇上人管那叫 <b class="kw">归钟</b>。</p>
-<p>这一段没有报时，也没有主持人说话，只有钟——敲了四下，然后停了很久。</p>
+<p>这一段没有报时，也没有主持人说话，只有钟。第二天凌晨，同一口钟会一直敲到没有人应答为止。</p>
+  <p class="noind" id="fin-line" style="display:none;color:var(--acc);font-weight:700">……如果你们听到这段，说明我没能拦住。</p>
   <p class="noind" id="rel-src" style="font-size:12.5px;color:var(--dim);margin-top:26px">来源：<b class="kw">沅川日报</b>　·　沅川日报 · 音视频资料</p>
   <div class="foot">本页为录音转写整理稿。</div>
 </div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 播放：3 秒电流 → 12 秒真的什么都没有 → 最后一句 */
+(function(){
+  var btn=document.getElementById('play'), cnt=document.getElementById('cnt'),
+      fin=document.getElementById('fin-line'), running=false;
+  if(!btn) return;
+  btn.onclick=function(){
+    if(running) return; running=true; btn.disabled=true;
+    btn.textContent='▶ 播放中……';
+    if(window.WS){ WS.tape(3,0,0.055); WS.drone(52,20,0,0.035); }
+    var s=0;
+    var tick=setInterval(function(){
+      s++;
+      if(cnt) cnt.textContent='00:'+(s<10?'0':'')+s+'　·　'+(s<=12?'（空白）':'……');
+      if(s>=12){ clearInterval(tick);
+        if(fin){ fin.style.display='block'; fin.classList.add('fx-stare'); }
+        if(window.WS){ WS.bell(174.6,0,4.2,0.18); }
+        if(cnt) cnt.textContent='（录音在此处中断）';
+        btn.disabled=false; running=false; btn.textContent='▶ 重播（02:14）';
+      }
+    },1000);
+  };
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

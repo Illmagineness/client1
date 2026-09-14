@@ -8,26 +8,55 @@
 <link rel="stylesheet" href="../truth.css">
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
-<body class="th-video fx-shake">
+<body class="th-video fx-dread">
 <div class="top"><span class="ic">音</span><span>未公开整理稿</span><span class="tag">音频播放页</span><span class="sp"></span><a href="../../browser.html" target="_blank">↩ 浏览器</a></div>
 <div class="wrap">
   <h1>归钟</h1>
   <div class="meta">音频 44.wav · 时长 00:01:12</div>
-  <p class="noind" style="font-family:Consolas,monospace">▶ 00:01:12 / 00:01:12</p>
+  <p class="noind" style="font-family:Consolas,monospace">
+    <button class="ev-play" id="play">▶ 播放（44.wav · 00:01:12）</button>
+    <span class="ev-count" id="cnt">未播放　·　共 44 下，第 44 下听起来不一样</span>
+  </p>
   <p>礼堂的钟，会里叫归钟。三更礼点名一次，鸣一声。</p>
   <div class="box"><span class="h">频谱分析（业余）</span>本段钟声共 44 下，间隔 0.8 秒；末尾 6 秒空拍。<br>第 44 下的泛音比前 43 下低约 30 音分——像是被什么东西压住了。</div>
   <p>按<b class="kw">还乡经</b>第六页，钟鸣一声、礼毕。这一夜的钟，多鸣了四十三声。</p>
   <p class="noind" style="color:var(--dim);font-size:13px">同一段录音曾被上传为短视频，见"<b class="kw">三更</b>"。</p>
     <p>那晚的次数后来成了一个数字：<b class="kw">四十四</b>。</p>
   <p>敲钟的规矩写在 <b class="kw">还乡经</b> 的页边，抄写人补了一行："几下算数，要看<b class="kw">三更</b>那晚来了多少人。"</p>
+  <p class="noind ev-hand" id="after" style="display:none">数完了。四十四下，一声不多。第 45 声没有人敲，也没有人等到。</p>
   <p class="noind" id="rel-src" style="font-size:12.5px;color:var(--dim);margin-top:26px">来源：<b class="kw">沅川短视频</b>　·　沅川短视频 · 音频</p>
   <div class="foot">本页为音频整理稿。</div>
 </div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 归钟：真的敲 44 下，第 44 下音高下压，末尾 6 秒空拍 */
+(function(){
+  var btn=document.getElementById('play'), cnt=document.getElementById('cnt'),
+      after=document.getElementById('after'), running=false;
+  if(!btn) return;
+  btn.onclick=function(){
+    if(running) return; running=true; btn.disabled=true;
+    btn.textContent='▶ 鸣钟中……';
+    if(window.WS){ WS.tape(1.6,0,0.03); }
+    window.__bell = window.WS ? WS.ring44(44, function(i,last){
+      if(cnt) cnt.textContent='第 '+i+' / 44 下'+(last?'　·　低了':'');
+    }, function(){
+      if(cnt) cnt.textContent='空拍 6 秒　·　没有第 45 下';
+      if(after) after.style.display='block';
+      btn.disabled=false; running=false; btn.textContent='▶ 重听（44.wav）';
+    }, 0.55) : null;
+    /* 无 Web Audio 时退化为纯计数，仍然成立 */
+    if(!window.WS){
+      var i=0, t=setInterval(function(){ i++; if(cnt) cnt.textContent='第 '+i+' / 44 下';
+        if(i>=44){ clearInterval(t); if(after) after.style.display='block';
+          btn.disabled=false; running=false; btn.textContent='▶ 重听（44.wav）'; } }, 550);
+    }
+  };
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

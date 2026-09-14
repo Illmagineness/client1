@@ -46,9 +46,9 @@ th{background:var(--box);font-weight:600;}
   display:flex;align-items:center;justify-content:center;min-height:220px;margin:0 0 20px;}
 .viewer img{max-height:420px;object-fit:contain;}
 
-/* ---------- 关键词：只加粗 ---------- */
+/* ---------- 关键词：只加粗（不可点，与 nav.js 的 cursor:default 保持一致） ---------- */
 .kw{font-weight:700 !important;color:inherit !important;background:none !important;
-  border:none !important;text-decoration:none !important;cursor:pointer;text-indent:0;}
+  border:none !important;text-decoration:none !important;cursor:default;text-indent:0;}
 .kw:hover{background:none !important;color:inherit !important;}
 
 /* ---------- 回到浏览器 ---------- */
@@ -104,6 +104,79 @@ th-wiki,.th-wiki{--bg:#fbfbf9;--ink:#202122;--dim:#72773d;--dim:#72767a;--line:#
   font-family:-apple-system,"PingFang SC","Microsoft YaHei",sans-serif;}
 
 /* =========================================================================
+   物证 · 纯 CSS 伪照片（不依赖任何图片素材）
+   用法：.ev.ev-photo > .ev-row > .ev-face（.cut 表示被涂掉）
+   ========================================================================= */
+.ev{border:1px solid var(--line);border-radius:2px;background:var(--box);
+  padding:14px 16px;margin:0 0 20px;}
+.ev-cap{display:block;font-family:Consolas,monospace;font-size:11.5px;color:var(--dim);
+  letter-spacing:.08em;margin-bottom:10px;}
+.ev-photo{
+  position:relative;padding:14px 12px 12px;border-radius:1px;
+  background:
+    repeating-linear-gradient(0deg,rgba(0,0,0,.055) 0 1px,transparent 1px 3px),
+    repeating-linear-gradient(90deg,rgba(255,255,255,.05) 0 1px,transparent 1px 4px),
+    radial-gradient(ellipse at 50% 38%,#d9d2c1 0%,#b9b1a0 55%,#8d8677 100%);
+  box-shadow:inset 0 0 42px rgba(0,0,0,.45), 0 1px 0 rgba(255,255,255,.25);
+}
+.ev-photo::after{ /* 暗角 */
+  content:"";position:absolute;inset:0;pointer-events:none;
+  background:radial-gradient(ellipse at center,transparent 42%,rgba(0,0,0,.6) 100%);
+}
+.ev-row{display:flex;flex-wrap:wrap;gap:10px 8px;align-items:flex-end;justify-content:center;
+  padding:6px 4px 10px;min-height:56px;}
+.ev-face{position:relative;width:26px;height:28px;flex:none;border-radius:50% 50% 42% 42%;
+  background:linear-gradient(180deg,#6d6558,#3b362e);}
+.ev-face::after{content:"";position:absolute;left:50%;top:96%;transform:translateX(-50%);
+  width:44px;height:24px;border-radius:22px 22px 0 0;
+  background:linear-gradient(180deg,#4b453b,#302c25);}
+.ev-face.cut::before{content:"";position:absolute;left:-6px;right:-6px;top:-8px;bottom:-4px;
+  background:#151515;transform:rotate(-5deg);box-shadow:0 0 0 1px rgba(0,0,0,.6);z-index:2;}
+.ev-face.blank{background:none;border:1px dashed rgba(0,0,0,.45);}
+.ev-face.blank::after{display:none;}
+.ev-slot{width:52px;height:64px;flex:none;border:1px dashed rgba(0,0,0,.5);border-radius:2px;
+  display:grid;place-items:center;font-family:Consolas,monospace;font-size:10px;color:rgba(0,0,0,.5);
+  background:repeating-linear-gradient(45deg,rgba(0,0,0,.06) 0 4px,transparent 4px 8px);}
+.ev-slot.has{position:relative;}
+.ev-slot.has::before{content:"";position:absolute;left:9px;top:8px;width:26px;height:26px;
+  border-radius:50%;background:linear-gradient(180deg,#6d6558,#3b362e);}
+.ev-slot.has::after{content:"";position:absolute;left:4px;bottom:0;width:44px;height:30px;
+  border-radius:22px 22px 0 0;background:linear-gradient(180deg,#4b453b,#302c25);}
+.ev-black{position:relative;aspect-ratio:16/9;border-radius:2px;overflow:hidden;
+  background:#000;display:grid;place-items:center;}
+.ev-black::before{content:"";position:absolute;inset:0;
+  background:repeating-linear-gradient(0deg,rgba(255,255,255,.035) 0 1px,transparent 1px 3px);
+  animation:fxNoiseK 2.4s infinite;}
+.ev-black .ev-tip{font-family:Consolas,monospace;font-size:11.5px;color:#3a3a3a;letter-spacing:.2em;}
+.ev-seal{width:104px;height:104px;margin:6px auto 2px;border:3px double #a8342a;border-radius:50%;
+  color:#a8342a;transform:rotate(-13deg);display:grid;place-items:center;text-align:center;
+  font-size:11px;line-height:1.5;letter-spacing:.16em;opacity:.68;font-weight:700;}
+.ev-seal.void{filter:blur(.4px);opacity:.5;}
+.ev-stain{position:relative;}
+.ev-stain::before{content:"";position:absolute;left:8%;top:12%;width:52%;height:60%;pointer-events:none;
+  background:radial-gradient(ellipse at 40% 40%,rgba(110,22,18,.30),rgba(110,22,18,0) 70%);
+  filter:blur(2px);}
+.ev-tape{font-family:Consolas,monospace;font-size:12.5px;color:var(--dim);letter-spacing:.06em;}
+.ev-hand{font-family:"Kaiti SC","STKaiti","KaiTi",var(--serif,serif);font-size:17px;
+  line-height:2.1;color:#2f2a24;}
+.ev-line{height:1px;background:var(--line);margin:14px 0;}
+.ev-lamp{width:13px;height:18px;flex:none;border-radius:50% 50% 38% 38%;
+  background:radial-gradient(circle at 50% 28%,#ffe0a2,#c8862a);
+  box-shadow:0 0 12px rgba(255,193,96,.6);}
+.ev-lamp.off{background:#33322e;box-shadow:none;opacity:.8;}
+.ev-lamp.off::after{content:"";}
+.ev-name{width:40px;height:13px;flex:none;border-radius:1px;
+  background:linear-gradient(90deg,rgba(0,0,0,.42),rgba(0,0,0,.2));}
+.ev-name.blank{background:none;border:1px dashed rgba(0,0,0,.45);}
+/* 录音 / 播放控件（点击才响，符合浏览器自动播放策略） */
+.ev-play{display:inline-flex;align-items:center;gap:8px;border:1px solid var(--line);
+  background:var(--bg);color:var(--ink);border-radius:3px;padding:7px 14px;cursor:pointer;
+  font-family:Consolas,monospace;font-size:12.5px;transition:.15s;}
+.ev-play:hover{border-color:var(--acc);color:var(--acc);}
+.ev-play[disabled]{opacity:.5;cursor:default;}
+.ev-count{font-family:Consolas,monospace;font-size:12px;color:var(--dim);margin-left:4px;}
+
+/* =========================================================================
    特效
    ========================================================================= */
 @keyframes fxClock{0%,100%{transform:none}50%{transform:translateY(-1px)}}
@@ -119,13 +192,25 @@ th-wiki,.th-wiki{--bg:#fbfbf9;--ink:#202122;--dim:#72773d;--dim:#72767a;--line:#
   93%{transform:translateX(-2px);text-shadow:2px 0 #f43, -2px 0 #3af}
   96%{transform:translateX(2px);text-shadow:-2px 0 #f43, 2px 0 #3af}}
 @keyframes fxJumpK{0%,100%{transform:translateY(0)}50%{transform:translateY(-1.5px)}}
+@keyframes fxDread{0%,100%{filter:none}50%{filter:brightness(.88) saturate(.8) blur(.2px)}}
+@keyframes fxBlackout{0%,95.5%,100%{opacity:1}96.5%,98%{opacity:0}}
+@keyframes fxStare{0%,100%{opacity:1}46%{opacity:.42}52%{opacity:1}}
+@keyframes fxBlink{0%,49%{opacity:1}50%,100%{opacity:.15}}
 @keyframes fxTypeK{from{width:0}to{width:100%}}
 @keyframes fxEraseK{to{opacity:0;filter:blur(2px)}}
 
 body.fx-clock .meta{animation:fxClock 3s steps(2) infinite;}
 body.fx-flicker{animation:fxFlicker 6s infinite;}
 body.fx-drift .wrap{animation:fxDrift 7s ease-in-out infinite;}
-body.fx-shake{animation:fxShake .28s infinite;}
+/* 抖动改为有限次：抖 6 下就停，不做无限抖动（伤眼且廉价） */
+body.fx-shake{animation:fxShake .3s 6;}
+/* 新增：更慢、更阴的三种 */
+body.fx-dread .wrap{animation:fxDread 11s ease-in-out infinite;}
+body.fx-blackout{animation:fxBlackout 23s infinite;}
+body.fx-night{filter:brightness(.8) saturate(.72) hue-rotate(-6deg);}
+.fx-stare{animation:fxStare 9s ease-in-out infinite;}
+.fx-tick{display:inline-block;width:6px;height:6px;border-radius:99px;background:var(--acc);
+  vertical-align:middle;margin-left:6px;animation:fxBlink 1s steps(2) infinite;}
 body.fx-drain .wrap{animation:fxDrainK 9s ease-in-out infinite;}
 body.fx-breathe{animation:fxBreathe 7s ease-in-out infinite;}
 body.fx-water .wrap{animation:fxWaterK 6s ease-in-out infinite;}

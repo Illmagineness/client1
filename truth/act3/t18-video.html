@@ -8,16 +8,18 @@
 <link rel="stylesheet" href="../truth.css">
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
-<body class="th-video fx-noise">
+<body class="th-video fx-noise fx-dread">
 <div class="top"><span class="ic">视</span><span>未公开整理稿</span><span class="tag">短视频播放页</span><span class="sp"></span><a href="../../browser.html" target="_blank">↩ 浏览器</a></div>
 <div class="wrap">
   <h1>三更</h1>
   <div class="meta">2016-03-11 03:04 上传 · 时长 00:00:37 · 已折叠</div>
-  <p class="noind" style="font-family:Consolas,monospace">▶ 00:00:37 / 00:00:37　·　画质 240p</p>
-  <div class="viewer" style="min-height:280px;background:#000;color:#2a2a2a;display:flex;align-items:center;justify-content:center">
-    <span style="font-size:13px;color:#3a3a3a">（画面全黑）</span></div>
+  <div class="ev ev-black" id="screen"><span class="ev-tip" id="scr-tip">（画面全黑）</span></div>
+  <p class="noind" style="font-family:Consolas,monospace">
+    <button class="ev-play" id="play">▶ 播放（00:00:37 · 240p）</button>
+    <span class="ev-count" id="cnt">音频未播放　·　建议戴耳机</span>
+  </p>
   <div class="box"><span class="h">音频</span>整段 37 秒只有钟声。<br>钟声共 <b>44</b> 下，间隔 0.8 秒。第 44 下之后，是 6 秒的空拍。</div>
-  <p class="noind" style="color:var(--dim);font-size:13px">上传设备：乌石镇广播站（IP 段）</p>
+  <p class="noind" style="color:var(--dim);font-size:13px">上传设备：乌石镇广播站（IP 段）　·　评论区已于 2016-03-14 关闭</p>
   <p>同一段钟声被本地人称作<b class="kw">归钟</b>。</p>
     <p class="noind" id="rel-src" style="font-size:12.5px;color:var(--dim);margin-top:26px">来源：<b class="kw">沅川短视频</b>　·　沅川短视频 · 已折叠内容</p>
   <div class="foot">本页为短视频平台播放页快照，画面已被平台折叠。</div>
@@ -25,8 +27,30 @@
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 黑屏视频：低频嗡鸣 + 44 下钟声（点击才响） */
+(function(){
+  var btn=document.getElementById('play'), cnt=document.getElementById('cnt'),
+      tip=document.getElementById('scr-tip'), running=false;
+  if(!btn) return;
+  btn.onclick=function(){
+    if(running) return; running=true; btn.disabled=true;
+    btn.textContent='▶ 播放中……';
+    if(tip) tip.textContent='';
+    if(window.WS){ WS.drone(43,37,0,0.06); WS.tape(2.5,0,0.035); }
+    var h=window.WS? WS.ring44(44,function(i,last){
+      if(cnt) cnt.textContent='第 '+i+' / 44 下'+(last?'　·　第 44 下，泛音低了':'');
+      if(tip) tip.textContent=last?'第 四十四 下':'第 '+i+' 下';
+    },function(){
+      if(cnt) cnt.textContent='空拍　·　没有第 45 下';
+      if(tip) tip.textContent='（画面仍然全黑）';
+      btn.disabled=false; running=false; btn.textContent='▶ 重播（00:00:37）';
+    },0.55) : null;
+    window.__v0311=h;
+  };
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

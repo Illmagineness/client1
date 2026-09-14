@@ -13,7 +13,11 @@
 <div class="wrap">
   <h1>门禁记录</h1>
   <div class="meta">乌石小学门禁系统 · 2016-03-11</div>
-  <div class="viewer"><img src="../../pic/t38-access.jpg" alt="门禁截图，照片栏为空" onerror="picMiss(this)"></div>
+  <div class="ev">
+    <span class="ev-cap">当日 00:00–03:00 抓拍照片 · 共 44 条</span>
+    <div class="ev-row" id="acc-row" style="gap:6px"></div>
+    <div class="ev-tape" style="text-align:center">第 44 条 · 照片栏为空（文件存在，内容为 0 字节）</div>
+  </div>
   <pre>2016-03-11 02:41:07　卡号 0032　姓名 周砚生　照片：（空）
 当日第 44 次刷卡</pre>
   <div class="box"><span class="h">记录说明</span>当日 00:00–03:00 间共记录刷卡 44 次；其余 43 次均有照片，仅此一次为空。</div>
@@ -25,8 +29,15 @@
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 43 张有人的抓拍 + 最后一张空的 */
+(function(){
+  var r=document.getElementById('acc-row'); if(!r) return;
+  for(var i=0;i<43;i++){ var d=document.createElement('span'); d.className='ev-slot has'; r.appendChild(d); }
+  var e=document.createElement('span'); e.className='ev-slot'; e.textContent='空'; r.appendChild(e);
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

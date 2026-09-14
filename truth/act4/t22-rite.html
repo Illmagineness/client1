@@ -13,7 +13,11 @@
 <div class="wrap">
   <h1>三更礼</h1>
   <div class="meta">乌石乡贤互助会 · 三更礼 · 仪程（手写）</div>
-  <div class="viewer"><img src="../../pic/t22-rite.jpg" alt="三更礼仪程手写页" onerror="picMiss(this)"></div>
+  <div class="ev ev-stain">
+    <span class="ev-cap">堂内灯位 · 一、三更起，堂内点灯七盏，灯不得背风</span>
+    <div class="ev-row" id="lamp-row" style="gap:16px;padding:14px 4px"></div>
+    <div class="ev-tape" style="text-align:center">第七盏的灯座是空的——照片上只有六个灯位有灯油痕</div>
+  </div>
   <pre>乌石乡贤互助会　三更礼　仪程
 
 一、三更起，堂内点灯七盏，灯不得背风。
@@ -23,14 +27,25 @@
 五、不应答者，即为已还乡，当场录名。
 六、钟鸣一声，礼毕。<b class="kw">归钟</b>只鸣一声。</pre>
   <p class="noind" style="color:var(--dim);font-size:13px">页脚另一行加注（字迹不同、墨色新）：<b>"2016 年 3 月 11 日，钟鸣四十四声。"</b></p>
+  <p class="noind ev-hand">第六条"钟鸣一声"四个字被人描过一遍，描的时候手是抖的。</p>
     <p class="noind" id="rel-src" style="font-size:12.5px;color:var(--dim);margin-top:26px">来源：<b class="kw">柳津政务服务网</b>　·　柳津政务服务网 · 注销材料附卷</p>
   <div class="foot">本页为社会组织档案附卷整理稿。</div>
 </div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>
 function go(){ window.open('../../browser.html','_blank','noopener'); }
-
+/* 七盏灯，第七盏没点着 */
+(function(){
+  var r=document.getElementById('lamp-row'); if(!r) return;
+  for(var i=0;i<7;i++){
+    var d=document.createElement('span');
+    d.className='ev-lamp'+(i===6?' off':'');
+    r.appendChild(d);
+  }
+})();
 </script>
+<script src="../../assets/sound.js"></script>
+<script src="../../assets/creep.js"></script>
 <script src="../../assets/nav.js"></script>
 </body>
 </html>

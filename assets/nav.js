@@ -93,7 +93,9 @@
 
   /* 随幕失效的背景词：页面上同步显示为已移除（与浏览器索引一致） */
   var ACT_RANGE=[[1,4],[5,11],[12,19],[20,30],[31,40],[41,47]];
-  var EXPIRED_WORDS={"县长信箱":4,"沅川日报":5,"沅川论坛":3,"柳津发布":5,"柳津公众号说明":6,"柳津地图":3,"柳津街景":5,"沅川短视频":5,"柳津点评":4,"柳津美食":5,"沅川人才网":4,"柳津房产网":3,"柳津二手房":5,"柳津快递":7,"柳津政务服务网":6,"柳津社保":6,"柳津人民医院":6,"柳津学籍查询":6,"网上纪念馆":4,"江边旧事":6,"柳津政务公开目录":6,"柳津住建局":6,"柳津中标公告":6,"柳津流标公告":6,"沅川论坛灌水区":4,"柳津杂谈":6,"沅川论坛版规":5,"柳津热帖":6,"柳津老照片帖子":7,"柳津吧规":5,"乌石吧存档":6,"柳津卫星图":7,"乌石礼堂旧址":6,"柳津驿站":7,"柳津老照片":6,"柳津旧报纸":5,"柳津副刊":6,"柳津天气":5,"柳溪河水位":6,"柳津面馆":6,"柳津民宿":6,"柳津企业查询":6,"柳津招聘":5,"柳津发布历史消息":7,"柳津公众号":6,"柳津镇人民政府":6,"柳津卫生院":7,"柳津社会组织":6,"柳津县志":6,"柳津镇中心校":6,"柳津二中招生":6,"柳津校友录":6,"柳津校史":6,"柳津纪念页":6,"柳津寻人":7,"柳津寻人启事":7,"柳津二手":5,"柳津旧木牌":7};
+  var EXPIRED_WORDS={"县长信箱":4,"沅川日报":5,"沅川论坛":3,"柳津发布":5,"柳津公众号说明":6,"柳津地图":3,"柳津街景":5,"沅川短视频":5,"柳津点评":4,"柳津美食":5,"沅川人才网":4,"柳津房产网":3,"柳津二手房":5,"柳津快递":7,"柳津政务服务网":6,"柳津社保":6,"柳津人民医院":6,"柳津学籍查询":6,"网上纪念馆":4,"江边旧事":6,"柳津政务公开目录":6,"柳津住建局":6,"柳津中标公告":6,"柳津流标公告":6,"沅川论坛灌水区":4,"柳津杂谈":6,"沅川论坛版规":5,"柳津热帖":6,"柳津老照片帖子":7,"柳津吧规":5,"乌石吧存档":6,"柳津卫星图":7,"乌石礼堂旧址":6,"柳津驿站":7,"柳津老照片":6,"柳津旧报纸":5,"柳津副刊":6,"柳津天气":5,"柳溪河水位":6,"柳津面馆":6,"柳津民宿":6,"柳津企业查询":6,"柳津招聘":5,"柳津发布历史消息":7,"柳津公众号":6,"柳津镇人民政府":6,"柳津卫生院":7,"柳津社会组织":6,"柳津县志":6,"柳津镇中心校":6,"柳津二中招生":6,"柳津校友录":6,"柳津校史":6,"柳津纪念页":6,"柳津寻人":7,"柳津寻人启事":7,"柳津二手":5,"柳津旧木牌":7,
+    /* 站点名：软失效——过期后仍可打开，但正文里一律划掉、标为已移除 */
+    "柳津县人民政府":6,"柳津县政府":6,"柳津贴吧":4,"沅川闲置":5,"柳津二中":6,"柳津图书馆":6,"柳津档案馆":6};
   function curAct(){
     try{ var raw=localStorage.getItem(SAVE_KEY); if(!raw) return 0;
       var d=JSON.parse(raw), a=0;
@@ -103,11 +105,38 @@
       return a;
     }catch(e){ return 0; }
   }
+  /* 软失效的视觉：划掉 + 变淡 + 一个「⌀」记号。
+   * 由 nav.js 注入，站点页与真相页共用，保证全站一致。 */
+  function injectGoneStyle(){
+    if(document.getElementById('gone-style')) return;
+    var s=document.createElement('style'); s.id='gone-style';
+    s.textContent =
+      '.kw.gone,span.gone{text-decoration:line-through;text-decoration-thickness:1px;opacity:.4;}'+
+      '.kw.gone::after,span.gone::after{content:" ⌀";font-size:.72em;opacity:.85;text-decoration:none;display:inline-block;}';
+    document.head.appendChild(s);
+  }
   function markExpired(){
     var a=curAct(); if(!a) return;
+    injectGoneStyle();
     document.querySelectorAll('.kw, .hitkw b').forEach(function(el){
       var w=(el.textContent||'').trim(), u=EXPIRED_WORDS[w];
       if(u && a>=u){ el.classList.add('gone'); el.setAttribute('title',''); }
+    });
+    /* 页脚导航 / 来源行里的裸站名：整段文本等于失效词时，包一层 span.gone */
+    var walker=document.createTreeWalker(document.body, NodeFilter.SHOW_TEXT, null, false);
+    var targets=[];
+    while(walker.nextNode()){
+      var n=walker.currentNode, t=(n.nodeValue||'').trim();
+      if(!t || t.length>12) continue;
+      var u2=EXPIRED_WORDS[t]; if(!u2 || a<u2) continue;
+      var p=n.parentNode;
+      if(!p || /^(SCRIPT|STYLE|TEXTAREA)$/.test(p.nodeName)) continue;
+      if(p.classList && p.classList.contains('gone')) continue;
+      targets.push(n);
+    }
+    targets.forEach(function(n){
+      var sp=document.createElement('span'); sp.className='gone'; sp.textContent=n.nodeValue;
+      n.parentNode.replaceChild(sp,n);
     });
   }
 
