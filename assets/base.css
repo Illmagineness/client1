@@ -71,6 +71,13 @@ button{cursor:pointer;}
 
 /* 搜索词高亮：站点页正文里出现的、可被玩家检索的名字。
  * 视觉上要"看得出来但不喧宾夺主"——虚线下划线 + 主色，鼠标悬停变实线。 */
-b.kw{font-weight:700;color:inherit;border-bottom:1px dashed currentColor;padding-bottom:0.5px;cursor:text;}
+b.kw{font-weight:700;color:inherit;border-bottom:1px dashed currentColor;padding-bottom:0.5px;}
 b.kw:hover{border-bottom-style:solid;}
 .srcnote b.kw,.crosslink b.kw{font-weight:600;}
+
+/* 已移除的背景检索词：页面保留痕迹，但明确显示"拿不到了" */
+b.kw.gone,.hitkw b.gone{text-decoration:line-through;opacity:.42;}
+b.kw.gone::after,.hitkw b.gone::after{content:"（已移除）";font-size:11px;opacity:.8;}
+/* 页脚说明行：来源与相关检索合并为一行，去掉堆叠 */
+p.srcnote{margin-top:16px;}
+p.srcnote+p.hitkw{margin-top:6px;}

@@ -195,7 +195,11 @@
     <button class="navbtn" onclick="renderHome()" title="起始页">⌂</button>
     <div class="addrwrap">
       <span class="glb">⊙</span>
-      <input id="addr" placeholder="在地址栏输入网址，或检索你读到的名词……" autocomplete="off"
+      <div id="finale" style="display:none;margin:16px 0 6px;padding:13px 16px;border:1px solid #3a2f2a;background:#17120f;border-radius:10px;font-size:13.5px;line-height:1.9;color:#a89b93">
+  <b style="color:#ff9d6b;font-family:var(--mono)">索引已停止更新</b>　2016-03-11 起，本站不再收录任何新条目。<br>
+  「撤并」之后，能检索到的只剩下你还记得的那些名字。
+</div>
+<input id="addr" placeholder="在地址栏输入网址，或检索你读到的名词……" autocomplete="off"
         onkeydown="if(event.key==='Enter'){doSearch(this.value);}">
     </div>
     <button class="navbtn" onclick="doSearch(document.getElementById('addr').value)">检索</button>
@@ -232,6 +236,7 @@
 
 /* ====================== 1. 站点路由：页面 → 独立站点文件 + 锚点 ====================== */
 const PAGE_ROUTE = {
+  S_HOME:['index.html',''],
   /* —— 站点层：16 个站点 —— */
   S_GOV:['sites/gov/index.html',''],        S_GOV_OPEN:['sites/gov/open.html',''],
   S_GOV_TENDER:['sites/gov/tender.html',''],S_GOV_PERMIT:['sites/gov/permit.html',''],
@@ -342,43 +347,100 @@ const SEARCH_INDEX = [
   {k:['柳津县政务公开','政务公开'], p:'S_GOV_OPEN', until:6},
   {k:['柳津招标公告','柳津招标'], p:'S_GOV_TENDER', until:3},
   {k:['柳津住建局','施工许可公示'], p:'S_GOV_PERMIT', until:5},
-  {k:['12345 政务服务','12345'], p:'S_GOV_HOTLINE', until:4},
-  {k:['县长信箱'], p:'S_GOV_PETITION', until:4},
+  {k:['县长信箱'], p:'S_GOV', until:4},
   {k:['柳津干部公示','干部任免'], p:'S_GOV_CADRE', until:5},
   {k:['沅川日报'], p:'S_NEWS', until:5},
-  {k:['柳津新闻'], p:'S_NEWS_LOCAL', until:5},
   {k:['柳津旧报纸','旧报影印'], p:'S_NEWS_OLD', until:5},
-  {k:['柳津影像'], p:'S_NEWS_PHOTO', until:4},
   {k:['柳津副刊','地方文化'], p:'S_NEWS_CULT', until:5},
   {k:['柳津天气','柳津天气预报'], p:'S_NEWS_WX', until:5},
   {k:['沅川论坛'], p:'S_FORUM', until:3},
   {k:['沅川论坛灌水区','灌水区'], p:'S_FORUM_BOARD', until:3},
   {k:['沅川论坛版规','论坛版规'], p:'S_FORUM_RULES', until:3},
-  {k:['柳津贴吧'], p:'S_TIEBA', until:4},
+  {k:['柳津贴吧'], p:'S_TIEBA'},
   {k:['柳津吧规','吧规'], p:'S_TIEBA_ABOUT', until:4},
   {k:['柳津发布'], p:'S_WX', until:5},
   {k:['柳津公众号说明'], p:'S_WX_ABOUT', until:6},
   {k:['柳津地图'], p:'S_MAP', until:3},
-  {k:['柳津街景'], p:'S_MAP_ROUTE', until:3},
+  {k:['柳津街景'], p:'S_MAP', until:5},
   {k:['沅川闲置','柳津二手'], p:'S_MK', until:5},
-  {k:['闲置客服'], p:'S_MK_CHAT', until:5},
   {k:['沅川短视频'], p:'S_VID', until:5},
-  {k:['短视频评论'], p:'S_VID_CMT', until:5},
   {k:['柳津点评'], p:'S_LIFE', until:4},
-  {k:['柳津美食'], p:'S_LIFE_FOOD', until:4},
+  {k:['柳津美食'], p:'S_LIFE_FOOD', until:5},
   {k:['沅川人才网'], p:'S_JOB', until:4},
   {k:['柳津企业查询','企业信息查询'], p:'S_JOB_CO', until:4},
   {k:['柳津房产网'], p:'S_HOUSE', until:3},
-  {k:['柳津二手房'], p:'S_HOUSE_XQ', until:3},
+  {k:['柳津二手房'], p:'S_HOUSE', until:5},
   {k:['柳津快递'], p:'S_LOGI', until:7},
-  {k:['柳津物流'], p:'S_LOGI_TRK', until:3},
   {k:['柳津政务服务网'], p:'S_SVC', until:6},
   {k:['柳津社保'], p:'S_SVC_SB', until:6},
-  {k:['柳津公积金'], p:'S_SVC_GJJ', until:6},
   {k:['柳津人民医院'], p:'S_SVC_YY', until:6},
-  {k:['柳津学籍查询'], p:'S_SVC_XJ', until:7},
+  {k:['柳津学籍查询'], p:'S_SVC_XJ', until:6},
   {k:['网上纪念馆'], p:'S_MEM', until:4},
   {k:['江边旧事'], p:'S_BLOG', until:6},
+  /* —— 背景词：站点页「热门检索」里出现，随幕失效 —— */
+  {k:['柳津政务公开目录'], p:'S_GOV_OPEN', until:6},
+  {k:['柳津住建局'], p:'S_GOV_PERMIT', until:6},
+  {k:['柳津中标公告'], p:'S_GOV_TENDER', until:6},
+  {k:['柳津流标公告'], p:'S_GOV_TENDER', until:6},
+  {k:['沅川论坛灌水区'], p:'S_FORUM_BOARD', until:4},
+  {k:['柳津杂谈'], p:'S_FORUM_BOARD', until:6},
+  {k:['沅川论坛版规'], p:'S_FORUM_RULES', until:5},
+  {k:['柳津热帖'], p:'S_FORUM_BOARD', until:6},
+  {k:['柳津老照片帖子'], p:'S_FORUM_T3', until:7},
+  {k:['柳津吧规'], p:'S_TIEBA', until:5},
+  {k:['乌石吧存档'], p:'S_TIEBA_GONE', until:6},
+  {k:['柳津卫星图'], p:'S_MAP', until:7},
+  {k:['乌石礼堂旧址'], p:'S_MAP_HALL', until:6},
+  {k:['柳津驿站'], p:'S_LOGI_TRK', until:7},
+  {k:['柳津老照片'], p:'S_NEWS_PHOTO', until:6},
+  {k:['柳津旧报纸'], p:'S_NEWS_OLD', until:5},
+  {k:['柳津副刊'], p:'S_NEWS_CULT', until:6},
+  {k:['柳津天气'], p:'S_NEWS_WX', until:5},
+  {k:['柳溪河水位'], p:'S_NEWS_WX', until:6},
+  {k:['柳津面馆'], p:'S_LIFE_FOOD', until:6},
+  {k:['柳津民宿'], p:'S_LIFE', until:6},
+  {k:['柳津企业查询'], p:'S_JOB_CO', until:6},
+  {k:['柳津招聘'], p:'S_JOB', until:5},
+  {k:['柳津发布历史消息'], p:'S_WX', until:7},
+  {k:['柳津公众号'], p:'S_WX', until:6},
+  {k:['柳津镇人民政府'], p:'S_WX', until:6},
+  {k:['柳津卫生院'], p:'S_SVC_YY', until:7},
+  {k:['柳津社会组织'], p:'S_SVC_MZ', until:6},
+  {k:['柳津县志'], p:'S_LIB', until:6},
+  {k:['柳津镇中心校'], p:'S_EDU', until:6},
+  {k:['柳津二中招生'], p:'S_EDU', until:6},
+  {k:['柳津校友录'], p:'S_EDU_ALUM', until:6},
+  {k:['柳津校史'], p:'S_EDU_HIS', until:6},
+  {k:['柳津纪念页'], p:'S_MEM', until:6},
+  {k:['柳津寻人'], p:'S_MEM_MSG', until:7},
+  {k:['柳津寻人启事'], p:'S_MEM_MSG', until:7},
+  {k:['柳津二手'], p:'S_MK', until:5},
+  {k:['柳津旧木牌'], p:'S_MK_REL', until:7},
+  /* —— 就地取材关键词：正文里已有的编号/案号/单号/索取号/日期 —— */
+  {k:['〔2016〕011号'], p:'T37'},
+  /* —— 剧情词别名：同一概念的不同叫法 —— */
+  {k:['乌石乡'], p:'T04'},
+  {k:['老乌石'], p:'T04'},
+  {k:['原乌石镇'], p:'T04'},
+  {k:['乌石片区'], p:'T04'},
+  {k:['老陈'], p:'T02'},
+  {k:['陈师傅'], p:'T02'},
+  {k:['乡志稿本'], p:'T05'},
+  {k:['老礼堂'], p:'T07'},
+  {k:['三一一事件'], p:'T12'},
+  {k:['守钥人老周'], p:'T46'},
+  {k:['周砚生同志'], p:'T45'},
+  /* —— 补回剧情入口 —— */
+  {k:['还乡会'], p:'T19'},
+  {k:['〔2016〕011 号'], p:'T37'},
+
+
+
+
+
+
+
+
 
   /* —— 站点名：常驻检索入口（不随幕失效）。
    *    页面上的「来源」行与正文里出现的站名，玩家打字即可打开该站。 —— */
@@ -442,9 +504,9 @@ const SEARCH_INDEX = [
   {k:['门禁记录'], p:'T38'},
   {k:['求助信'], p:'T39'},
   {k:['通话详单'], p:'T40'},
-  {k:['四十四','44'], p:'T41'},
   {k:['乌石便道'], p:'T42'},
   {k:['还乡堂'], p:'T43'},
+  {k:['四十四','44','四十四级'], p:'T41'},
   {k:['第四十四行'], p:'T44'},
   {k:['周砚生档案'], p:'T45'},
   {k:['守钥人'], p:'T46'},
@@ -455,7 +517,7 @@ const SEARCH_INDEX = [
 const ACT_RANGE = [[1,4],[5,11],[12,19],[20,30],[31,40],[41,47]];
 
 /* 进度统计用的全部界面节点（与 map.html 一致） */
-const NODE_IDS = ['__browser__',
+const NODE_IDS = ['__browser__','S_HOME',
   'S_GOV','S_NEWS','S_FORUM','S_TIEBA','S_WX','S_MAP','S_MK','S_VID',
   'S_LIFE','S_JOB','S_HOUSE','S_LOGI','S_EDU','S_LIB','S_MEM','S_BLOG','S_SVC',
   'T01','T02','T03','T04','T05','T06','T07','T08','T09','T10','T11',

@@ -62,6 +62,14 @@
   .node.cur{border-color:var(--warn);color:var(--warn);background:#1c1410;box-shadow:0 0 0 2px rgba(255,157,107,.18);}
   .node.cur .tag{color:var(--warn);}
   .node.miss{opacity:.62;}
+  .exp{display:block;font-family:var(--mono);font-size:10.5px;color:var(--acc);margin-top:6px;cursor:pointer;opacity:.85;}
+  .exp:hover{opacity:1;}
+  .subbox{display:flex;flex-wrap:wrap;gap:4px;margin-top:7px;}
+  .chip{font-family:var(--mono);font-size:10px;border:1px solid var(--line);border-radius:999px;padding:2px 7px;color:var(--ink-faint);cursor:pointer;}
+  .chip.on{border-color:var(--acc);color:var(--acc2);}
+  .chip:hover{filter:brightness(1.2);}
+  .node.sub{padding:6px 9px;font-size:11.5px;margin-bottom:6px;border-style:dashed;}
+  .node.sub .leads{display:none;}
 
   /* 漏掉清单 */
   .missed{border:1px solid var(--line);border-radius:11px;background:var(--panel);padding:14px 16px;margin-top:8px;}
@@ -193,13 +201,18 @@ const NODES=[
   {id:'T44',name:'第四十四行',layer:7,search:'第四十四行',leads:'周砚生档案　〔站点〕柳津图书馆'},
   {id:'T45',name:'周砚生档案',layer:7,search:'周砚生档案',leads:'守钥人 / 撤并　〔站点〕柳津政务服务网'},
   {id:'T46',name:'守钥人',layer:7,search:'守钥人',leads:'第四十四行 / 撤并 / 周砚生档案　〔站点〕柳津政务服务网'},
-  {id:'T47',name:'撤并（终章）',layer:7,search:'撤并',leads:'〔站点〕沅川在线'}
+  {id:'T47',name:'撤并（终章）',layer:7,search:'撤并',leads:'〔站点〕沅川在线'},
 ];
+
+const SUB={"S_GOV":8,"S_NEWS":10,"S_FORUM":7,"S_TIEBA":6,"S_WX":6,"S_MAP":4,"S_MK":5,"S_VID":4,"S_LIFE":5,"S_JOB":3,"S_HOUSE":3,"S_LOGI":2,"S_EDU":4,"S_LIB":5,"S_MEM":3,"S_SVC":6,"S_BLOG":7};
+
+const SUBPAGES={"S_GOV":[["S_GOV_OPEN","柳津县人民政府 · 政务公开"],["S_GOV_TENDER","柳津县人民政府 · 招标公告"],["S_GOV_PERMIT","柳津县人民政府 · 施工许可"],["S_GOV_HOTLINE","柳津县人民政府 · 1234"],["S_GOV_CADRE","柳津县人民政府 · 干部任免"],["S_GOV_PETITION","柳津县人民政府 · 信访答复"]],"S_NEWS":[["S_NEWS_LOCAL","本地 · 沅川日报网"],["S_NEWS_OLD","旧报影印 · 沅川日报网"],["S_NEWS_PHOTO","影像 · 沅川日报网"],["S_NEWS_CULT","副刊 · 沅川日报网"],["S_NEWS_WX","柳津天气 · 沅川日报网"],["S_NEWS_T311","乌石镇 43 名群众外出务工"]],"S_FORUM":[["S_FORUM_BOARD","沅川论坛 · 灌水区"],["S_FORUM_RULES","沅川论坛 · 版规"],["S_FORUM_NOTICE","沅川论坛 · 站务公告"],["S_FORUM_T3","沅川论坛 · 帖子"]],"S_TIEBA":[["S_TIEBA_ABOUT","柳津贴吧 · 吧规"],["S_TIEBA_GONE","柳津贴吧 · 失效页"],["S_TIEBA_T1","柳津贴吧 · 帖子"]],"S_WX":[["S_WX_ABOUT","柳津发布 · 关于"]],"S_MAP":[["S_MAP_HALL","乌石礼堂 · 柳津地图"],["S_MAP_ROUTE","路线规划"]],"S_MK":[["S_MK_CHAT","与卖家的聊天 · 沅川闲置"],["S_MK_ITEM","倒钥匙（乌石镇旧木牌）· 沅"],["S_MK_REL","关联推荐"]],"S_VID":[["S_VID_CMT","沅川短视频 · 评论区"],["S_VID_LIVE","沅川短视频 · 直播回放"]],"S_LIFE":[["S_LIFE_FOOD","柳津点评 · 柳津美食"],["S_LIFE_CLOSED","柳津点评 · 已停业商户"]],"S_JOB":[["S_JOB_CO","沅川人才网 · 公司主页"]],"S_HOUSE":[["S_HOUSE_XQ","柳津房产网 · 乌石新村"]],"S_LOGI":[["S_LOGI_TRK","柳津快递驿站 · 物流轨迹"]],"S_EDU":[["S_EDU_ALUM","柳津二中校友录"],["S_EDU_HIS","柳津二中 · 校史"]],"S_LIB":[["S_LIB_ARC","柳津图书馆 · 档案检索"],["S_LIB_CAT","柳津图书馆 · 馆藏目录"]],"S_MEM":[["S_MEM_MSG","网上纪念馆 · 留言板"]],"S_SVC":[["S_SVC_SB","柳津政务服务网 · 社保查询"],["S_SVC_GJJ","柳津政务服务网 · 公积金查"],["S_SVC_YY","柳津政务服务网 · 医院挂号"],["S_SVC_XJ","柳津政务服务网 · 学籍查询"],["S_SVC_MZ","柳津政务服务网 · 民政服务"]],"S_BLOG":[["S_BLOG_311","江边旧事 · 我舅的最后一次"],["S_BLOG_TOWN","江边旧事 · 乌石镇的最后一"]]};
 
 const LAYER_NAME=['沅川在线（起点）','站点层（已发现）','幕一 · 木牌','幕二 · 镇志','幕三 · 三一一','幕四 · 还乡会','幕五 · 礼堂','幕六 · 撤并 · 终章'];
 
 /* 已到达节点 → 打开对应网页 */
 const NODE_OPEN={
+  'S_HOME':['index.html',''],
   'S_GOV':['sites/gov/index.html',''],'S_NEWS':['sites/news/index.html',''],'S_FORUM':['sites/forum/index.html',''],
   'S_TIEBA':['sites/tieba/index.html',''],'S_WX':['sites/wx/index.html',''],'S_MAP':['sites/map/index.html',''],
   'S_MK':['sites/market/index.html',''],'S_VID':['sites/video/index.html',''],'S_LIFE':['sites/life/index.html',''],
@@ -218,20 +231,99 @@ const NODE_OPEN={
   'T35':['truth/act5/t35-bell.html',''],'T36':['truth/act5/t36-related.html',''],'T37':['truth/act5/t37-permit.html',''],'T38':['truth/act5/t38-access.html',''],
   'T39':['truth/act5/t39-mail.html',''],'T40':['truth/act5/t40-call.html',''],
   'T41':['truth/act6/t41-44.html',''],'T42':['truth/act6/t42-route.html',''],'T43':['truth/act6/t43-blog.html',''],'T44':['truth/act6/t44-line.html',''],
-  'T45':['truth/act6/t45-file.html',''],'T46':['truth/act6/t46-keykeeper.html',''],'T47':['truth/act6/t47-final.html','']
+  'T45':['truth/act6/t45-file.html',''],'T46':['truth/act6/t46-keykeeper.html',''],'T47':['truth/act6/t47-final.html',''],
+  'S_GOV_OPEN':['sites/gov/open.html',''],
+  'S_GOV_TENDER':['sites/gov/tender.html',''],
+  'S_GOV_PERMIT':['sites/gov/permit.html',''],
+  'S_GOV_HOTLINE':['sites/gov/hotline.html',''],
+  'S_GOV_CADRE':['sites/gov/cadre.html',''],
+  'S_NEWS_LOCAL':['sites/news/local.html',''],
+  'S_NEWS_OLD':['sites/news/oldnews.html',''],
+  'S_NEWS_PHOTO':['sites/news/photos.html',''],
+  'S_NEWS_CULT':['sites/news/culture.html',''],
+  'S_NEWS_WX':['sites/news/weather.html',''],
+  'S_FORUM_BOARD':['sites/forum/board.html',''],
+  'S_FORUM_RULES':['sites/forum/rules.html',''],
+  'S_TIEBA_ABOUT':['sites/tieba/about.html',''],
+  'S_WX_ABOUT':['sites/wx/about.html',''],
+  'S_MK_CHAT':['sites/market/chat.html',''],
+  'S_VID_CMT':['sites/video/comments.html',''],
+  'S_LIFE_FOOD':['sites/life/food.html',''],
+  'S_JOB_CO':['sites/job/company.html',''],
+  'S_SVC_SB':['sites/svc/shebao.html',''],
+  'S_SVC_GJJ':['sites/svc/gongjijin.html',''],
+  'S_SVC_YY':['sites/svc/yiyuan.html',''],
+  'S_SVC_XJ':['sites/svc/xueji.html',''],
+  'S_GOV_PETITION':['sites/gov/petition.html',''],
+  'S_FORUM_NOTICE':['sites/forum/notice.html',''],
+  'S_FORUM_T3':['sites/forum/t3.html',''],
+  'S_TIEBA_GONE':['sites/tieba/gone.html',''],
+  'S_TIEBA_T1':['sites/tieba/t1.html',''],
+  'S_MAP_HALL':['sites/map/poi-hall.html',''],
+  'S_MAP_ROUTE':['sites/map/route.html',''],
+  'S_HOUSE_XQ':['sites/house/xiaoqu.html',''],
+  'S_LOGI_TRK':['sites/logi/track.html',''],
+  'S_NEWS_T311':['sites/news/art-t311.html',''],
+  'S_VID_LIVE':['sites/video/live.html',''],
+  'S_LIFE_CLOSED':['sites/life/closed.html',''],
+  'S_SVC_MZ':['sites/svc/minzheng.html',''],
+  'S_LIB_ARC':['sites/lib/archive.html',''],
+  'S_LIB_CAT':['sites/lib/catalog.html',''],
+  'S_EDU_ALUM':['sites/edu/alumni.html',''],
+  'S_EDU_HIS':['sites/edu/history.html',''],
+  'S_MEM_MSG':['sites/mem/msg.html',''],
+  'S_BLOG_311':['sites/blog/p-311.html',''],
+  'S_BLOG_TOWN':['sites/blog/p-town.html',''],
+  'S_MK_ITEM':['sites/market/item-token.html',''],
+  'S_MK_REL':['sites/market/related.html',''],
 };
 
 /* 背景检索词（42 条）：随幕失效，失效后显示为"已移除" */
 const BG=[
- ['柳津招标公告',3],['沅川论坛',3],['沅川论坛灌水区',3],['沅川论坛版规',3],['柳津地图',3],
- ['柳津街景',3],['柳津房产网',3],['柳津二手房',3],['柳津物流',3],
- ['12345 政务服务',4],['县长信箱',4],['柳津影像',4],['柳津贴吧',4],['柳津吧规',4],
- ['短视频评论',4],['柳津点评',4],['柳津美食',4],['沅川人才网',4],['柳津企业查询',4],['网上纪念馆',4],
- ['柳津住建局',5],['柳津干部公示',5],['沅川日报',5],['柳津新闻',5],['柳津旧报纸',5],
- ['柳津副刊',5],['柳津天气',5],['柳津发布',5],['沅川闲置',5],['闲置客服',5],['沅川短视频',5],
- ['柳津县人民政府',6],['柳津县政务公开',6],['柳津公众号说明',6],['柳津政务服务网',6],
- ['柳津社保',6],['柳津公积金',6],['柳津人民医院',6],['江边旧事',6],
- ['柳津快递',7],['柳津学籍查询',7],['沅川在线',0]
+ ['县长信箱',4],
+ ['沅川论坛灌水区',4],
+ ['沅川论坛版规',5],
+ ['柳津吧规',5],
+ ['柳津街景',5],
+ ['柳津二手房',5],
+ ['柳津旧报纸',5],
+ ['柳津天气',5],
+ ['柳津美食',5],
+ ['柳津招聘',5],
+ ['柳津二手',5],
+ ['柳津政务公开目录',6],
+ ['柳津住建局',6],
+ ['柳津中标公告',6],
+ ['柳津杂谈',6],
+ ['柳津热帖',6],
+ ['乌石吧存档',6],
+ ['乌石礼堂旧址',6],
+ ['柳津老照片',6],
+ ['柳津副刊',6],
+ ['柳溪河水位',6],
+ ['柳津面馆',6],
+ ['柳津民宿',6],
+ ['柳津企业查询',6],
+ ['柳津公众号说明',6],
+ ['柳津公众号',6],
+ ['柳津镇人民政府',6],
+ ['柳津社保',6],
+ ['柳津人民医院',6],
+ ['柳津学籍查询',6],
+ ['柳津社会组织',6],
+ ['柳津县志',6],
+ ['柳津镇中心校',6],
+ ['柳津二中招生',6],
+ ['柳津校友录',6],
+ ['柳津校史',6],
+ ['柳津纪念页',6],
+ ['柳津老照片帖子',7],
+ ['柳津卫星图',7],
+ ['柳津驿站',7],
+ ['柳津卫生院',7],
+ ['柳津寻人',7],
+ ['柳津寻人启事',7],
+ ['柳津旧木牌',7]
 ];
 function curAct(f){
   let a=0; const R=[[1,4],[5,11],[12,19],[20,30],[31,40],[41,47]];
@@ -290,9 +382,25 @@ function render(){
     NODES.filter(n=>n.layer===L).forEach(n=>{
       const d=isDone(n,found); const cur=(n.id===curId);
       const card=document.createElement('div');
-      card.className='node '+(d?(cur?'cur':'done'):'miss');
+      card.className='node '+(d?(cur?'cur':'done'):'miss')+(n.sub?' sub':'');
+      const sub=(n.layer===1&&SUB[n.id])?('<span class="leads">共 '+SUB[n.id]+' 个页面</span>'):'';
+      const ld=(n.leads)?('<span class="leads">'+(d?'已走过：':'线索：')+n.leads.replace(/〔站点〕/g,' · 站点 ')+'</span>'):'';
       card.innerHTML='<div>'+n.name+'</div>'+
-        '<span class="tag">'+(d?(cur?'● 当前位置':'✓ 已到达'):'○ 未到达')+'</span>';
+        '<span class="tag">'+(d?(cur?'● 当前位置':'✓ 已到达'):'○ 未到达')+'</span>'+sub+ld;
+      if(SUBPAGES[n.id]){
+        const kids=SUBPAGES[n.id];
+        const ready=kids.filter(([k])=>found.has(k)).length;
+        const box=document.createElement('div'); box.className='subbox'; box.style.display='none';
+        box.innerHTML=kids.map(([k,nm])=>'<span class="chip'+(found.has(k)?' on':'')+'" data-sub="'+k+'">'+nm+(found.has(k)?' ✓':'')+'</span>').join('');
+        const tg=document.createElement('span'); tg.className='exp';
+        tg.textContent='▸ '+ready+'/'+kids.length+' 个子页';
+        tg.onclick=function(ev){ ev.stopPropagation();
+          const open=box.style.display==='block'; box.style.display=open?'none':'block';
+          tg.textContent=(open?'▸ ':'▾ ')+ready+'/'+kids.length+' 个子页'; };
+        card.appendChild(tg); card.appendChild(box);
+        box.onclick=function(ev){ const c=ev.target.closest('.chip'); if(!c) return;
+          ev.stopPropagation(); const k=c.getAttribute('data-sub'); if(OPEN[k]) window.open(OPEN[k]+'?node='+k,'_blank','noopener'); };
+      }
       card.onclick=()=>openNode(n,found);
       col.appendChild(card);
     });

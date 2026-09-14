@@ -16,6 +16,7 @@
 
   /* 页面 → 节点 id（与 browser.html / map.html 保持一致） */
   var PAGE_ROUTE = {
+    S_HOME:['index.html',''],
     S_GOV:['sites/gov/index.html',''], S_GOV_OPEN:['sites/gov/open.html',''], S_GOV_TENDER:['sites/gov/tender.html',''],
     S_GOV_PERMIT:['sites/gov/permit.html',''], S_GOV_HOTLINE:['sites/gov/hotline.html',''],
     S_GOV_PETITION:['sites/gov/petition.html',''], S_GOV_CADRE:['sites/gov/cadre.html',''], S_GOV_ABOUT:['sites/gov/about.html',''],
@@ -90,6 +91,26 @@
     return ROOT_PREFIX + 'browser.html' + (q ? ('?q=' + encodeURIComponent(q)) : '');
   }
 
+  /* 随幕失效的背景词：页面上同步显示为已移除（与浏览器索引一致） */
+  var ACT_RANGE=[[1,4],[5,11],[12,19],[20,30],[31,40],[41,47]];
+  var EXPIRED_WORDS={"县长信箱":4,"沅川日报":5,"沅川论坛":3,"柳津发布":5,"柳津公众号说明":6,"柳津地图":3,"柳津街景":5,"沅川短视频":5,"柳津点评":4,"柳津美食":5,"沅川人才网":4,"柳津房产网":3,"柳津二手房":5,"柳津快递":7,"柳津政务服务网":6,"柳津社保":6,"柳津人民医院":6,"柳津学籍查询":6,"网上纪念馆":4,"江边旧事":6,"柳津政务公开目录":6,"柳津住建局":6,"柳津中标公告":6,"柳津流标公告":6,"沅川论坛灌水区":4,"柳津杂谈":6,"沅川论坛版规":5,"柳津热帖":6,"柳津老照片帖子":7,"柳津吧规":5,"乌石吧存档":6,"柳津卫星图":7,"乌石礼堂旧址":6,"柳津驿站":7,"柳津老照片":6,"柳津旧报纸":5,"柳津副刊":6,"柳津天气":5,"柳溪河水位":6,"柳津面馆":6,"柳津民宿":6,"柳津企业查询":6,"柳津招聘":5,"柳津发布历史消息":7,"柳津公众号":6,"柳津镇人民政府":6,"柳津卫生院":7,"柳津社会组织":6,"柳津县志":6,"柳津镇中心校":6,"柳津二中招生":6,"柳津校友录":6,"柳津校史":6,"柳津纪念页":6,"柳津寻人":7,"柳津寻人启事":7,"柳津二手":5,"柳津旧木牌":7};
+  function curAct(){
+    try{ var raw=localStorage.getItem(SAVE_KEY); if(!raw) return 0;
+      var d=JSON.parse(raw), a=0;
+      (d.f||[]).forEach(function(id){ var m=/^T(\d+)$/.exec(id); if(!m) return; var n=+m[1];
+        for(var i=0;i<ACT_RANGE.length;i++){ var r=ACT_RANGE[i];
+          if(n>=r[0]&&n<=r[1]){ if(i+1>a) a=i+1; break; } } });
+      return a;
+    }catch(e){ return 0; }
+  }
+  function markExpired(){
+    var a=curAct(); if(!a) return;
+    document.querySelectorAll('.kw, .hitkw b').forEach(function(el){
+      var w=(el.textContent||'').trim(), u=EXPIRED_WORDS[w];
+      if(u && a>=u){ el.classList.add('gone'); el.setAttribute('title',''); }
+    });
+  }
+
   function register(id){
     if(!id) return;
     try{
@@ -131,6 +152,8 @@
 
     /* 3) 正文关键词：只加粗，**不绑任何点击**、不加手型、不发 title。
      *    顺手清掉页面里可能残留的内联手型样式。 */
+    markExpired();
+
     document.querySelectorAll('.kw').forEach(function(el){
       el.style.cursor = 'default';
       el.removeAttribute('title');
