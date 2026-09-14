@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,37 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 沅川日报 · 站点主题 */
+body{font-family:"Songti SC",var(--serif);background:#fbf9f6;font-size:15.5px;line-height:1.95}
+.card{background:#fff;border:none;border-top:3px double #8c1c13;border-radius:0;box-shadow:none;padding:14px 16px}
+.card h2{font-family:var(--serif);font-size:21px;line-height:1.4;color:#161616;border-bottom:1px solid #d8d2c8;padding-bottom:6px;letter-spacing:.5px}
+.hd .lg{border-radius:0;background:#8c1c13}.hd .nm{font-family:var(--serif);font-size:23px;letter-spacing:3px}
+.nav{background:#8c1c13}.crumb{font-family:var(--mono);font-size:11px}
+ul.ls li{border-bottom:1px solid #ece7de}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>沅川日报网</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>沅川日报网</span></div>
 <div class="hd"><div class="lg">沅</div><div><div class="nm">沅川日报网</div><div class="ds">本地报道 · 旧报影印</div></div></div>
 <div class="wrap">
 <div class="crumb">沅川日报网 · 礼堂修缮开工</div>
 <div class="card"><h2>乌石礼堂修缮工程开工</h2><p class="meta">2016-03-11</p><p>工程于 3 月 10 日开工，工期十天。</p></div>
+<div class="card"><h2>乌石礼堂修缮工程完成</h2>
+ <p class="meta">《沅川日报》2009-10-22 · 第 3 版 · 通讯员 周某</p>
+ <p>日前，乌石礼堂修缮工程完成并重新开放。该礼堂始建于上世纪五十年代，是我镇重要的公共活动场所。</p>
+ <p>此次修缮对屋面、墙面及门窗进行了整修，并保留了原有的木构屋架。据施工负责人介绍，礼堂内原有的一口铜钟在修缮中一并拆除，交由镇文化站保管。</p>
+ <p class="meta">【注】本稿中"交由镇文化站保管"一句，在电子版中出现两次，句子完全相同。</p></div>
+<div class="card"><h2>后续报道（目录）</h2>
+ <p>2016-05-19　第 2 版　《原乌石镇村级资产已全部清点移交》</p>
+ <p class="meta">点击标题提示：该稿件电子版已下架，下架时间未记录。</p></div>
+<div class="card"><h2>本版其它稿件</h2>
+ <p>· 全县秋季农田水利建设全面展开<br>· 县图书馆新增地方文献专架</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">报道线索来自<b class="kw">柳津发布</b>与<b class="kw">柳津点评</b>读者投稿。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津县人民政府</b> · <b class="kw">柳津贴吧</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于我们</a> <a href="art-merge.html">柳津县乡镇行政区划调整</a> <a href="art-t311.html">乌石镇 43 名群众外出务工，已</a> <a href="culture.html">副刊</a> <a href="index.html">index</a> <a href="local.html">本地</a> <a href="oldnews.html">旧报影印</a> <a href="photos.html">影像</a> <a href="weather.html">柳津天气</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

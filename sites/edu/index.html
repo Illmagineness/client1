@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,42 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津第二中学 · 站点主题 */
+body{background:#f2f4fb}
+.card{border-radius:16px;border:none;box-shadow:0 2px 10px rgba(31,49,102,.07)}
+.card h2{text-align:center;font-size:17px;color:#1f3166;letter-spacing:1px}
+.hd{border-bottom:3px solid #1f3166}.hd .lg{border-radius:50%;background:#1f3166}
+.nav a{border-radius:99px;margin:4px 3px}
+table{border-radius:10px;overflow:hidden}
+table th{background:#e8ecf8;text-align:center}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津二中</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津二中</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津二中</div><div class="ds">学校 · 校友</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津二中 · 站内</div>
-<div class="card"><h2>柳津二中</h2><p>含原乌石分校。乌石分校于 2016 年随镇撤并停办。</p></div>
+<div class="card"><h2>柳津二中</h2><p>含原乌石分校。乌石分校于 2016 年随镇撤并停办。</p><p><a href="alumni.html" style="color:#3a6ea5">校友录 ›</a>　<a href="history.html" style="color:#3a6ea5">校史 ›</a></p></div>
+<div class="card"><h2>学校简介</h2>
+ <p>柳津县第二中学创办于 1958 年，现有教学班 36 个，在校学生 1,842 人，教职工 147 人。</p>
+ <p>2003 年以前，学校面向原乌石镇、柳津镇两个片区招生；2004 年起调整为柳津镇辖区统一招生。</p></div>
+<div class="card"><h2>校园动态</h2>
+ <ul class="ls">
+  <li><span class="t">我校举行 2026 年秋季开学典礼</span><span class="d">2026-09-01</span></li>
+  <li><span class="t">校史陈列室完成资料补充，新收校友捐赠物件 12 件</span><span class="d">2026-05-18</span></li>
+  <li><span class="t">关于校友信息登记的通知（长期有效）</span><span class="d">2024-11-06</span></li>
+ </ul></div>
+<div class="card"><h2>校史陈列室</h2>
+ <p>位于教学楼三楼东侧，开放时间：每周三下午。参观请提前与办公室联系。</p>
+ <p class="meta">陈列室现存历届毕业照 46 张，其中 2003 届高三（7）班合影因原底片损坏，未展出。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">校史陈列室部分资料由<b class="kw">柳津图书馆</b>地方文献室提供。</p>
+
+<p class="crosslink" style="font-size:13px;margin-top:18px">相关：<a href="../lib/index.html">柳津图书馆</a></p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津图书馆</b> · <b class="kw">江边旧事</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于</a> <a href="alumni.html">柳津二中校友录</a> <a href="history.html">校史</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

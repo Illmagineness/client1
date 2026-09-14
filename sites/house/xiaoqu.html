@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,38 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津房产网 · 站点主题 */
+body{background:#f3f7f8;font-size:15px}
+.nav{background:#0d7f8a}.top{background:#0d7f8a}.hd .lg{background:#0d7f8a}
+.card{border-radius:6px;border:1px solid #d7e6e8;border-top:3px solid #0d7f8a;box-shadow:none}
+.card h2{font-size:16px;color:#0b5f68}
+table th{background:#e9f3f4}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津房产网</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津房产网</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津房产网</div><div class="ds">小区 · 房源</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津房产网 · 乌石新村</div>
 <div class="card"><h2>乌石新村</h2><div class="viewer" style="background:#f6f1e8;border:1px solid #e6dcc8;border-radius:4px;padding:12px;text-align:center"><img src="../../pic/house-xiaoqu.jpg" style="max-height:280px" onerror="picMiss(this)"></div><p>该小区暂无在售房源。</p></div>
+<div class="card"><h2>小区详情 · 老供销社宿舍</h2>
+ <table><tr><th>地址</th><td>柳津镇柳津街 128 号</td></tr>
+  <tr><th>建成年代</th><td>1986</td></tr>
+  <tr><th>总户数</th><td>24 户</td></tr>
+  <tr><th>产权性质</th><td>房改房</td></tr></table></div>
+<div class="card"><h2>在售房源</h2>
+ <p>3 楼 · 58 ㎡ · 两室一厅 · 挂牌 18.6 万 · 挂牌时间 2024-10-08</p>
+ <p>房源描述："老房子，采光一般，楼下是商铺。看房请提前一天联系。"</p>
+ <p class="meta">该房源挂牌后 14 天内价格下调 3 次，累计下调 4.2 万。描述栏末尾原有一句"屋里东西没清"，2024-10-22 被发布者删除。</p></div>
+<div class="card"><h2>小区评价</h2>
+ <p>"安静，就是楼道灯老是坏。"（2023-03-02）</p>
+ <p class="meta">共 4 条评价，均未提及该楼的历史用途。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">房屋权属可凭不动产权证号在<b class="kw">柳津政务服务网</b>核验。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津点评</b> · <b class="kw">柳津快递</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于</a> <a href="index.html">小区列表</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

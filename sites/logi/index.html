@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,40 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津快递 · 站点主题 */
+body{background:#f4f8fc;font-size:14.5px}
+.nav{background:#1565c0}.top{background:#1565c0}.hd .lg{background:#1565c0;border-radius:4px}
+.card{border-radius:4px;border:1px solid #cfe0f2;border-left:5px solid #ffb300;box-shadow:none}
+.card h2{font-size:15.5px;color:#0d47a1;font-family:var(--mono)}
+table{border:1px solid #cfe0f2}table th{background:#e8f1fb;font-family:var(--mono);font-size:12.5px}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津快递驿站</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津快递驿站</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津快递驿站</div><div class="ds">包裹 · 网点</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津快递驿站 · 单号查询</div>
 <div class="card"><h2>快递查询</h2><p>网点：柳津镇 XX 路 12 号（乌石镇网点已于 2016 年撤并）</p></div>
+<div class="card"><h2>柳津快递驿站</h2>
+ <p>本站点为综合代收点，承接多家快递公司包裹代收、代寄与暂存服务。</p>
+ <p>营业时间：8:00—20:00　地址：柳津镇柳津街 128 号（与柳津百货同址）</p></div>
+<div class="card"><h2>服务范围</h2>
+ <p>本点派送范围：柳津镇柳津街、柳溪路、堤畔小区。</p>
+ <p class="meta">系统提示：以下区域暂不派送 —— 原乌石镇片区（柳溪街以西）。如收货地址填写为该片区，包裹将退回发件方。</p></div>
+<div class="card"><h2>长期未取件公告</h2>
+ <table><tr><th>入库日期</th><th>快递单号</th><th>状态</th></tr>
+  <tr><td>2024-03-02</td><td>JD32xx7714</td><td>无人认领</td></tr>
+  <tr><td>2024-03-02</td><td>YT70xx2208</td><td>无人认领</td></tr>
+  <tr><td>2024-03-05</td><td>SF11xx9032</td><td>无人认领</td></tr></table>
+ <p class="meta">三个包裹入库日期相近，收件人姓名不同，但收件地址均填写为"乌石镇柳溪街"。按规则，无人认领满 60 天的包裹应退回，本点未退回，也未上报。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">本点代收的闲置物品包裹，卖家多来自<b class="kw">沅川闲置</b>。</p>
+
+<p class="crosslink" style="font-size:13px;margin-top:18px">相关：<a href="../market/index.html">沅川闲置</a></p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津政务服务网</b> · <b class="kw">柳津房产网</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="track.html">物流轨迹</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,35 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津图书馆 · 站点主题 */
+body{font-family:"Songti SC",var(--serif);background:#f7f8f4;font-size:16px;line-height:2.15}
+.card{background:transparent;border:none;border-left:1px solid #b8c6b4;border-radius:0;padding:4px 0 4px 20px;box-shadow:none}
+.card h2{font-size:18px;color:#2f4a34;letter-spacing:1px}
+.nav{background:#2f4a34}.hd .lg{border-radius:50%;background:#2f4a34}
+table th{background:#eef1ea;color:#42563f}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津图书馆</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津图书馆</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津图书馆</div><div class="ds">馆藏 · 检索</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津图书馆 · 关于</div>
 <div class="card"><h2>关于</h2><p>柳津图书馆 · 档案馆。</p></div>
+<div class="card"><h2>本馆概况</h2>
+ <p>柳津县图书馆为国家二级图书馆，现有馆舍面积 4,120 平方米，阅览座位 320 个。</p>
+ <p>馆藏纸质文献 21.6 万册，其中地方文献专藏 1.8 万册，含历代县志、乡镇志稿、堤工档案与民间文献。</p></div>
+<div class="card"><h2>开放时间</h2>
+ <table><tr><th>区域</th><th>时间</th></tr>
+  <tr><td>综合借阅区</td><td>周二至周日 9:00—17:00</td></tr>
+  <tr><td>地方文献阅览室</td><td>周二至周五 9:00—11:30，14:30—17:00（需预约）</td></tr>
+  <tr><td>自习区</td><td>周二至周日 9:00—20:00</td></tr></table>
+ <p class="meta">地方文献一律不外借，仅限室内查阅，可申请复制（限三分之一以内）。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">馆藏地点与开放时间以<b class="kw">柳津地图</b>标注为准。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津二中</b> · <b class="kw">沅川日报</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="archive.html">档案检索</a> <a href="catalog.html">馆藏目录</a> <a href="chihzi.html">乌石乡志（扫描）</a> <a href="index.html">地方文献检索</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

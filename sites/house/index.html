@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,40 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津房产网 · 站点主题 */
+body{background:#f3f7f8;font-size:15px}
+.nav{background:#0d7f8a}.top{background:#0d7f8a}.hd .lg{background:#0d7f8a}
+.card{border-radius:6px;border:1px solid #d7e6e8;border-top:3px solid #0d7f8a;box-shadow:none}
+.card h2{font-size:16px;color:#0b5f68}
+table th{background:#e9f3f4}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津房产网</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津房产网</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津房产网</div><div class="ds">小区 · 房源</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津房产网 · 小区列表</div>
 <div class="card"><h2>小区</h2><ul class="ls"><li><span class="t"><a href="xiaoqu.html" style="color:#3a6ea5">乌石新村</a>　<span style="font-size:12px;color:#d9534f">暂无数据</span></span><span class="d">1998 年建</span></li></ul></div>
+<div class="card"><h2>柳津房产 · 房源</h2>
+ <p>在售 412 套，在租 806 套。数据来自中介与个人发布。</p>
+ <p class="meta">2016 年以前的房源数据已在系统升级中清除，不再提供历史查询。</p></div>
+<div class="card"><h2>小区列表</h2>
+ <table><tr><th>小区</th><th>建成</th><th>均价</th></tr>
+  <tr><td>柳溪花园</td><td>2012</td><td>6,820 元/㎡</td></tr>
+  <tr><td>堤畔家园</td><td>2019</td><td>7,410 元/㎡</td></tr>
+  <tr><td>老供销社宿舍</td><td>1986</td><td>3,150 元/㎡</td></tr></table>
+ <p class="meta">"老供销社宿舍"登记地址显示为柳津镇柳津街 128 号，与一处在售商铺同址。</p></div>
+<div class="card"><h2>经纪人</h2>
+ <p>本平台不介入交易。发布信息请自行核对房屋权属。</p>
+ <p class="meta">2024 年收到关于权属争议的投诉 7 件，其中 3 件涉及原乌石镇辖区的自建房，因"历史权属材料不全"未能处理。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">房屋权属可凭不动产权证号在<b class="kw">柳津政务服务网</b>核验。</p>
+
+<p class="crosslink" style="font-size:13px;margin-top:18px">相关：<a href="../svc/index.html">柳津政务服务网</a></p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津点评</b> · <b class="kw">柳津快递</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于</a> <a href="xiaoqu.html">乌石新村</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,36 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津贴吧 · 站点主题 */
+body{background:#f5f6f7;font-size:14px;line-height:1.75}
+.nav{background:#f08c00}.top{background:#333}
+.card{border-radius:10px;border:1px solid #e6e8ea;box-shadow:0 1px 3px rgba(0,0,0,.04)}
+.card h2{font-size:15px;color:#c46a00;border-bottom:1px solid #f3e3cc;padding-bottom:7px}
+.hd .lg{border-radius:8px;background:#f08c00}
+ul.ls li{padding:7px 0;font-size:13.5px}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津贴吧</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津贴吧</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津贴吧</div><div class="ds">兴趣吧 · 闲聊</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津贴吧 · 失效页</div>
 <div class="card"><h2>该吧已被合并</h2><p>乌石吧已于 2016 年并入柳津吧。</p></div>
+<div class="card"><h2>该吧已关闭</h2>
+ <p>您访问的"乌石吧"已关闭，原因：所在行政区划已调整。</p>
+ <p>关闭时间：2016-03-11　最后一条主题：2016-03-10 22:41</p></div>
+<div class="card"><h2>存档说明</h2>
+ <p>按平台规则，关闭的吧保留只读存档 5 年，逾期清除。乌石吧存档应于 2021-03-11 清除。</p>
+ <p class="meta">实际清除日期：2021-11-03。清除原因：归档清理，未另行公告。</p></div>
+<div class="card"><h2>仍可检索到的碎片</h2>
+ <p>部分主题标题仍残留在搜索引擎缓存中，例如：</p>
+ <p class="meta">"【通知】三月十三，钟不用敲了" · "礼堂的钥匙交给谁" · "谁还记得四十四级"</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">原帖同步发布于<b class="kw">沅川论坛</b>，可搜索查看完整讨论。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">沅川论坛</b> · <b class="kw">网上纪念馆</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">吧规</a> <a href="index.html">吧首页</a> <a href="t1.html">帖子</a> <a href="t2.html">【寻人】周砚生，广播站的</a> <a href="t3.html">我来解释一下"还乡"</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,56 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津图书馆 · 站点主题 */
+body{font-family:"Songti SC",var(--serif);background:#f7f8f4;font-size:16px;line-height:2.15}
+.card{background:transparent;border:none;border-left:1px solid #b8c6b4;border-radius:0;padding:4px 0 4px 20px;box-shadow:none}
+.card h2{font-size:18px;color:#2f4a34;letter-spacing:1px}
+.nav{background:#2f4a34}.hd .lg{border-radius:50%;background:#2f4a34}
+table th{background:#eef1ea;color:#42563f}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津图书馆</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津图书馆</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津图书馆</div><div class="ds">馆藏 · 地方文献 · 检索</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津图书馆 · 地方文献检索</div>
-undefined
+<div class="card"><h2>地方文献 · 检索</h2>
+ <p class="meta">命中 3 条 · 按相关度排序 · 检索时间 0.04 秒</p>
+ <ul class="ls">
+  <li><span class="t"><a href="chihzi.html" style="color:#3a6ea5"><b class="kw">乌石乡志</b>（扫描件 · 馆藏编号 LX-0117）</a><br>
+    <span style="font-size:12.5px;color:#6d7680">柳津县乌石乡志编纂组，1986 年修。1987 年之后整段缺页，装订线处有撕裂毛边。</span></span><span class="d">1986</span></li>
+  <li><span class="t">柳津县志（1990 版）<br>
+    <span style="font-size:12.5px;color:#6d7680">"乡镇概况"一节含乌石镇条目，约 400 字，内容与本馆藏乡志互有出入。</span></span><span class="d">1990</span></li>
+  <li><span class="t">柳溪河水利资料汇编<br>
+    <span style="font-size:12.5px;color:#6d7680">馆内标记"不予开放"。查阅须到馆填写登记表并说明用途。</span></span><span class="d">1998</span></li>
+ </ul>
+ <p style="font-size:13px">
+   <a href="catalog.html" style="color:#3a6ea5">馆藏目录 ›</a>　
+   <a href="archive.html" style="color:#3a6ea5">档案检索 ›</a>　
+   <a href="about.html" style="color:#3a6ea5">关于本馆 ›</a></p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">柳津二中</b> · <b class="kw">沅川日报</b></div>
+<div class="card"><h2>检索须知</h2>
+ <p>一、本馆提供地方文献与档案的<b>目录检索</b>，不提供原文在线下载；影像与扫描件须到馆调阅。</p>
+ <p>二、涉及未开放档案的，请持本人证件到馆填写查阅登记表，说明查阅目的与用途。</p>
+ <p>三、1987 年以后的乡镇志稿，因行政区划调整，部分尚未整理入库；原乌石镇相关卷宗编号为 LX-WS-01 至 LX-WS-11。</p>
+ <p>四、读者留言与到馆预约，请使用馆内服务台或县政务服务网。</p>
+</div>
+<div class="card"><h2>最近到馆查阅记录（脱敏）</h2>
+ <ul class="ls">
+  <li><span class="t">查"乌石"相关卷宗</span><span class="d">2026-08-31</span></li>
+  <li><span class="t">查柳溪河沿革</span><span class="d">2026-08-24</span></li>
+  <li><span class="t">查 1998 年柳溪河资料</span><span class="d">2026-08-11</span></li>
+ </ul>
+ <p class="meta">说明：本栏仅显示查阅主题，不显示查阅人。</p>
+</div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">馆藏地点与开放时间以<b class="kw">柳津地图</b>标注为准。</p>
+
+<p class="crosslink" style="font-size:13px;margin-top:18px">相关：<a href="../map/index.html">柳津地图</a></p>
+</div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于</a> <a href="archive.html">档案检索</a> <a href="catalog.html">馆藏目录</a> <a href="chihzi.html">乌石乡志（扫描）</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

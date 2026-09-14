@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,18 +50,41 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津县人民政府 · 站点主题 */
+body{font-family:"Songti SC",var(--serif);font-size:15.5px;line-height:2}
+.card{border:none;border-left:4px solid #8c1c13;border-radius:0;box-shadow:none;background:#fff}
+.card h2{font-family:var(--serif);font-size:19px;letter-spacing:.5px;border-bottom:2px solid #8c1c13;padding-bottom:8px}
+.nav{border-radius:0}.nav a{border-right:1px solid rgba(255,255,255,.22)}
+.hd .lg{border-radius:0;background:#8c1c13}.hd .nm{font-family:var(--serif);letter-spacing:2px}
+.crumb{font-family:var(--mono);font-size:11.5px}
+table th{background:#faf3f2}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津县人民政府</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津县人民政府</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津县人民政府</div><div class="ds">政务公开 · 通知公告</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津县人民政府 · 政务公开目录</div>
 <div class="card"><h2>政务公开目录（2016）</h2><ul class="ls">
   <li><span class="t">柳政函〔2016〕27 号</span><span class="d">03-18</span></li>
   <li><span class="t">乌石镇卫生院合并公告</span><span class="d">2016-04</span></li></ul></div>
+<div class="card"><h2>信息公开指南</h2>
+ <p>公民、法人和其他组织可以依申请获取本机关在履职过程中制作或获取的、以一定形式记录保存的信息。</p>
+ <p>受理机构：县人民政府办公室信息科。受理时间：法定工作日 9:00—11:30，14:30—17:00。</p></div>
+<div class="card"><h2>不予公开说明（摘录）</h2>
+ <p>下列信息不予公开：涉及国家秘密的；涉及商业秘密、个人隐私的；<b>属于过程性信息的</b>；法律法规规定不予公开的其他情形。</p>
+ <p class="meta">2024 年 1—12 月，驳回申请 12 件，其中以"过程性信息"为由驳回 9 件。</p></div>
+<div class="card"><h2>常见问题</h2>
+ <p><b>问：</b>能否提供 2015 年及以前的原乌石镇文件？<br>
+ <b>答：</b>区划调整期间形成的文件已按规定整理归档。您可通过县档案馆查询，本机关不单独保管。</p>
+ <p><b>问：</b>为何网上现查不到原乌石镇的相关内容？<br>
+ <b>答：</b>原网站相关内容已停止更新并整合，不再单独保留入口。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">本页信息同步发布渠道：<b class="kw">柳津发布</b>、<b class="kw">沅川日报</b>。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">沅川日报</b> · <b class="kw">柳津政务服务网</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于本站</a> <a href="cadre.html">干部任免公示</a> <a href="hotline.html">12345 回执查询</a> <a href="index.html">政府门户</a> <a href="permit.html">施工许可公示</a> <a href="petition.html">信访答复查询</a> <a href="tender.html">招标公告</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

@@ -35,6 +35,15 @@ img,svg,video{max-width:100%;}
 img{height:auto;}
 a{transition:color .15s,background-color .15s,border-color .15s,opacity .15s;}
 
+/* 表格：站点层多处用到（公示表、办件记录、档案台账、检索结果）。
+ * 原来是裸 table，无边框无内边距，与站点设计语言不符，故在此统一。 */
+table{width:100%;border-collapse:collapse;margin:10px 0 14px;font-size:13.5px;}
+th,td{text-align:left;padding:7px 10px;border-bottom:1px solid var(--n3);vertical-align:top;}
+th{font-weight:600;color:var(--n6);background:var(--n1);white-space:nowrap;}
+tr:last-child td,tr:last-child th{border-bottom:none;}
+/* 已下架 / 已撤销的栏目名用删除线表示 */
+s{opacity:.55;text-decoration-thickness:1px;}
+
 /* 页脚 / 底部的站内导航（各站点共用）。只在同一个站内跳转。 */
 .footnav{display:flex;flex-wrap:wrap;gap:8px 16px;margin:0 0 10px;font-size:13px;}
 .footnav a{opacity:.85;}
@@ -58,3 +67,10 @@ button{cursor:pointer;}
   .backbar,.tip,.bbtn,.follow,.bot{display:none!important;}
   body{background:#fff!important;color:#000!important;}
 }
+
+
+/* 搜索词高亮：站点页正文里出现的、可被玩家检索的名字。
+ * 视觉上要"看得出来但不喧宾夺主"——虚线下划线 + 主色，鼠标悬停变实线。 */
+b.kw{font-weight:700;color:inherit;border-bottom:1px dashed currentColor;padding-bottom:0.5px;cursor:text;}
+b.kw:hover{border-bottom-style:solid;}
+.srcnote b.kw,.crosslink b.kw{font-weight:600;}

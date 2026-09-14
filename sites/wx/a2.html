@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,36 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津发布 · 站点主题 */
+body{background:#ededed;font-size:15.5px}
+.wrap{max-width:640px;background:#fff;padding:22px 18px;box-shadow:0 0 12px rgba(0,0,0,.05)}
+.card{border:none;border-radius:8px;background:#fff;padding:0 0 18px;margin-bottom:6px;box-shadow:none;border-bottom:1px solid #ececec}
+.card h2{font-size:18px;font-weight:600;color:#1a1a1a;text-align:center;letter-spacing:.5px}
+.nav{background:#2f7d4f}.hd .lg{border-radius:50%;background:#2f7d4f}
+.top{background:#f6f6f6;color:#888;font-size:11.5px}
+.crumb{color:#b2b2b2;font-size:11.5px}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津发布</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津发布</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津发布</div><div class="ds">官方公众号</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津发布 · 汛前巡查</div>
 <div class="card"><h2>柳溪河汛前巡查</h2><p>2016-03-05 · 柳津发布</p><p>巡查范围为柳溪河沿线。</p></div>
+<div class="card"><h2>老照片征集｜你手里还有哪些柳津记忆</h2>
+ <p class="meta">柳津发布 · 2023-05-11 · 阅读 8,204</p>
+ <p>为了留住记忆，本号面向社会长期征集柳津老照片。请注明拍摄时间、地点、人物，经采用后将署名刊出。</p>
+ <p>征集范围：老街、渡口、学校、河堤、公共建筑等。</p>
+ <p class="meta">本启事未写"原乌石镇"在不在征集范围内。留言区有 6 人问过，均未获回复。</p></div>
+<div class="card"><h2>征集结果</h2>
+ <p>截至 2023 年 8 月，共收到投稿 214 组，采用 46 组，刊出 31 组。</p>
+ <p class="meta">未采用稿件中，有 23 组的拍摄地标注为原乌石镇。未采用原因栏统一填写为"不符合征集范围"。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">本期内容与<b class="kw">沅川日报</b>同期报道口径一致。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">沅川日报</b> · <b class="kw">柳津政务服务网</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="a1.html">区划调整解读</a> <a href="a3.html">乌石之声</a> <a href="about.html">关于</a> <a href="dead.html">已注销公众号</a> <a href="index.html">历史消息</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

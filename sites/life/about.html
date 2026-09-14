@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,33 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津点评 · 站点主题 */
+body{background:#f7f7f7;font-size:15px}
+.top{background:#ff5722}.nav{background:#ff5722}.hd .lg{border-radius:10px;background:#ff5722}
+.card{border-radius:14px;border:1px solid #f0e4dd;box-shadow:0 2px 8px rgba(255,87,34,.06)}
+.card h2{font-size:16px;color:#d84315}
+table th{background:#fff3ee}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津点评</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津点评</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津点评</div><div class="ds">商户 · 评价</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津点评 · 关于</div>
 <div class="card"><h2>关于</h2><p>柳津点评 · 本地生活。</p></div>
+<div class="card"><h2>关于本站</h2>
+ <p>柳津点评为个人维护的本地商户点评站，创建于 2012 年。</p></div>
+<div class="card"><h2>收录规则</h2>
+ <p>一、商户信息以用户补充为主，本站不实地核实。<br>
+ 二、已停业商户保留归档，不删除，但不再显示评价。<br>
+ 三、涉及历史建制、行政区划的商户名称，按现行标准地址收录。</p>
+ <p class="meta">第三条自 2016 年起执行。执行后，带"乌石"字样的商户名陆续被改写，现仅 4 家保留原名，均在归档页。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">商户位置以<b class="kw">柳津地图</b>标注为准。</p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">沅川短视频</b> · <b class="kw">柳津房产网</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="closed.html">已停业商户</a> <a href="food.html">柳津美食</a> <a href="index.html">商户列表</a> <a href="shop.html">乌石腊肉</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

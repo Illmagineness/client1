@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,10 +50,19 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 江边旧事 · 站点主题 */
+body{font-family:"Songti SC",var(--serif);background:#f6f2e8;color:#3a352c;font-size:16.5px;line-height:2.3}
+.wrap{max-width:720px}
+.card{background:transparent;border:none;border-radius:0;padding:0 0 26px;box-shadow:none;border-bottom:1px solid #e2d9c6}
+.card h2{font-size:19px;font-weight:400;color:#5c5344;letter-spacing:1.5px}
+.hd{background:transparent}.hd .lg{background:transparent;color:#8a7f68;border:1px solid #c9bda3;border-radius:50%}
+.nav{background:#8a7f68}.crumb{font-family:var(--mono);font-size:11px;color:#a29880}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>江边旧事</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>江边旧事</span></div>
 <div class="hd"><div class="lg">江</div><div><div class="nm">江边旧事</div><div class="ds">个人博客</div></div></div>
 <div class="wrap">
 <div class="crumb">江边旧事 · 个人博客</div>
@@ -65,8 +74,26 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
   <li><span class="t">乌石镇的最后一天</span><span class="d">2016-03-10</span></li>
  </ul>
  <div class="box" style="border-left:3px solid #B08968;background:#faf6f1;padding:12px 14px;border-radius:4px">关于本博：我舅是乌石镇广播站的播音员。2016 年 3 月之后，网上关于他的东西一条一条消失了。</div></div>
+<div class="card"><h2>关于这个博客</h2>
+ <p>我从小在柳溪河边长大。这里记一些河、桥、钟、木牌的事，都是我自己听来的、看见的，不保证对。</p>
+ <p>更新很慢，因为有些事要想很久才敢写下来。</p></div>
+<div class="card"><h2>最近更新</h2>
+ <ul class="ls">
+  <li><span class="t"><a href="p-token.html">木牌上的编号</a></span><span class="d">2024-09-21</span></li>
+  <li><span class="t"><a href="p-name.html">一个人可以有多少个名字</a></span><span class="d">2024-06-30</span></li>
+  <li><span class="t"><a href="p-mem.html">我去看了一眼纪念页</a></span><span class="d">2024-04-05</span></li>
+  <li><span class="t"><a href="p-311.html">三月十三，那天的雨</a></span><span class="d">2023-03-13</span></li>
+  <li><span class="t"><a href="p-town.html">没有名字的地方</a></span><span class="d">2022-11-08</span></li>
+ </ul></div>
+<div class="card"><h2>留言</h2>
+ <p><b>2024-09-22：</b>"你写的东西我认识。别写了。"（该留言已由博主隐藏）</p>
+ <p class="meta">本博客不设评论功能。上面这条是邮件，我贴在草稿里又删了，只留下这一行。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">文中提到的事件，<b class="kw">沅川日报</b>旧报影印可查到同日报道。</p>
+
+<p class="crosslink" style="font-size:13px;margin-top:18px">相关：<a href="../news/index.html">沅川日报网</a></p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">网上纪念馆</b> · <b class="kw">柳津二中</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于本博</a> <a href="p-311.html">我舅的最后一次广播</a> <a href="p-mem.html">八月十五，我去了一趟乌石</a> <a href="p-name.html">第四十四行</a> <a href="p-token.html">一块木牌的来历</a> <a href="p-town.html">乌石镇的最后一天</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

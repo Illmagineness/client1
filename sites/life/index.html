@@ -37,8 +37,8 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .pager{font-size:13px;color:#8a929c;margin:14px 0}
 .footnav{border-top:1px solid #e3e6ea;background:#fff;padding:12px 18px;font-size:13px;color:#5c6773;display:flex;gap:14px;flex-wrap:wrap}
 .backbar{position:fixed;left:0;right:0;bottom:0;background:var(--c);color:#fff;text-align:center;padding:8px 0;font-size:13px;cursor:pointer;letter-spacing:.06em;z-index:9}
-.kw{font-weight:700;color:inherit;cursor:pointer}
-.kw:hover{background:rgba(0,0,0,.05)}
+.kw{font-weight:700;color:inherit}
+.kw{cursor:default}
 .thumb{width:150px;aspect-ratio:4/3;background:#eceff4;overflow:hidden;border-radius:3px;flex:none}
 .thumb img{width:100%;height:100%;object-fit:cover}
 .item{display:grid;grid-template-columns:auto 1fr;gap:14px;padding:12px 0;border-bottom:1px dashed #e8eaee}
@@ -50,16 +50,37 @@ ul.ls .d{color:#98a0aa;font-size:12px;white-space:nowrap}
 .price{color:#d96b3c;font-weight:700}
 @media(max-width:860px){.grid{grid-template-columns:1fr}}
 </style>
+<style id="site-theme">/* 柳津点评 · 站点主题 */
+body{background:#f7f7f7;font-size:15px}
+.top{background:#ff5722}.nav{background:#ff5722}.hd .lg{border-radius:10px;background:#ff5722}
+.card{border-radius:14px;border:1px solid #f0e4dd;box-shadow:0 2px 8px rgba(255,87,34,.06)}
+.card h2{font-size:16px;color:#d84315}
+table th{background:#fff3ee}
+</style>
+
 <script>function picMiss(img){var w=img.closest(".thumb,.fig,.mth,.cv,figure");(w||img).style.display="none";}</script>
 </head>
 <body>
-<div class="top"><span><b class="kw">沅川在线</b> · 收录站点</span><span class="sp"></span><span>柳津点评</span></div>
+<div class="top"><span>沅川在线 · 收录站点</span><span class="sp"></span><span>柳津点评</span></div>
 <div class="hd"><div class="lg">柳</div><div><div class="nm">柳津点评</div><div class="ds">商户 · 评价</div></div></div>
 <div class="wrap">
 <div class="crumb">柳津点评 · 商户列表</div>
 <div class="card"><h2>商户</h2><ul class="ls"><li><span class="t"><a href="shop.html" style="color:#3a6ea5">乌石腊肉（已停业）</a></span><span class="d">4.2</span></li><li><span class="t"><span class="tag">已停业</span>老柳津面馆</span><span class="d">4.5</span></li></ul></div>
+<div class="card"><h2>柳津镇 · 商户收录</h2>
+ <p>本镇收录商户 1,842 家，其中"已停业"312 家，"已搬迁"88 家。</p>
+ <p>用户可补充商户信息，经审核后显示。</p></div>
+<div class="card"><h2>热门分类</h2>
+ <p>餐饮 · 住宿 · 修理 · 建材 · 农资 · 快递代收 · 老年服务 · 殡葬服务</p>
+ <p class="meta">"殡葬服务"下的商户全部标注为"信息由用户补充"，无照片、无评分。</p></div>
+<div class="card"><h2>站长说明</h2>
+ <p>本站为个人维护。原乌石镇范围内的商户已在 2016 年统一迁移至柳津镇分类下，原分类入口关闭。</p>
+ <p class="meta">迁移时使用脚本批量修改，部分商户地址被改写为"柳津镇柳津街"，与实际不符。</p></div>
+
+<p class="srcnote" style="font-size:12.5px;color:#7b828c;margin-top:22px">商户位置以<b class="kw">柳津地图</b>标注为准。</p>
+
+<p class="crosslink" style="font-size:13px;margin-top:18px">相关：<a href="../map/index.html">柳津地图</a></p>
 </div>
-<div class="footnav" id="rel-sites"><a href="index.html">首页</a><span style="color:#98a0aa">相关站点：</span><b class="kw">沅川短视频</b> · <b class="kw">柳津房产网</b></div>
+<div class="footnav"><a href="index.html">本站首页</a> <a href="about.html">关于</a> <a href="closed.html">已停业商户</a> <a href="food.html">柳津美食</a> <a href="shop.html">乌石腊肉</a></div>
 <div class="backbar" onclick="go()">↩ 回到浏览器</div>
 <script>function go(){window.open('../../browser.html','_blank','noopener');}</script>
 <script src="../../assets/nav.js"></script>

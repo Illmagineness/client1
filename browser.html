@@ -380,6 +380,27 @@ const SEARCH_INDEX = [
   {k:['网上纪念馆'], p:'S_MEM', until:4},
   {k:['江边旧事'], p:'S_BLOG', until:6},
 
+  /* —— 站点名：常驻检索入口（不随幕失效）。
+   *    页面上的「来源」行与正文里出现的站名，玩家打字即可打开该站。 —— */
+  {k:['沅川在线'], p:'S_HOME'},
+  {k:['柳津县人民政府','柳津县政府'], p:'S_GOV'},
+  {k:['沅川日报','沅川日报网'], p:'S_NEWS'},
+  {k:['沅川论坛'], p:'S_FORUM'},
+  {k:['柳津贴吧'], p:'S_TIEBA'},
+  {k:['柳津发布'], p:'S_WX'},
+  {k:['柳津地图'], p:'S_MAP'},
+  {k:['沅川闲置'], p:'S_MK'},
+  {k:['沅川短视频'], p:'S_VID'},
+  {k:['柳津点评'], p:'S_LIFE'},
+  {k:['沅川人才网'], p:'S_JOB'},
+  {k:['柳津房产网'], p:'S_HOUSE'},
+  {k:['柳津快递','柳津快递驿站'], p:'S_LOGI'},
+  {k:['柳津二中'], p:'S_EDU'},
+  {k:['柳津图书馆','柳津档案馆'], p:'S_LIB'},
+  {k:['网上纪念馆'], p:'S_MEM'},
+  {k:['柳津政务服务网'], p:'S_SVC'},
+  {k:['江边旧事'], p:'S_BLOG'},
+
   /* —— 真相词（47 个 · 一词一页 · 永不失效） —— */
   {k:['倒钥匙','倒置的钥匙'], p:'T01'},
   {k:['陈有德','老陈木匠'], p:'T02'},
@@ -540,46 +561,15 @@ function siteNameOf(file){
 }
 
 /* ====================== 7. 渲染：首页 / 结果 / 站点 ====================== */
-const SEED_SITES=['S_MK'];   /* 起始页最初只收录的站点：沅川闲置 */
 function applyHome(){
   showInline();
-  const cards=[
-    ['柳津县人民政府','gov','政','政务公开 · 通知公告','#2C5FA8','#3D74BE'],
-    ['沅川日报网','news','闻','本地报道 · 旧报','#C8161D','#E34A50'],
-    ['沅川论坛','forum','坛','网友讨论 · 旧帖','#3A5F8A','#4E77A8'],
-    ['柳津贴吧','tieba','吧','兴趣吧 · 闲聊','#3B7DE0','#5B9BF3'],
-    ['柳津发布','wx','微','官方公众号','#07C160','#3DDC84'],
-    ['柳津地图','map','图','地点 · 路线','#4A90D9','#6FAAE8'],
-    ['沅川闲置','market','闲','二手 · 旧物','#E8734A','#F0916E'],
-    ['沅川短视频','video','视','视频 · 直播','#1A1A22','#33333F'],
-    ['柳津点评','life','评','商户 · 评价','#FF6633','#FF855C'],
-    ['沅川人才网','job','聘','招聘 · 求职','#2B7DE0','#4A97F0'],
-    ['柳津房产网','house','房','小区 · 房源','#C9A66B','#D9BC85'],
-    ['柳津快递驿站','logi','递','包裹 · 网点','#5A6B7B','#748697'],
-    ['柳津二中','edu','学','学校 · 校友','#2E7D8F','#4197A8'],
-    ['柳津图书馆','lib','馆','馆藏 · 检索','#6B7B8C','#8595A6'],
-    ['网上纪念馆','mem','念','纪念 · 留言','#9A9A9A','#B4B4B4'],
-    ['柳津政务服务网','svc','服','社保 · 公积金','#1E6B5A','#2E8A76'],
-    ['江边旧事','blog','记','个人博客','#B08968','#C9A383']
-  ];
-  const nodes=cards.map(c=> c[1]==='market' ? 'S_MK' : 'S_'+c[1].toUpperCase());
-  const vis=cards.filter((c,i)=>SEED_SITES.indexOf(nodes[i])>=0 || found.has(nodes[i]));
   pageEl.innerHTML = `
     <div class="start">
       <div class="start-t">沅 川 在 线</div>
-      <div class="start-s">本地导航 · 已收录站点 ${vis.length} 个</div>
-      <div class="sites" style="display:grid;grid-template-columns:repeat(auto-fill,minmax(168px,1fr));gap:10px">`
-      + (vis.length? vis.map(c=>`
-        <div class="site" onclick="doSearch('${c[0]}')">
-          <div class="site-ic" style="background:linear-gradient(135deg,${c[4]},${c[5]})">${c[2]}</div>
-          <div class="site-nm">${c[0]}</div><div class="site-d">${c[3]}</div>
-        </div>`).join('')
-        : `<div style="color:var(--ink-dim);font-family:var(--sans);font-size:var(--fs-sm);padding:10px 0">（尚无收录站点）</div>`)
-      + `</div>
-      <div class="start-f">在上方输入你在网页里读到的名字，可以找到更多站点。</div>
+      <div class="start-s">在地址栏输入你读到的名字，回车即可检索</div>
     </div>`;
   window.scrollTo(0,0);
-  setAddr('about:home');
+  setAddr('about:blank');
 }
 function renderHome(){ applyHome(); pushHistory({kind:'home'}); updateProgress(); }
 
@@ -655,7 +645,6 @@ function goFwd(){ if(hi<hist.length-1){ hi++; applyView(hist[hi]); syncNavBtns()
 /* ====================== 9. 主检索入口 ====================== */
 function doSearch(raw){
   const q=(raw||'').trim(); if(!q) return;
-  if(SITES[q]){ const s=SITES[q]; window.open(s[0]+'?node='+encodeURIComponent(s[1]), '_blank', 'noopener'); return; }
   const entries = matchAll(q);
   if(!entries.length){
     const ex = expiredMatch(q);
